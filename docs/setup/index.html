@@ -249,53 +249,11 @@
 
   <header>
     <div class="badge">Pre-Workshop Setup</div>
-    <h1>Get Your Machine Ready</h1>
+    <h1>Your laptop called. It's not ready. 🔨</h1>
     <p class="subtitle">
-      Download and run the setup script for your OS.<br />
-      It handles everything automatically — takes about 2 minutes.
+      One click. Two minutes. Zero excuses for not shipping at the workshop.
     </p>
   </header>
-
-  <!-- what it installs -->
-  <div class="steps-preview">
-    <h2>What the script installs</h2>
-
-    <div class="step-row">
-      <div class="step-num">1</div>
-      <div class="step-text">
-        <strong>Git</strong>
-        <span>Installs if missing, skips if already present.</span>
-      </div>
-    </div>
-    <div class="step-row">
-      <div class="step-num">2</div>
-      <div class="step-text">
-        <strong>Node.js</strong>
-        <span>Required by the Claude Code CLI. Installs via Homebrew (Mac) or winget (Windows).</span>
-      </div>
-    </div>
-    <div class="step-row">
-      <div class="step-num">3</div>
-      <div class="step-text">
-        <strong>Claude Code CLI</strong>
-        <span>Installs via npm. Checks for updates if already installed.</span>
-      </div>
-    </div>
-    <div class="step-row">
-      <div class="step-num">4</div>
-      <div class="step-text">
-        <strong>Forge Plugin</strong>
-        <span>Installs via <code style="font-size:0.8rem;color:#a855f7">claude plugin install forge</code></span>
-      </div>
-    </div>
-    <div class="step-row">
-      <div class="step-num">5</div>
-      <div class="step-text">
-        <strong>Atlassian MCP + Slack Plugin</strong>
-        <span>Wires up the Atlassian HTTP MCP and the Slack plugin for use inside Claude Code.</span>
-      </div>
-    </div>
-  </div>
 
   <!-- download buttons -->
   <div class="os-cards">
@@ -304,7 +262,7 @@
       <h3>macOS</h3>
       <span class="detected-badge">Your OS</span>
       <p>Downloads a <code>.command</code> file. Double-click to open in Terminal.</p>
-      <a class="btn-download btn-mac" href="mac-setup.command" download="mac-setup.command">
+      <a class="btn-download btn-mac" href="mac-setup-signed.command" download="mac-setup-signed.command">
         &#8659; Download for Mac
       </a>
     </div>
@@ -327,7 +285,7 @@
       <ol>
         <li>Click <strong>Download for Mac</strong> above</li>
         <li>Open your <strong>Downloads</strong> folder</li>
-        <li><strong>Double-click</strong> <code>mac-setup.command</code></li>
+        <li><strong>Double-click</strong> <code>mac-setup-signed.command</code></li>
         <li>If macOS blocks it: right-click → <em>Open</em> → <em>Open</em></li>
         <li>Watch the terminal — done in ~2 min</li>
       </ol>
