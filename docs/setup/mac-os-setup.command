@@ -18,7 +18,6 @@ log_step() {
 log_ok()   { echo -e "  ${GREEN}✓${RESET} $1"; }
 log_info() { echo -e "  ${DIM}→ $1${RESET}"; }
 log_warn() { echo -e "  ${YELLOW}⚠${RESET}  $1"; }
-log_err()  { echo -e "  ${RED}✗${RESET} $1"; }
 
 divider() { echo -e "${DIM}────────────────────────────────────────────────${RESET}"; }
 
@@ -33,58 +32,49 @@ echo ""
 log_step "Checking Homebrew"
 if command -v brew &>/dev/null; then
   log_ok "Homebrew already installed ($(brew --version | head -1))"
-  log_info "Running brew update…"
   brew update --quiet 2>&1 | tail -1 || true
 else
   log_info "Installing Homebrew…"
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  # Add brew to PATH for Apple Silicon
-  if [[ -f /opt/homebrew/bin/brew ]]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-  fi
+  [[ -f /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
   log_ok "Homebrew installed"
 fi
 
 # ── 2. Git ────────────────────────────────────────────────────────────────────
 log_step "Checking Git"
 if command -v git &>/dev/null; then
-  current=$(git --version | awk '{print $3}')
-  log_ok "Git already installed (v${current})"
-  log_info "Checking for updates via brew…"
+  log_ok "Git already installed ($(git --version | awk '{print $3}'))"
   brew upgrade git 2>/dev/null && log_ok "Git updated" || log_info "Already up to date"
 else
   log_info "Installing Git…"
   brew install git
-  log_ok "Git installed ($(git --version | awk '{print $3}'))"
+  log_ok "Git installed"
 fi
 
-# ── 3. Node.js (required by Claude CLI) ──────────────────────────────────────
+# ── 3. Node.js ────────────────────────────────────────────────────────────────
 log_step "Checking Node.js"
 if command -v node &>/dev/null; then
   log_ok "Node already installed ($(node --version))"
 else
   log_info "Installing Node.js via brew…"
   brew install node
-  log_ok "Node.js installed ($(node --version))"
+  log_ok "Node.js installed"
 fi
 
 # ── 4. Claude Code CLI ────────────────────────────────────────────────────────
 log_step "Checking Claude Code CLI"
 if command -v claude &>/dev/null; then
-  current=$(claude --version 2>/dev/null | head -1 || echo "unknown")
-  log_ok "Claude Code already installed (${current})"
-  log_info "Checking for updates…"
+  log_ok "Claude Code already installed ($(claude --version 2>/dev/null | head -1))"
   npm update -g @anthropic-ai/claude-code 2>&1 | grep -E "(added|updated|unchanged)" || true
   log_ok "Claude Code is up to date"
 else
-  log_info "Installing Claude Code CLI via npm…"
+  log_info "Installing Claude Code CLI…"
   npm install -g @anthropic-ai/claude-code
-  log_ok "Claude Code installed ($(claude --version 2>/dev/null | head -1))"
+  log_ok "Claude Code installed"
 fi
 
 # ── 5. rr-standards via marketplace ──────────────────────────────────────────
 log_step "Adding rr-standards from marketplace"
-log_info "Running: claude plugin marketplace add rewards-guilds/rr-standards"
 if claude plugin marketplace add rewards-guilds/rr-standards 2>&1; then
   log_ok "rr-standards added"
 else
@@ -93,24 +83,20 @@ fi
 
 # ── 6. Forge plugin ───────────────────────────────────────────────────────────
 log_step "Installing Forge plugin"
-log_info "Running: claude plugin install forge"
 if claude plugin install forge 2>&1; then
   log_ok "Forge plugin installed"
 else
-  log_warn "Forge install returned non-zero — it may already be installed or require auth first"
+  log_warn "Forge may already be installed"
 fi
 
 # ── 7. MCP integrations ───────────────────────────────────────────────────────
 log_step "Configuring MCP integrations"
-
-log_info "Adding Atlassian MCP (HTTP transport)…"
 if claude mcp add --transport http atlassian-v2 https://mcp.atlassian.com/v1/mcp 2>&1; then
   log_ok "Atlassian MCP added"
 else
   log_warn "Atlassian MCP may already be configured"
 fi
 
-log_info "Installing Slack plugin…"
 if claude plugin install slack -s user 2>&1; then
   log_ok "Slack plugin installed"
 else
