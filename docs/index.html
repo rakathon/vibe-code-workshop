@@ -1766,7 +1766,7 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
       ];
 
       const outlineRows = groups.map((g,i) => `
-        <div class="outline-item" onclick="nextSlide()">
+        <div class="outline-item" onclick="goToSection(${i})" style="cursor:pointer;">
           <div class="oi-num">${g.num}</div>
           <div class="oi-body">
             <div class="oi-title">${g.title}</div>
@@ -1829,10 +1829,6 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
           <div class="stat-box"><div class="stat-num">${quizzes}</div><div class="stat-label">Quizzes</div></div>
           <div class="stat-box"><div class="stat-num">24</div><div class="stat-label">Tests Passing</div></div>
           <div class="stat-box"><div class="stat-num">7</div><div class="stat-label">Tasks Done</div></div>
-        </div>
-        <div class="success-box" style="text-align:left;margin-bottom:1rem;">
-          <strong>Branch:</strong> <code>feat/dining-experience-on-web-for-rakutencom</code><br>
-          <strong>Phase:</strong> implementation complete · 24/24 tests pass · 6 suites · 0 failures
         </div>
         <div class="cert-section">
           <h3>📜 Download Your Certificate of Completion</h3>
@@ -2109,6 +2105,20 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
     goTo(next);
   }
   function prevSlide() { goTo(current - 1); }
+
+  function goToSection(sectionIndex) {
+    const sec = SECTIONS[sectionIndex];
+    if (!sec) { nextSlide(); return; }
+    // Find the first slide matching this section's first slideId
+    const firstId = sec.slideIds[0];
+    const idx = slides.findIndex(s => s.id === firstId);
+    if (idx === -1) { nextSlide(); return; }
+    if (idx > maxReached) {
+      showToast('Complete earlier sections first');
+      return;
+    }
+    goTo(idx);
+  }
 
   function updateNav() {
     const isWelcome = slides[current].type === 'welcome';
