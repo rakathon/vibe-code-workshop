@@ -596,7 +596,8 @@
   const SECTIONS = [
     { label: 'Section 1: Getting Started',            slideIds: ['step-1','step-2'] },
     { label: 'Section 2: Create a Forge Work Effort', slideIds: ['step-3'] },
-    { label: 'Section 3: Elaborate Requirements',     slideIds: ['step-4'] },
+    { label: 'Section 3: Elaborate Requirements',     slideIds: ['step-4','step-5'] },
+    { label: 'Section 4: Promote & Implement',        slideIds: ['step-6','step-7','step-8','step-9'] },
   ];
 
   // Sub-steps that live under a parent step (displayed indented + grayed in sidebar)
@@ -1755,15 +1756,13 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
       // Build outline rows from slides (steps + quizzes + cert)
       const stepSlides = slides.filter(x => x.type === 'step');
       const quizSlides = slides.filter(x => x.type === 'quiz');
-      const stepMins   = [12, 8, 10, 8, 6, 12, 8, 6, 14]; // per step
-      const totalMins  = stepMins.reduce((a,b) => a+b, 0);
+      const totalMins = 45;
 
-      // Group: steps 1-3, quiz1, steps 4-5, quiz2, steps 6-9, quiz3, cert
       const groups = [
-        { num:1, title:'Clone the Repo & Initialize Forge', mins: stepMins[0]+stepMins[1], quiz:true },
-        { num:2, title:'Create Effort & Elaborate Requirements', mins: stepMins[2]+stepMins[3], quiz:true },
-        { num:3, title:'Classify, Design UI & Commit', mins: stepMins[4]+stepMins[5]+stepMins[6], quiz:true },
-        { num:4, title:'Plan & Implement', mins: stepMins[7]+stepMins[8], quiz:false },
+        { num:1, title:'Getting Started',            mins: 10, quiz:true },
+        { num:2, title:'Create a Forge Work Effort', mins: 10, quiz:false },
+        { num:3, title:'Elaborate Requirements',     mins: 10, quiz:true },
+        { num:4, title:'Promote & Implement',        mins: 15, quiz:true },
       ];
 
       const outlineRows = groups.map((g,i) => `
