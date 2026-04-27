@@ -4,7 +4,7 @@
 $ErrorActionPreference = "Stop"
 
 $step = 0
-$total = 5
+$total = 6
 
 function Write-Step($msg) {
     $script:step++
@@ -68,7 +68,17 @@ if ($claudeCmd) {
     Write-Ok "Claude Code installed ($ver)"
 }
 
-# ── 4. Forge plugin ───────────────────────────────────────────────────────────
+# ── 4. rr-standards via marketplace ──────────────────────────────────────────
+Write-Step "Adding rr-standards from marketplace"
+Write-Info "Running: claude plugin marketplace add rewards-guilds/rr-standards"
+try {
+    & claude plugin marketplace add rewards-guilds/rr-standards
+    Write-Ok "rr-standards added"
+} catch {
+    Write-Warn "rr-standards may already be added"
+}
+
+# ── 5. Forge plugin ───────────────────────────────────────────────────────────
 Write-Step "Installing Forge plugin"
 Write-Info "Running: claude plugin install forge"
 try {
@@ -78,7 +88,7 @@ try {
     Write-Warn "Forge install issue — may already be installed or require auth first"
 }
 
-# ── 5. MCP integrations ───────────────────────────────────────────────────────
+# ── 6. MCP integrations ───────────────────────────────────────────────────────
 Write-Step "Configuring MCP integrations"
 
 Write-Info "Adding Atlassian MCP (HTTP transport)..."

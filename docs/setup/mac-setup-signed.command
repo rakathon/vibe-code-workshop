@@ -8,7 +8,7 @@ RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'
 CYAN='\033[0;36m'; BOLD='\033[1m'; DIM='\033[2m'; RESET='\033[0m'
 
 step=0
-total=6
+total=7
 
 log_step() {
   step=$((step + 1))
@@ -82,7 +82,16 @@ else
   log_ok "Claude Code installed ($(claude --version 2>/dev/null | head -1))"
 fi
 
-# ── 5. Forge plugin ───────────────────────────────────────────────────────────
+# ── 5. rr-standards via marketplace ──────────────────────────────────────────
+log_step "Adding rr-standards from marketplace"
+log_info "Running: claude plugin marketplace add rewards-guilds/rr-standards"
+if claude plugin marketplace add rewards-guilds/rr-standards 2>&1; then
+  log_ok "rr-standards added"
+else
+  log_warn "rr-standards may already be added"
+fi
+
+# ── 6. Forge plugin ───────────────────────────────────────────────────────────
 log_step "Installing Forge plugin"
 log_info "Running: claude plugin install forge"
 if claude plugin install forge 2>&1; then
@@ -91,7 +100,7 @@ else
   log_warn "Forge install returned non-zero — it may already be installed or require auth first"
 fi
 
-# ── 6. MCP integrations ───────────────────────────────────────────────────────
+# ── 7. MCP integrations ───────────────────────────────────────────────────────
 log_step "Configuring MCP integrations"
 
 log_info "Adding Atlassian MCP (HTTP transport)…"
