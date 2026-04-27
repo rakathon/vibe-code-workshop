@@ -112,7 +112,7 @@
     .sb-item.done   { border-left-color:#16a34a; }
 
     .sb-dot {
-      flex-shrink:0; width:20px; height:20px; border-radius:50%;
+      flex-shrink:0; width:20px; height:20px; border-radius:3px;
       background:var(--border); display:flex; align-items:center; justify-content:center;
       font-size:.62rem; font-weight:700; color:var(--muted); margin-top:1px;
       transition:all .2s;
@@ -161,7 +161,7 @@
     .sb-item.substep.expanded.active { opacity: 1; border-left-color: var(--dark) !important; }
     .sb-item.substep.expanded.done   { opacity: 1; border-left-color: #16a34a !important; }
     .sb-item.substep .sb-dot {
-      width: 16px; height: 16px; font-size: .55rem;
+      width: 16px; height: 16px; font-size: .55rem; border-radius: 2px;
     }
 
     /* Locked sidebar items */
@@ -315,7 +315,7 @@
 
     .step-header { display:flex; align-items:center; gap:.85rem; margin-bottom:1.4rem; }
     .step-badge {
-      flex-shrink:0; width:42px; height:42px; border-radius:50%;
+      flex-shrink:0; width:42px; height:42px; border-radius:6px;
       background:var(--dark); display:flex; align-items:center; justify-content:center;
       font-size:1.05rem; font-weight:800; color:#fff; box-shadow:0 4px 12px rgba(0,0,0,.2);
     }
@@ -350,6 +350,13 @@
     .t-str    { color:#d0d0d0; font-style:italic; }
     .t-cmt    { color:#555; font-style:italic; }
     .t-key    { color:#ccc; font-weight:600; }
+
+    .typing-cursor {
+      display: inline-block;
+      color: #aaa;
+      animation: blink .9s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
     .copy-btn {
       position:absolute; top:.55rem; right:.55rem;
@@ -417,7 +424,7 @@
     .quiz-slide { max-width:680px; margin:0 auto; }
     .quiz-header { display:flex; align-items:center; gap:.7rem; margin-bottom:1.3rem; }
     .quiz-badge {
-      width:38px; height:38px; border-radius:50%; background:var(--dark);
+      width:38px; height:38px; border-radius:6px; background:var(--dark);
       display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0;
     }
     .quiz-header h2 { font-size:1.2rem; font-weight:700; color:var(--dark); }
@@ -568,11 +575,10 @@
     <div class="slide-area" id="slide-area"></div>
   </div>
 
-  <!-- Nav -->
-  <div class="nav-bar">
-    <button class="nav-btn sec" id="prev-btn" onclick="prevSlide()" disabled>← Previous</button>
-    <span class="nav-hint">Use ← → arrow keys to navigate</span>
-    <button class="nav-btn" id="next-btn" onclick="nextSlide()">Next →</button>
+
+  <!-- Footer -->
+  <div id="site-footer" style="text-align:center;padding:.55rem;font-size:.72rem;color:#aaa;flex-shrink:0;background:var(--bg);">
+    🌿 Platform Engineering Trainings 🌿 &nbsp;·&nbsp; © Rakuten Rewards
   </div>
 
   <!-- Toast -->
@@ -834,48 +840,165 @@ Commit these files so your team gets the workspace structure:
       type:'step', num:'3', id:'step-3',
       title:'Create a Work Effort', desc:'Run /forge:effort',
       content:`
-        <div class="info-box">Creates a new work effort under <code>.forge/efforts/</code>, scaffolds the directory structure, creates a working branch, and commits everything atomically.</div>
-        <div class="forge-cmd">⚡ /forge:effort</div>
-        <hr class="div">
-        <div class="substep">
-          <div class="substep-title">3.1 — Effort Title</div>
-          <div class="prompt-block">
-            <div class="prompt-label">Forge prompts: What is the effort title?</div>
-            <p>let's create dining experience on web for rakuten.com</p>
-            <button class="copy-btn" onclick="copyText(this,&quot;let's create dining experience on web for rakuten.com&quot;)">Copy</button>
-          </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Creates a new work effort under <code>.forge/efforts/</code>, scaffolds the directory structure, creates a working branch, and commits everything atomically.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run:</p>
+        <div class="cmd-block">
+          <pre><span class="t-cmd">/forge:effort</span></pre>
+          <button class="copy-btn" onclick="copyText(this,'/forge:effort')">Copy</button>
         </div>
-        <div class="substep">
-          <div class="substep-title">3.2 — Work Item Type</div>
-          <table class="dialog-table">
-            <tr><th>Options</th><th>Answer</th></tr>
-            <tr><td class="prompt-col">program / initiative / epic / story / task / spike</td><td class="answer-col"><code>epic</code> — auto-sets tier to full</td></tr>
-          </table>
+      `
+    },
+
+    // ── STEP 3.1 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'3.1', parentId:'step-3',
+      title:'Effort Title', desc:'Answer Forge\'s first prompt',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will prompt:</p>
+        <div class="cmd-block">
+          <pre><span class="t-key">What is the effort title?</span></pre>
         </div>
-        <div class="substep">
-          <div class="substep-title">3.3 — Risk Level</div>
-          <table class="dialog-table">
-            <tr><th>Options</th><th>Answer</th></tr>
-            <tr><td class="prompt-col">R1 Critical / R2 High / R3 Moderate / R4 Low</td><td class="answer-col"><code>R2</code> — core feature, external Dining APIs</td></tr>
-          </table>
+        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .75rem;">Enter:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="let's create dining experience on web for rakuten.com"></span><span class="typing-cursor">▌</span></pre>
+          <button class="copy-btn" onclick="copyText(this,&quot;let's create dining experience on web for rakuten.com&quot;)">Copy</button>
         </div>
-        <div class="substep">
-          <div class="substep-title">3.4 – 3.6 — Permissions</div>
-          <table class="dialog-table">
-            <tr><th>Prompt</th><th>Answer</th></tr>
-            <tr><td class="prompt-col">plugin:forge:atlassian — Get current user info</td><td class="answer-col"><code>3</code> — No (skip Jira)</td></tr>
-            <tr><td class="prompt-col">git checkout -b feat/dining-experience-on-web</td><td class="answer-col"><code>1</code> — Yes</td></tr>
-            <tr><td class="prompt-col">git add + git commit (effort scaffold)</td><td class="answer-col"><code>1</code> — Yes</td></tr>
-          </table>
+      `
+    },
+
+    // ── STEP 3.2 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'3.2', parentId:'step-3',
+      title:'Select Work Item Type', desc:'Choose the effort type',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will prompt:</p>
+        <div class="cmd-block">
+          <pre><span class="t-key">What type of work item is this?</span>
+
+  <span class="t-str">program</span>       — cross-team strategic initiative (largest scope)
+  <span class="t-str">initiative</span>    — multi-epic project within a program
+  <span class="t-str">epic</span>          — significant feature set (weeks to months)
+  <span class="t-str">story</span>         — single feature or user-facing behavior change
+  <span class="t-str">task</span>          — technical work item, no direct user story
+  <span class="t-str">spike</span>         — time-boxed research or technical investigation
+
+<span class="t-key">Enter type:</span></pre>
         </div>
-        <div class="substep">
-          <div class="substep-title">3.7 — Effort Creation Complete</div>
-          <div class="success-box">
-            <strong>Active effort:</strong> dining-experience-on-web<br>
-            Type: epic | Tier: full | Risk: R2 | Phase: discovery<br>
-            Branch: <code>feat/dining-experience-on-web</code>
-          </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter <strong style="color:var(--dark);">epic</strong> — Forge automatically sets tier to full for epics — no tier prompt.</p>
+      `
+    },
+
+    // ── STEP 3.3 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'3.3', parentId:'step-3',
+      title:'Select Risk Level', desc:'Choose the risk classification',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will prompt:</p>
+        <div class="cmd-block">
+          <pre><span class="t-key">What is the risk level?</span>
+
+  <span class="t-str">R1</span> — Critical: authentication, payments, data migrations, PII
+  <span class="t-str">R2</span> — High: core features, external integrations
+  <span class="t-str">R3</span> — Moderate: new features, UI updates
+  <span class="t-str">R4</span> — Low: logging, minor changes, documentation
+
+<span class="t-key">Enter R1, R2, R3, or R4:</span></pre>
         </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter <strong style="color:var(--dark);">R2</strong> — this is a core feature integrating with existing external Dining APIs.</p>
+      `
+    },
+
+    // ── STEP 3.4 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'3.4', parentId:'step-3',
+      title:'Skip Jira Association', desc:'Decline the Atlassian plugin request',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will attempt to check Atlassian authentication and prompt:</p>
+        <div class="cmd-block">
+          <pre><span class="t-key">Tool use</span>
+
+  plugin:forge:atlassian - Get current user info() (MCP)
+  Get current user info
+
+<span class="t-key">Do you want to proceed?</span>
+  <span class="t-str">1.</span> Yes
+  <span class="t-str">2.</span> Yes, and don't ask again for plugin:forge:atlassian commands in this project
+  <span class="t-str">3.</span> No</pre>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select <strong style="color:var(--dark);">3. No</strong> — skip Jira association for this workshop.</p>
+      `
+    },
+
+    // ── STEP 3.5 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'3.5', parentId:'step-3',
+      title:'Allow Branch Creation', desc:'Approve the git checkout',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge derives the branch name from the effort title and prompts:</p>
+        <div class="cmd-block">
+          <pre><span class="t-key">Bash command</span>
+
+  git checkout -b feat/dining-experience-on-web
+  <span class="t-cmt">Create working branch for the effort</span>
+
+This command requires approval
+
+<span class="t-key">Do you want to proceed?</span>
+  <span class="t-str">1.</span> Yes
+  <span class="t-str">2.</span> Yes, and don't ask again for: git checkout *
+  <span class="t-str">3.</span> No</pre>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select <strong style="color:var(--dark);">1. Yes</strong> — allow Forge to create the working branch <code>feat/dining-experience-on-web</code>.</p>
+      `
+    },
+
+    // ── STEP 3.6 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'3.6', parentId:'step-3',
+      title:'Allow Effort Scaffold Commit', desc:'Approve the git commit',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge stages and commits the new effort directory atomically:</p>
+        <div class="cmd-block">
+          <pre><span class="t-key">Bash command</span>
+
+  git add .forge/efforts/dining-experience-on-web/ .forge/efforts/README.md \
+    &amp;&amp; git commit -m "chore(dining-experience-on-web): scaffold dining experience on web effort"
+  <span class="t-cmt">Stage and commit effort scaffold</span>
+
+<span class="t-key">Do you want to proceed?</span>
+  <span class="t-str">1.</span> Yes
+  <span class="t-str">2.</span> Yes, and don't ask again for git add and git commit commands in this project
+  <span class="t-str">3.</span> No</pre>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select <strong style="color:var(--dark);">1. Yes</strong> — commit the effort scaffold to your local branch.</p>
+      `
+    },
+
+    // ── STEP 3.7 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'3.7', parentId:'step-3', markComplete: true,
+      title:'Effort Creation Complete', desc:'Your work effort is ready',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will confirm the active effort and print a summary:</p>
+        <div class="cmd-block">
+          <pre><span class="t-key">Active effort: dining-experience-on-web</span>
+
+---
+Effort created: dining-experience-on-web
+Title:          dining experience on web
+Type:           epic | Tier: full | Risk: R2
+Subtype:        full-tier
+Production-bound: yes
+Phase:          discovery
+Directory:      .forge/efforts/dining-experience-on-web/
+Branch:         <span class="t-str">feat/dining-experience-on-web</span> (created)
+Jira:           not linked
+
+Next steps:
+  Create requirements/business.md and requirements/technical.md to define scope.
+  Run forge:arch-review when discovery artifacts are ready.</pre>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">The effort is now scaffolded and ready. You are on branch <code>feat/dining-experience-on-web</code> and in the discovery phase.</p>
       `
     },
 
@@ -1605,6 +1728,7 @@ Commit these files so your team gets the workspace structure:
     sb?.scrollIntoView({ block:'nearest' });
     updateSubstepExpansion();
     updateNav();
+    startTypingAnimations();
   }
 
   function updateSidebarLocks() {
@@ -1660,13 +1784,10 @@ Commit these files so your team gets the workspace structure:
   function updateNav() {
     const isWelcome = slides[current].type === 'welcome';
     document.getElementById('cur-slide').textContent = current + 1;
-    document.getElementById('prev-btn').disabled = current === 0;
-    document.getElementById('next-btn').disabled = current === slides.length - 1;
-    document.getElementById('next-btn').textContent = current === slides.length - 2 ? 'Finish →' : 'Next →';
-    document.querySelector('.header').style.display  = isWelcome ? 'none' : '';
-    document.querySelector('.nav-bar').style.display = isWelcome ? 'none' : '';
-    document.getElementById('sidebar').style.display = isWelcome ? 'none' : '';
+    document.querySelector('.header').style.display     = isWelcome ? 'none' : '';
+    document.getElementById('sidebar').style.display    = isWelcome ? 'none' : '';
     document.getElementById('expand-btn').style.display = isWelcome ? 'none' : '';
+    document.getElementById('site-footer').style.display = isWelcome ? 'none' : '';
   }
 
   // ═══════════════════════════════════════════════════════════════
@@ -1805,6 +1926,29 @@ Commit these files so your team gets the workspace structure:
     if (e.key === 'ArrowRight') nextSlide();
     if (e.key === 'ArrowLeft')  prevSlide();
   });
+
+  // ═══════════════════════════════════════════════════════════════
+  // TYPING ANIMATION
+  // ═══════════════════════════════════════════════════════════════
+  function startTypingAnimations() {
+    const slide = document.getElementById('slide-' + current);
+    if (!slide) return;
+    slide.querySelectorAll('.typing-text[data-type-text]').forEach(el => {
+      if (el.dataset.typed) return;
+      el.dataset.typed = '1';
+      const text = el.dataset.typeText;
+      const cursor = el.nextElementSibling;
+      let i = 0;
+      el.textContent = '';
+      function type() {
+        if (i <= text.length) {
+          el.textContent = text.slice(0, i++);
+          setTimeout(type, 38);
+        }
+      }
+      setTimeout(type, 400);
+    });
+  }
 
   // ═══════════════════════════════════════════════════════════════
   // SIDEBAR RESIZE
