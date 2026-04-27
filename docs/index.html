@@ -1219,187 +1219,408 @@ Why not R2:
 
     // ── STEP 6 ───────────────────────────────────────────────────
     {
-      type:'step', num:'6',
+      type:'step', num:'6', id:'step-6',
       title:'Design the UI', desc:'Run /forge:ui-design',
       content:`
-        <div class="info-box">Generates a UI spec from requirements — page layouts, component structure, interaction patterns.</div>
-        <div class="forge-cmd">⚡ /forge:ui-design</div>
-        <div class="substep">
-          <div class="substep-title">6.1 — Provide Context</div>
-          <div class="prompt-block">
-            <div class="prompt-label">Forge asks: What are you building?</div>
-            <p>look at our BR and TR</p>
-            <button class="copy-btn" onclick="copyText(this,'look at our BR and TR')">Copy</button>
-          </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Generates a UI spec from the business and technical requirements — defining page layouts, component structure, and interaction patterns.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run:</p>
+        <div class="cmd-block">
+          <pre><span class="t-cmd">/forge:ui-design</span></pre>
+          <button class="copy-btn" onclick="copyText(this,'/forge:ui-design')">Copy</button>
         </div>
-        <div class="substep">
-          <div class="substep-title">6.3 — Verify UIKit Compatibility</div>
-          <div class="prompt-block">
-            <div class="prompt-label">Before answering page states</div>
-            <p>just to make sure our tech stack compatible with @rakuten-rewards/uikit</p>
-            <button class="copy-btn" onclick="copyText(this,'just to make sure our tech stack compatible with @rakuten-rewards/uikit')">Copy</button>
-          </div>
-        </div>
-        <div class="substep">
-          <div class="substep-title">6.4–6.5 — Confirm States &amp; Out of Scope</div>
-          <table class="dialog-table">
-            <tr><th>Question</th><th>Answer</th></tr>
-            <tr><td class="prompt-col">Extra states / accessibility beyond WCAG 2.1 AA?</td><td class="answer-col"><code>NO</code></td></tr>
-            <tr><td class="prompt-col">Out-of-scope boundary (auth, card-linking, pagination…)</td><td class="answer-col"><code>looks good</code></td></tr>
-            <tr><td class="prompt-col">Final summary — approve?</td><td class="answer-col"><code>all good</code></td></tr>
-          </table>
-        </div>
-        <div class="substep">
-          <div class="substep-title">6.7 — What gets written</div>
-          <div class="cmd-block">
-            <pre><span class="t-cmt"># .forge/efforts/dining-experience-on-web/spec/ui-spec.md</span>
+      `
+    },
 
-<span class="t-key">Pages:</span>     src/pages/dining/index.tsx
-           src/pages/dining/[id].tsx
-<span class="t-key">Stack:</span>     React 18 · Next.js 13 · @rakuten-rewards/uikit v5.3.1
-<span class="t-key">States:</span>    default · near-me · location-denied · search · empty · not-found
-<span class="t-key">A11y:</span>      WCAG 2.1 AA baseline</pre>
-          </div>
-          <div class="prompt-block">
-            <div class="prompt-label">Forge asks what next — answer</div>
-            <p>let's do 1 and 2 both</p>
-            <button class="copy-btn" onclick="copyText(this,&quot;let's do 1 and 2 both&quot;)">Copy</button>
-          </div>
+    // ── STEP 6.1 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'6.1', parentId:'step-6',
+      title:'Provide Context', desc:'Point Forge at your requirements',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will ask what you are building and what is driving it:</p>
+        <div class="cmd-block"><pre><span class="t-key">What are you building, and what's driving it?</span></pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .75rem;">Point Forge at the existing requirements:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="look at our BR and TR"></span><span class="typing-cursor">▌</span></pre>
+          <button class="copy-btn" onclick="copyText(this,'look at our BR and TR')">Copy</button>
+        </div>
+      `
+    },
+
+    // ── STEP 6.2 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'6.2', parentId:'step-6',
+      title:'Confirm Scope and Mode', desc:'Review what Forge inferred',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge reads the requirements and confirms scope before proceeding:</p>
+        <div class="cmd-block"><pre>Read both — great context. Here's what I've inferred:
+
+Goal: Build a Dining Cash Back experience on rakuten.com — restaurant listing
+at /dining and detail at /dining/:id, client-side only, static JSON data,
+@rakuten-rewards/uikit.
+
+Mode: <span class="t-key">production</span> — well-defined requirements, specific tech stack, real
+shipping target. Does that fit?
+
+---
+
+Scope is clear from TR-7: two new Next.js pages at
+src/pages/dining/index.tsx and src/pages/dining/[id].tsx.
+
+Data shape is defined in TR-2: id, name, cuisineType, cashBackOffer,
+thumbnailUrl, address, lat, lng.
+
+Interactions are defined: live name search (BR-5) + "near me" geolocation
+sort (BR-4).
+
+Let me ask the production-mode questions that aren't yet answered:
+
+States — listing page. I've identified these from BRs:
+  <span class="t-str">1.</span> Default — alphabetical list, no location
+  <span class="t-str">2.</span> Near-me active — sorted by distance, distance shown on cards
+  <span class="t-str">3.</span> Location denied — inline message, alphabetical order
+  <span class="t-str">4.</span> Search active — filtered list
+  <span class="t-str">5.</span> Empty search results — empty state message
+
+Are there any additional states I'm missing?</pre></div>
+      `
+    },
+
+    // ── STEP 6.3 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'6.3', parentId:'step-6',
+      title:'Verify UIKit Compatibility', desc:'Confirm the tech stack',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Before answering the states question, verify the tech stack is compatible with <code>@rakuten-rewards/uikit</code>:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="just to make sure our tech stack compatible with @rakuten-rewards/uikit"></span><span class="typing-cursor">▌</span></pre>
+          <button class="copy-btn" onclick="copyText(this,'just to make sure our tech stack compatible with @rakuten-rewards/uikit')">Copy</button>
+        </div>
+      `
+    },
+
+    // ── STEP 6.4 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'6.4', parentId:'step-6',
+      title:'Confirm Page States and Accessibility', desc:'Approve the confirmed states list',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">After confirming UIKit compatibility, Forge presents the full confirmed state list and asks about accessibility requirements:</p>
+        <div class="cmd-block"><pre>Stack is confirmed compatible. Back to forge:ui-design.
+
+---
+States — confirmed from BRs + TRs:
+
+  <span class="t-str">1.</span> Default — alphabetical list, no distance shown
+  <span class="t-str">2.</span> Near-me active, location granted — sorted by distance, distance on each card
+  <span class="t-str">3.</span> Location denied/unavailable — inline message, alphabetical order
+  <span class="t-str">4.</span> Search active — filtered list
+  <span class="t-str">5.</span> Empty search results — empty state message
+  <span class="t-str">6.</span> Detail page — restaurant not found (invalid id) — inline error with back link
+
+Accessibility question: Any requirements beyond the standard WCAG 2.1 AA
+baseline — specific ARIA labelling, focus management for the search input,
+or screen reader text for the cash back offer badge?</pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .4rem;">Answer:</p>
+        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="NO"></span><span class="typing-cursor">▌</span></pre></div>
+      `
+    },
+
+    // ── STEP 6.5 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'6.5', parentId:'step-6',
+      title:'Confirm Out of Scope', desc:'Approve the boundary list',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge confirms the out-of-scope boundary before writing the spec:</p>
+        <div class="cmd-block"><pre>Noted — none beyond WCAG 2.1 AA baseline.
+
+Out of scope — confirming from the PRD and our elaboration:
+  <span class="t-cmt">-</span> Authentication / login walls
+  <span class="t-cmt">-</span> Card-linking UX
+  <span class="t-cmt">-</span> Pagination
+  <span class="t-cmt">-</span> Filters (cuisine, distance radius, category)
+  <span class="t-cmt">-</span> Map-based discovery
+  <span class="t-cmt">-</span> City/zip geocoding
+  <span class="t-cmt">-</span> Reviews, ratings, photos
+  <span class="t-cmt">-</span> SSR / SEO
+  <span class="t-cmt">-</span> External APIs or backend
+
+Does that list look right, or anything to add/remove?</pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .4rem;">Answer:</p>
+        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="looks good"></span><span class="typing-cursor">▌</span></pre></div>
+      `
+    },
+
+    // ── STEP 6.6 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'6.6', parentId:'step-6',
+      title:'Approve Final Summary', desc:'Confirm before spec is written',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge presents a complete summary of everything it has gathered and asks for final approval before writing the spec:</p>
+        <div class="cmd-block"><pre>Here's the summary before I write the spec:
+
+<span class="t-key">Goal:</span>     Dining Cash Back experience on rakuten.com — browse/search
+          restaurants, view offers, "near me" distance sort
+<span class="t-key">Mode:</span>     production
+<span class="t-key">Scope:</span>    Two new Next.js pages — src/pages/dining/index.tsx (listing),
+          src/pages/dining/[id].tsx (detail)
+<span class="t-key">Data:</span>     Static JSON at src/data/restaurants.json — id, name, cuisineType,
+          cashBackOffer, thumbnailUrl, address, lat, lng
+<span class="t-key">Interactions:</span>
+          - Live name search (client-side filter, keystroke)
+          - "Near me" button (Geolocation API -> Haversine distance sort)
+<span class="t-key">States:</span>   Default list · Near-me active · Location denied · Search active ·
+          Empty search · Detail not found
+<span class="t-key">Stack:</span>    React 18 · Next.js 13 (pages router) · @rakuten-rewards/uikit v5.3.1
+<span class="t-key">A11y:</span>     WCAG 2.1 AA baseline only
+<span class="t-key">Out of scope:</span> auth, card-linking, pagination, filters, maps, geocoding,
+          reviews, SSR, external APIs
+
+Does this look right? Anything to change before I write the spec?</pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .4rem;">Answer:</p>
+        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="all good"></span><span class="typing-cursor">▌</span></pre></div>
+      `
+    },
+
+    // ── STEP 6.7 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'6.7', parentId:'step-6', markComplete: true,
+      title:'Spec Written — Choose Next Step', desc:'Trigger commit and plan',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge writes the spec to <code>.forge/efforts/dining-experience-on-web/spec/ui-spec.md</code> and presents the next step options:</p>
+        <div class="cmd-block"><pre>Spec written: .forge/efforts/dining-experience-on-web/spec/ui-spec.md
+
+---
+The shared understanding is written. What next?
+
+  <span class="t-str">1.</span> Commit this work — I'll run forge:commit to create a checkpoint
+  <span class="t-str">2.</span> Move to planning — I'll run forge:plan to break this into implementation tasks
+  <span class="t-str">3.</span> Something else — tell me what you'd like to do
+
+<span class="t-key">Enter:</span></pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .4rem;">Enter:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="let's do 1 and 2 both"></span><span class="typing-cursor">▌</span></pre>
+          <button class="copy-btn" onclick="copyText(this,&quot;let's do 1 and 2 both&quot;)">Copy</button>
         </div>
       `
     },
 
     // ── STEP 7 ───────────────────────────────────────────────────
     {
-      type:'step', num:'7',
+      type:'step', num:'7', id:'step-7',
       title:'Commit Discovery & Promote', desc:'Run /forge:commit',
       content:`
-        <div class="info-box">Forge commits discovery work and promotes the effort to the planning phase before forge:plan can run.</div>
-        <div class="forge-cmd">⚡ /forge:commit</div>
-        <div class="substep">
-          <div class="substep-title">7.1 — Promote + Validate</div>
-          <table class="dialog-table">
-            <tr><th>Prompt</th><th>Answer</th></tr>
-            <tr><td class="prompt-col">Run forge:validate before advancing? (yes/no/skip)</td><td class="answer-col"><code>yes</code></td></tr>
-            <tr><td class="prompt-col">Advance discovery → planning? (yes/no)</td><td class="answer-col"><code>yes</code></td></tr>
-          </table>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge needs to commit discovery work and promote the effort to the planning phase before running forge:plan. Forge automatically detects the phase and runs forge:promote first.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run:</p>
+        <div class="cmd-block">
+          <pre><span class="t-cmd">/forge:commit</span></pre>
+          <button class="copy-btn" onclick="copyText(this,'/forge:commit')">Copy</button>
         </div>
-        <div class="substep">
-          <div class="substep-title">7.2 — Validation Result</div>
-          <div class="success-box"><strong>PASS WITH CONCERNS</strong> — all BRs covered. TR-9 (test coverage spec) has no dedicated artifact — suggestion only, not a blocker.</div>
-        </div>
+      `
+    },
+
+    // ── STEP 7.1 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'7.1', parentId:'step-7',
+      title:'Forge Promotes to Planning First', desc:'Readiness check on discovery artifacts',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge detects <code>currentPhase = "discovery"</code> and invokes forge:promote to advance before planning can begin. It runs a readiness check on all discovery artifacts:</p>
+        <div class="cmd-block"><pre>currentPhase = "discovery" — need to promote to planning first. Invoking forge:promote.
+
+Step 3: Advisory Readiness Checks — discovery
+
+  <span class="t-str">-</span> requirements/business.md  — present (BR-1 through BR-5)
+  <span class="t-str">-</span> requirements/technical.md — present (TR-1 through TR-10)
+  <span class="t-str">-</span> spec/ui-spec.md           — present
+  <span class="t-cmt">-</span> spec/api/, spec/storage/, spec/messaging/ — absent (expected — no backend)
+  <span class="t-cmt">-</span> validation/report.md      — absent
+
+No validation report found. Run forge:validate before advancing out of
+discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .4rem;">Enter:</p>
+        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="yes"></span><span class="typing-cursor">▌</span></pre></div>
+      `
+    },
+
+    // ── STEP 7.2 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'7.2', parentId:'step-7',
+      title:'Validation Result', desc:'Forge runs forge:validate',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge runs forge:validate and reports the result:</p>
+        <div class="cmd-block"><pre>Result: <span class="t-key">PASS WITH CONCERNS</span> — all BRs covered, TR-9 (test coverage spec) has
+no dedicated spec artifact (suggestion only, not a blocker).
+
+Forge records the result in .state.json and commits it automatically — no action needed.</pre></div>
+      `
+    },
+
+    // ── STEP 7.3 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'7.3', parentId:'step-7', markComplete: true,
+      title:'Confirm Promotion to Planning', desc:'Advance to the planning phase',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge presents the final readiness summary and asks for confirmation to advance:</p>
+        <div class="cmd-block"><pre>Advance discovery -> planning for dining-experience-on-web-for-rakutencom?
+
+  discovery:  <span class="t-str">+</span> requirements/business.md present
+              <span class="t-str">+</span> requirements/technical.md present
+              <span class="t-str">+</span> spec/ui-spec.md present
+              <span class="t-str">+</span> validation/report.md present (PASS WITH CONCERNS)
+  planning:   <span class="t-cmt">-</span> plan/tasks.md absent (will be created by forge:plan)
+
+Proceed? <span class="t-key">(yes/no)</span></pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .4rem;">Enter:</p>
+        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="yes"></span><span class="typing-cursor">▌</span></pre></div>
       `
     },
 
     // ── STEP 8 ───────────────────────────────────────────────────
     {
-      type:'step', num:'8',
+      type:'step', num:'8', id:'step-8',
       title:'Plan the Implementation', desc:'Run /forge:plan',
       content:`
-        <div class="info-box">Breaks the effort into concrete implementation tasks organized into sequenced waves.</div>
-        <div class="forge-cmd">⚡ /forge:plan</div>
-        <div class="substep">
-          <div class="substep-title">8.1 — Plan Output</div>
-          <div class="cmd-block">
-            <pre><span class="t-cmt"># .forge/efforts/.../plan/tasks.md</span>
-
-<span class="t-key">Tasks:</span>  7 tasks across 3 waves
-<span class="t-key">Wave 1:</span> TASK-001 JSON scaffold
-        TASK-002 distance utils
-        TASK-003 search filter
-        TASK-004 useGeolocation hook
-<span class="t-key">Wave 2:</span> TASK-005 RestaurantCard component
-<span class="t-key">Wave 3:</span> TASK-006 /dining listing page
-        TASK-007 /dining/:id detail page</pre>
-          </div>
-          <div class="success-box"><strong>Phase advanced:</strong> discovery → planning → approved → implementation</div>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Breaks the effort into concrete implementation tasks organized into sequenced waves.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run:</p>
+        <div class="cmd-block">
+          <pre><span class="t-cmd">/forge:plan</span></pre>
+          <button class="copy-btn" onclick="copyText(this,'/forge:plan')">Copy</button>
         </div>
+      `
+    },
+
+    // ── STEP 8.1 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'8.1', parentId:'step-8', markComplete: true,
+      title:'Plan Complete', desc:'Tasks written, effort in implementation phase',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge writes the task plan and promotes the effort to the implementation phase:</p>
+        <div class="cmd-block"><pre>Promoted: <span class="t-key">dining-experience-on-web-for-rakutencom</span>
+  planning -> approved (2026-04-27T05:32:27Z)
+Now in:   <span class="t-str">implementation</span>
+
+---
+Plan written: .forge/efforts/dining-experience-on-web-for-rakutencom/plan/tasks.md
+Tasks:        <span class="t-key">7 tasks across 3 waves</span>
+Waves:        wave:1 (4), wave:2 (1), wave:3 (2)
+
+Next: Begin implementation with forge:implement dining-experience-on-web-for-rakutencom TASK-001</pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">The effort is now in the implementation phase with 7 tasks planned across 3 waves. Proceed to Step 9.</p>
       `
     },
 
     // ── STEP 9 ───────────────────────────────────────────────────
     {
-      type:'step', num:'9',
+      type:'step', num:'9', id:'step-9',
       title:'Implement', desc:'Run each task in order — TDD mode active',
       content:`
-        <div class="info-box">forge:implement detects the UI spec and delegates to forge:ui — loads UIKit guides, writes tests first, confirms red, then implements.</div>
-
-        <div class="substep">
-          <div class="substep-title">TASK-001 — JSON Data &amp; Page Scaffold (Wave 1)</div>
-          <div class="forge-cmd" style="font-size:.77rem;">⚡ /forge:implement dining-experience-on-web-for-rakutencom TASK-001</div>
-          <div class="cmd-block">
-            <pre><span class="t-cmt">// src/data/restaurants.json  (15 restaurants)</span>
-[
-  {
-    <span class="t-str">"id"</span>:            <span class="t-str">"rest-001"</span>,
-    <span class="t-str">"name"</span>:          <span class="t-str">"Nobu Los Angeles"</span>,
-    <span class="t-str">"cuisineType"</span>:   <span class="t-str">"Japanese"</span>,
-    <span class="t-str">"cashBackOffer"</span>: <span class="t-str">"5% Cash Back"</span>,
-    <span class="t-str">"thumbnailUrl"</span>:  <span class="t-str">"https://..."</span>,
-    <span class="t-str">"address"</span>:       <span class="t-str">"903 N La Cienega Blvd"</span>,
-    <span class="t-str">"lat"</span>:           34.0835,
-    <span class="t-str">"lng"</span>:           -118.3863
-  },
-  <span class="t-cmt">// ... 14 more</span>
-]</pre>
-          </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Executes the planned tasks wave by wave. forge:implement detects the effort's UI spec and delegates to forge:ui, which loads UIKit guides and applies TDD mode (write tests first, confirm red, then implement).</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run each task in order:</p>
+        <div class="cmd-block">
+          <pre><span class="t-cmd">/forge:implement</span> dining-experience-on-web-for-rakutencom TASK-001</pre>
+          <button class="copy-btn" onclick="copyText(this,'/forge:implement dining-experience-on-web-for-rakutencom TASK-001')">Copy</button>
         </div>
+      `
+    },
 
-        <div class="substep">
-          <div class="substep-title">TASK-002–004 — Wave 1 Utilities &amp; Hook (TDD, Parallel)</div>
-          <div class="cmd-block">
-            <pre><span class="t-cmt">// src/utils/distance.ts</span>
-<span class="t-key">export function</span> haversineDistance(
-  lat1: number, lng1: number,
-  lat2: number, lng2: number
-): number { <span class="t-cmt">/* returns km */</span> }
+    // ── STEP 9.1 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'9.1', parentId:'step-9',
+      title:'TASK-001: Restaurant JSON Data and Page Scaffold', desc:'Wave 1',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge detects no forge:implement skill and automatically loads forge:ui — the correct skill for frontend work. It loads UIKit implementation guides before writing any code.</p>
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin-bottom:.5rem;">What gets created:</p>
+        <div class="cmd-block"><pre>src/data/restaurants.json   — 15 mock restaurants, all TR-2 fields present:
+                              id, name, cuisineType, cashBackOffer,
+                              thumbnailUrl, address, lat, lng</pre></div>
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .5rem;">Result:</p>
+        <div class="success-box">Task marked complete: <strong>TASK-001</strong> — restaurant JSON data and dining page scaffold<br>SHA: 5828375</div>
+      `
+    },
 
-<span class="t-key">export function</span> formatDistance(km: number): string {
-  <span class="t-key">return</span> km &lt; 1 ? <span class="t-str">\`\${Math.round(km*1000)}m\`</span> : <span class="t-str">\`\${km.toFixed(1)}km\`</span>;
-}</pre>
-          </div>
-          <div class="cmd-block">
-            <pre><span class="t-cmt">// src/hooks/useGeolocation.ts</span>
-<span class="t-key">type</span> State = <span class="t-str">'idle'</span> | <span class="t-str">'loading'</span> | <span class="t-str">'granted'</span> | <span class="t-str">'denied'</span> | <span class="t-str">'unavailable'</span>;
+    // ── STEP 9.2 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'9.2', parentId:'step-9',
+      title:'TASK-002, 003, 004: Wave 1 Utilities and Hook', desc:'Parallel, TDD',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Wave 1 tasks are independent — Forge implements all three in parallel after checking the test setup. TDD mode is active: tests are written first, confirmed to fail for the right reason, then the implementation is added.</p>
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin-bottom:.5rem;">What gets created:</p>
+        <div class="cmd-block"><pre>src/utils/distance.ts           — Haversine distance calculation + formatDistance helper
+src/utils/distance.test.ts      — 4 unit tests
 
-<span class="t-key">export function</span> useGeolocation() {
-  <span class="t-key">const</span> [state, setState] = useState&lt;State&gt;(<span class="t-str">'idle'</span>);
-  <span class="t-key">const</span> [coords, setCoords] = useState&lt;GeolocationCoordinates | null&gt;(null);
-  <span class="t-key">return</span> { state, coords, request };
-}</pre>
-          </div>
-          <div class="result-grid">
-            <div class="result-row"><span class="result-file">src/utils/distance.ts</span><span class="result-desc">Haversine + formatDistance · 4 tests</span><span class="result-pass">4/4 PASS</span></div>
-            <div class="result-row"><span class="result-file">src/utils/searchFilter.ts</span><span class="result-desc">Case-insensitive name filter · 5 tests</span><span class="result-pass">5/5 PASS</span></div>
-            <div class="result-row"><span class="result-file">src/hooks/useGeolocation.ts</span><span class="result-desc">idle/loading/granted/denied/unavailable · 4 tests</span><span class="result-pass">4/4 PASS</span></div>
-          </div>
+src/utils/searchFilter.ts       — Case-insensitive restaurant name filter
+src/utils/searchFilter.test.ts  — 5 unit tests
+
+src/hooks/useGeolocation.ts     — Browser Geolocation API hook
+                                  States: idle / loading / granted / denied / unavailable
+src/hooks/useGeolocation.test.ts — 4 unit tests</pre></div>
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .5rem;">Test results — all wave:1 suites:</p>
+        <div class="result-grid">
+          <div class="result-row"><span class="result-file">distance.test.ts</span><span class="result-desc">Haversine + formatDistance</span><span class="result-pass">4/4 PASS</span></div>
+          <div class="result-row"><span class="result-file">searchFilter.test.ts</span><span class="result-desc">Case-insensitive name filter</span><span class="result-pass">5/5 PASS</span></div>
+          <div class="result-row"><span class="result-file">useGeolocation.test.ts</span><span class="result-desc">idle/loading/granted/denied/unavailable</span><span class="result-pass">4/4 PASS</span></div>
         </div>
+        <div class="success-box" style="margin-top:.75rem;">All 12 tests pass across all three suites.<br><span style="font-size:.8rem;color:#777;">Warnings are React deprecation notices from UIKit library internals — not test failures.</span></div>
+      `
+    },
 
-        <div class="substep">
-          <div class="substep-title">TASK-005–007 — Component &amp; Pages (Wave 2 &amp; 3)</div>
-          <div class="cmd-block">
-            <pre><span class="t-cmt">// src/pages/dining/index.tsx  (listing page)</span>
-<span class="t-key">export default function</span> DiningPage() {
-  <span class="t-key">const</span> [query, setQuery] = useState(<span class="t-str">''</span>);
-  <span class="t-key">const</span> { state, coords, request } = useGeolocation();
-  <span class="t-key">const</span> filtered = searchFilter(restaurants, query);
-  <span class="t-key">const</span> sorted = state === <span class="t-str">'granted'</span>
-    ? sortByDistance(filtered, coords) : filtered;
-  <span class="t-key">return</span> (
-    &lt;Page&gt;
-      &lt;SearchInput value={query} onChange={setQuery} /&gt;
-      &lt;NearMeButton onClick={request} state={state} /&gt;
-      {sorted.map(r =&gt; &lt;RestaurantCard key={r.id} {...r} /&gt;)}
-    &lt;/Page&gt;
-  );
-}</pre>
-          </div>
-          <div class="result-grid">
-            <div class="result-row"><span class="result-file">src/components/dining/RestaurantCard.tsx</span><span class="result-desc">UIKit card · TagInLineCashBack · distance prop</span><span class="result-pass">PASS</span></div>
-            <div class="result-row"><span class="result-file">src/pages/dining/index.tsx</span><span class="result-desc">listing page · search · near me · empty state · 7 tests</span><span class="result-pass">7/7 PASS</span></div>
-            <div class="result-row"><span class="result-file">src/pages/dining/[id].tsx</span><span class="result-desc">detail page · not-found handling · back link · 3 tests</span><span class="result-pass">3/3 PASS</span></div>
-          </div>
+    // ── STEP 9.3 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'9.3', parentId:'step-9',
+      title:'TASK-005: RestaurantCard Component', desc:'Wave 2',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Wave 2 has a single task: the shared card component used by the listing page.</p>
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin-bottom:.5rem;">What gets created:</p>
+        <div class="cmd-block"><pre>src/components/dining/RestaurantCard.tsx      — UIKit card component
+                                               Uses TagInLineCashBack for the offer badge
+                                               Accepts optional distance prop
+                                               Links to /dining/:id
+src/components/dining/RestaurantCard.test.tsx — component tests</pre></div>
+      `
+    },
+
+    // ── STEP 9.4 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'9.4', parentId:'step-9',
+      title:'TASK-006 and TASK-007: Pages', desc:'Wave 3, Parallel',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Wave 3 pages are implemented in parallel with their test suites.</p>
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin-bottom:.5rem;">What gets created:</p>
+        <div class="cmd-block"><pre>src/pages/dining/index.tsx       — Listing page
+                                   Live name search (client-side filter, keystroke)
+                                   "Near me" button (Geolocation -> Haversine sort)
+                                   Alphabetical default / distance sort when near-me active
+                                   Empty search results state
+src/pages/dining/index.test.tsx  — 7 tests
+
+src/pages/dining/[id].tsx        — Detail page
+                                   Restaurant not-found handling (invalid id)
+                                   Back link to /dining
+src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .5rem;">Test results — both page suites:</p>
+        <div class="result-grid">
+          <div class="result-row"><span class="result-file">dining/index.test.tsx</span><span class="result-desc">search, near-me, sort, empty state</span><span class="result-pass">7/7 PASS</span></div>
+          <div class="result-row"><span class="result-file">dining/[id].test.tsx</span><span class="result-desc">detail page, not-found, back link</span><span class="result-pass">3/3 PASS</span></div>
         </div>
+        <div class="success-box" style="margin-top:.75rem;">10/10 tests pass across both page test suites.<br><span style="font-size:.8rem;color:#777;">Warnings are React 18 deprecation notices from UIKit library internals — not test failures.</span></div>
+      `
+    },
+
+    // ── STEP 9.5 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'9.5', parentId:'step-9', markComplete: true,
+      title:'All Tasks Complete', desc:'24/24 tests pass, 6 suites, 0 failures',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">All 7 tasks complete on branch <code>feat/dining-experience-on-web-for-rakutencom</code>.</p>
+        <div class="result-grid">
+          <div class="result-row"><span class="result-file">src/data/restaurants.json</span><span class="result-desc">15 mock restaurants, all TR-2 fields</span><span class="result-pass">PASS</span></div>
+          <div class="result-row"><span class="result-file">src/utils/distance.ts</span><span class="result-desc">Haversine + formatDistance (4 tests)</span><span class="result-pass">4/4 PASS</span></div>
+          <div class="result-row"><span class="result-file">src/utils/searchFilter.ts</span><span class="result-desc">case-insensitive name filter (5 tests)</span><span class="result-pass">5/5 PASS</span></div>
+          <div class="result-row"><span class="result-file">src/hooks/useGeolocation.ts</span><span class="result-desc">idle/loading/granted/denied/unavailable (4 tests)</span><span class="result-pass">4/4 PASS</span></div>
+          <div class="result-row"><span class="result-file">src/components/dining/RestaurantCard.tsx</span><span class="result-desc">UIKit card, TagInLineCashBack, distance prop, links to /dining/:id</span><span class="result-pass">PASS</span></div>
+          <div class="result-row"><span class="result-file">src/pages/dining/index.tsx</span><span class="result-desc">listing page: search, near-me, sort, empty state (7 tests)</span><span class="result-pass">7/7 PASS</span></div>
+          <div class="result-row"><span class="result-file">src/pages/dining/[id].tsx</span><span class="result-desc">detail page: not-found handling, back link (3 tests)</span><span class="result-pass">3/3 PASS</span></div>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;"><strong>24/24 tests pass · 6 suites · 0 failures</strong></div>
       `
     },
 
