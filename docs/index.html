@@ -66,11 +66,23 @@
 
     /* ══ SIDEBAR ══════════════════════════════════════════════════════════════ */
     .sidebar {
-      width:260px; flex-shrink:0; background:var(--surface);
-      border-right:1px solid var(--border); display:flex; flex-direction:column;
-      overflow:hidden; transition:width .3s ease;
+      width:300px; min-width:180px; max-width:520px; flex-shrink:0;
+      background:var(--surface); border-right:1px solid var(--border);
+      display:flex; flex-direction:column; overflow:hidden;
+      transition:width .3s ease; position:relative;
     }
-    .sidebar.collapsed { width:0; border-right:none; }
+    .sidebar.collapsed { width:0 !important; border-right:none; }
+    .sidebar.collapsed .sidebar-resizer { display:none; }
+
+    /* drag handle */
+    .sidebar-resizer {
+      position:absolute; top:0; right:-3px; width:6px; height:100%;
+      cursor:col-resize; z-index:20;
+      background:transparent;
+    }
+    .sidebar-resizer:hover, .sidebar-resizer.dragging {
+      background:var(--border2);
+    }
 
     .sidebar-head {
       padding:.8rem 1rem; border-bottom:1px solid var(--border);
@@ -515,6 +527,7 @@
   <!-- Layout -->
   <div class="layout">
     <aside class="sidebar" id="sidebar">
+      <div class="sidebar-resizer" id="sidebar-resizer"></div>
       <div class="sidebar-head">
         <h3>Steps</h3>
         <button class="collapse-btn" onclick="toggleSidebar()">◀</button>
@@ -580,7 +593,7 @@
       type:'step', num:'1', id:'step-1',
       title:'Clone the Repo', desc:'Get the codebase onto your machine',
       content:`
-        <div class="info-box">Clone the lunch &amp; learn repo and switch into it.</div>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Clone the lunch &amp; learn repo and switch into it.</p>
         <div class="cmd-block">
           <pre><span class="t-cmd">gh</span> repo clone rewards-guilds/rr-lunchnlearn-web <span class="t-flag">&amp;&amp;</span> <span class="t-cmd">cd</span> rr-lunchnlearn-web</pre>
           <button class="copy-btn" onclick="copyText(this,'gh repo clone rewards-guilds/rr-lunchnlearn-web && cd rr-lunchnlearn-web')">Copy</button>
@@ -593,7 +606,12 @@
       type:'step', num:'2', id:'step-2',
       title:'Initialize Forge', desc:'Run /forge:init in Claude Code',
       content:`
-        <div class="info-box">Open Claude Code in the repo root and run:</div>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">In your terminal, type:</p>
+        <div class="cmd-block">
+          <pre><span class="t-cmd">claude</span></pre>
+          <button class="copy-btn" onclick="copyText(this,'claude')">Copy</button>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .75rem;">Open Claude Code in the repo root and run:</p>
         <div class="cmd-block">
           <pre><span class="t-cmd">/forge:init</span></pre>
           <button class="copy-btn" onclick="copyText(this,'/forge:init')">Copy</button>
@@ -606,12 +624,27 @@
       type:'substep', num:'2.1', parentId:'step-2',
       title:'Select Repository Type', desc:'Answer Forge\'s first prompt',
       content:`
-        <p style="font-size:.9rem;color:var(--muted);margin-bottom:1rem;">Forge will prompt:</p>
-        <div class="info-box"><em>What best describes this repository?</em></div>
-        <table class="dialog-table">
-          <tr><th>Option</th><th>Answer</th></tr>
-          <tr><td class="prompt-col">1 Source code / 2 Product / 3 Coordination</td><td class="answer-col"><code>1</code> — Source code repository</td></tr>
-        </table>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will prompt:</p>
+        <div class="cmd-block">
+          <pre><span class="t-key">What best describes this repository?</span>
+
+  <span class="t-str">1. Source code repository</span>   — a service, application, or library that engineers
+                                build and ship. Tracks deployables (the named units of
+                                source code, each with its own requirements, design,
+                                and test strategy) and active work items.
+
+  <span class="t-str">2. Product repository</span>       — owned by a product manager. Tracks product strategy,
+                                roadmap, and cross-team requirements. Contains no
+                                source code; references deployables that live in other
+                                repositories.
+
+  <span class="t-str">3. Coordination repository</span>  — houses planning artifacts for a project that spans
+                                multiple repositories. Contains no source code. Use
+                                this for a dedicated cross-team project repo.
+
+<span class="t-key">Enter 1, 2, or 3:</span></pre>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter <strong style="color:var(--dark);">1</strong> — Source code repository</p>
       `
     },
 
@@ -620,12 +653,19 @@
       type:'substep', num:'2.2', parentId:'step-2',
       title:'Legacy Repository Check', desc:'Answer Forge\'s second prompt',
       content:`
-        <p style="font-size:.9rem;color:var(--muted);margin-bottom:1rem;">Forge will prompt:</p>
-        <div class="info-box"><em>Is this a legacy repository?</em></div>
-        <table class="dialog-table">
-          <tr><th>Prompt</th><th>Answer</th></tr>
-          <tr><td class="prompt-col">Is this a legacy repository? [y/n]</td><td class="answer-col"><code>n</code> — active repo under development</td></tr>
-        </table>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will prompt:</p>
+        <div class="cmd-block">
+          <pre><span class="t-key">Is this a legacy repository?</span>
+
+  A legacy repository is one that is maintained but no longer under active
+  development — only bug fixes or minor changes, no new features.
+
+  In legacy mode, coding standards are not injected before code generation,
+  and version enforcement checks are suppressed.
+
+<span class="t-key">Enter y/n [n]:</span></pre>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter <strong style="color:var(--dark);">n</strong> — this is an active repo under development.</p>
       `
     },
 
@@ -634,12 +674,23 @@
       type:'substep', num:'2.3', parentId:'step-2',
       title:'Brownfield Analysis Offer', desc:'Forge detects existing source code',
       content:`
-        <p style="font-size:.9rem;color:var(--muted);margin-bottom:1rem;">Forge detects existing source code and will prompt:</p>
-        <div class="info-box"><em>Analyze now and scaffold .forge/deployables/?</em></div>
-        <table class="dialog-table">
-          <tr><th>Prompt</th><th>Answer</th></tr>
-          <tr><td class="prompt-col">Analyze now and scaffold? [y/n]</td><td class="answer-col"><code>n</code> — skip for now</td></tr>
-        </table>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge detects existing source code and will prompt:</p>
+        <div class="cmd-block">
+          <pre>This appears to be a brownfield repository with existing source code.
+
+Forge can analyze this repository to identify its deployables and capabilities,
+then generate initial .forge/deployables/ scaffolding (requirements stubs, spec
+outlines) based on what it finds. This gives your team a head start on the
+documentation and avoids a blank-slate discovery session later.
+
+You can skip this and run the analysis later using forge:discover.
+
+  <span class="t-str">y</span>  Analyze now and scaffold .forge/deployables/
+  <span class="t-str">n</span>  Skip — initialize without analysis [default]
+
+<span class="t-key">Enter y/n [n]:</span></pre>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter <strong style="color:var(--dark);">n</strong> — skip for now.</p>
       `
     },
 
@@ -648,12 +699,18 @@
       type:'substep', num:'2.4', parentId:'step-2',
       title:'Branch Naming Convention', desc:'Accept the RR standard',
       content:`
-        <p style="font-size:.9rem;color:var(--muted);margin-bottom:1rem;">Forge detects the RR CI/CD pipeline and proposes:</p>
-        <div class="info-box"><em>Proposed: &lt;type&gt;/&lt;description&gt; — feat, feature, release, hotfix, bugfix</em></div>
-        <table class="dialog-table">
-          <tr><th>Prompt</th><th>Answer</th></tr>
-          <tr><td class="prompt-col">Use this convention? [Y/n]</td><td class="answer-col"><code>Y</code> — accept <code>feat/</code>, <code>bugfix/</code>, <code>hotfix/</code></td></tr>
-        </table>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge detects the RR CI/CD pipeline and proposes:</p>
+        <div class="cmd-block">
+          <pre>Detected Rakuten Rewards standard CI/CD pipeline (helm-upgrade-nonprod).
+
+Proposed default branch convention: <span class="t-key">&lt;type&gt;/&lt;description&gt;</span>
+  where &lt;type&gt; is one of: <span class="t-str">feat, feature, release, hotfix, bugfix</span>
+  Examples: feat/add-user-preferences, bugfix/auth-timeout, hotfix/payment-crash
+
+<span class="t-key">Use this convention? [Y/n]</span>
+Or describe your convention in plain English or as a regex:</pre>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter <strong style="color:var(--dark);">Y</strong> — accept the RR standard branch naming convention.</p>
       `
     },
 
@@ -662,13 +719,21 @@
       type:'substep', num:'2.5', parentId:'step-2',
       title:'Allow Directory and File Creation', desc:'Grant persistent permission',
       content:`
-        <p style="font-size:.9rem;color:var(--muted);margin-bottom:1rem;">Claude Code will ask permission to create the .forge/ directory structure:</p>
-        <div class="info-box"><em>mkdir -p .forge/spec/arch-decisions .forge/efforts .forge/deployables</em></div>
-        <table class="dialog-table">
-          <tr><th>Permission Prompt</th><th>Answer</th></tr>
-          <tr><td class="prompt-col">Create .forge/ directory structure?</td><td class="answer-col"><code>2</code> — Yes, and always allow access to spec/</td></tr>
-        </table>
-        <div class="info-box">Selecting <strong>2</strong> grants persistent permission and avoids repeated prompts.</div>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Claude Code will ask permission to create the .forge/ directory structure:</p>
+        <div class="cmd-block">
+          <pre><span class="t-key">Bash command</span>
+
+  mkdir -p .forge/spec/arch-decisions \
+    .forge/efforts \
+    .forge/deployables &amp;&amp; echo "dirs created"
+  <span class="t-cmt">Create .forge directory structure</span>
+
+<span class="t-key">Do you want to proceed?</span>
+  <span class="t-str">1.</span> Yes
+  <span class="t-str">2.</span> Yes, and always allow access to spec/ from this project
+  <span class="t-str">3.</span> No</pre>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select <strong style="color:var(--dark);">2. Yes, and always allow access to spec/ from this project</strong> — grants persistent permission and avoids repeated prompts.</p>
       `
     },
 
@@ -677,13 +742,33 @@
       type:'substep', num:'2.6', parentId:'step-2', markComplete: true,
       title:'Confirm Completion and Commit', desc:'Commit the scaffold to your local repo',
       content:`
-        <p style="font-size:.9rem;color:var(--muted);margin-bottom:1rem;">Wait for Forge to finish, then commit:</p>
-        <div class="success-box">Forge creates <code>.forge/</code> files and <code>CLAUDE.md</code>. Commit them:</div>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Wait for Forge to finish. You will see the following summary:</p>
+        <div class="success-box">This step creates and saves all <code>.forge/</code> files and <code>CLAUDE.md</code> to your local repository.</div>
         <div class="cmd-block">
-          <pre><span class="t-cmd">git</span> add .forge/ CLAUDE.md <span class="t-flag">&amp;&amp;</span> <span class="t-cmd">git</span> commit <span class="t-flag">-m</span> <span class="t-str">"chore: initialize forge v0.9.0"</span></pre>
-          <button class="copy-btn" onclick="copyText(this,'git add .forge/ CLAUDE.md && git commit -m \\"chore: initialize forge v0.9.0\\"')">Copy</button>
+          <pre><span class="t-key">forge:init complete — forge v0.9.0</span>
+
+Repository type: Source code repository
+
+  Created:
+    <span class="t-str">.forge/README.md</span>
+    <span class="t-str">.forge/spec/README.md</span>
+    <span class="t-str">.forge/spec/arch-decisions/README.md</span>
+    <span class="t-str">.forge/efforts/README.md</span>
+    <span class="t-str">.forge/deployables/README.md</span>
+    <span class="t-str">.forge/branching.md</span>
+    <span class="t-str">.forge/version</span>
+    <span class="t-str">.forge/.gitignore</span>
+    <span class="t-str">CLAUDE.md</span>
+
+Plugin: rr-standards/forge/0.9.0
+Pin: unpinned
+
+Commit these files so your team gets the workspace structure:
+  git add .forge/ CLAUDE.md
+  git commit -m "chore: initialize forge v0.9.0"</pre>
         </div>
-        <div class="info-box">In Claude Code prefix shell commands with <strong>!</strong> to run them inline.</div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .5rem;">Go ahead and commit it locally:</p>
+        <p style="font-size:.88rem;color:var(--dark);font-family:'SF Mono','Fira Code','Courier New',monospace;background:var(--pale);border:1px solid var(--border);border-radius:7px;padding:.6rem .9rem;">! git add .forge/ CLAUDE.md &amp;&amp; git commit -m "chore: initialize forge v0.9.0"</p>
       `
     },
 
@@ -1281,9 +1366,8 @@
     if (s.type === 'substep') {
       const isLast = s.markComplete === true;
       const btnHTML = isLast
-        ? `<button class="btn-primary" onclick="markDone(${idx})" id="done-btn-${idx}"
-            style="${doneSet.has(idx) ? 'background:#16a34a;color:#fff;border:none;box-shadow:0 2px 8px rgba(22,163,74,.3);' : ''}">
-            ${doneSet.has(idx) ? '✓ Marked Complete' : 'Mark as Complete'}
+        ? `<button class="btn-primary" onclick="markDone(${idx})" id="done-btn-${idx}">
+            ${doneSet.has(idx) ? '<span style="color:#16a34a;font-size:1rem;">✓</span> Marked Complete' : 'Mark as Complete'}
            </button>`
         : `<button class="btn-primary" onclick="nextSlide()">Next Lesson →</button>`;
       return `<div class="step-slide">
@@ -1303,9 +1387,8 @@
     const hasSubsteps = s.id && slides.some(x => x.type === 'substep' && x.parentId === s.id);
     const stepBtnHTML = hasSubsteps
       ? `<button class="btn-primary" onclick="nextSlide()">Next Lesson →</button>`
-      : `<button class="btn-primary" onclick="markDone(${idx})" id="done-btn-${idx}"
-          style="${doneSet.has(idx) ? 'background:#16a34a;color:#fff;border:none;box-shadow:0 2px 8px rgba(22,163,74,.3);' : ''}">
-          ${doneSet.has(idx) ? '✓ Marked Complete' : 'Mark Step Complete'}
+      : `<button class="btn-primary" onclick="markDone(${idx})" id="done-btn-${idx}">
+          ${doneSet.has(idx) ? '<span style="color:#16a34a;font-size:1rem;">✓</span> Marked Complete' : 'Mark Step Complete'}
         </button>`;
 
     return `<div class="step-slide">
@@ -1428,12 +1511,13 @@
     // Update button
     const btn = document.getElementById('done-btn-' + idx);
     if (btn) {
-      btn.textContent = '✓ Marked Complete';
-      btn.style.cssText = 'background:#16a34a;color:#fff;border:none;box-shadow:0 2px 8px rgba(22,163,74,.3);';
+      btn.innerHTML = '<span style="color:#16a34a;font-size:1rem;">✓</span> Marked Complete';
+      btn.style.cssText = '';
     }
 
     updateProgress();
     showToast('Step marked complete!');
+    setTimeout(() => nextSlide(), 600);
   }
 
   function updateProgress() {
@@ -1613,6 +1697,37 @@
     if (e.key === 'ArrowRight') nextSlide();
     if (e.key === 'ArrowLeft')  prevSlide();
   });
+
+  // ═══════════════════════════════════════════════════════════════
+  // SIDEBAR RESIZE
+  // ═══════════════════════════════════════════════════════════════
+  (function() {
+    const resizer = document.getElementById('sidebar-resizer');
+    const sidebar = document.getElementById('sidebar');
+    let startX, startW;
+
+    resizer.addEventListener('mousedown', e => {
+      startX = e.clientX;
+      startW = sidebar.offsetWidth;
+      resizer.classList.add('dragging');
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+
+      function onMove(e) {
+        const w = Math.min(520, Math.max(180, startW + (e.clientX - startX)));
+        sidebar.style.width = w + 'px';
+      }
+      function onUp() {
+        resizer.classList.remove('dragging');
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  })();
 
   build();
   </script>
