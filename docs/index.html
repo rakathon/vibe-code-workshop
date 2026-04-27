@@ -2187,6 +2187,19 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
     ctx.fillStyle = '#111111';
     ctx.fillRect(28, 28, W - 56, 100);
 
+    // Rakuten R logo in header (left side)
+    ctx.save();
+    const logoSize = 60;
+    const logoX = 58;
+    const logoY = 48;
+    const scale = logoSize / 24;
+    ctx.translate(logoX, logoY);
+    ctx.scale(scale, scale);
+    ctx.fillStyle = '#ffffff';
+    const rPath = new Path2D('M23.277 21.3L3.939 24 .722 21.3h22.555zM7.6 19.276H3.939V0h6.052a6.653 6.653 0 0 1 6.65 6.646c0 2.234-1.108 4.204-2.799 5.418l5.418 7.211h-4.585l-4.486-5.979H7.6v5.98zm0-9.64h2.392a2.992 2.992 0 0 0 2.989-2.989 2.994 2.994 0 0 0-2.989-2.986H7.6v5.975z');
+    ctx.fill(rPath);
+    ctx.restore();
+
     // Header text
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 28px -apple-system, Helvetica, Arial, sans-serif';
