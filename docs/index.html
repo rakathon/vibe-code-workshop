@@ -594,8 +594,9 @@
   // Section definitions — maps slide index ranges to section labels
   // Built after slides array is defined (see buildSections())
   const SECTIONS = [
-    { label: 'Section 1: Getting Started',         slideIds: ['step-1','step-2'] },
+    { label: 'Section 1: Getting Started',            slideIds: ['step-1','step-2'] },
     { label: 'Section 2: Create a Forge Work Effort', slideIds: ['step-3'] },
+    { label: 'Section 3: Elaborate Requirements',     slideIds: ['step-4'] },
   ];
 
   // Sub-steps that live under a parent step (displayed indented + grayed in sidebar)
@@ -1004,70 +1005,178 @@ Next steps:
 
     // ── STEP 4 ───────────────────────────────────────────────────
     {
-      type:'step', num:'4',
+      type:'step', num:'4', id:'step-4',
       title:'Elaborate Technical Requirements', desc:'Run /forge:elaborate',
       content:`
-        <div class="info-box">Expands business requirements into technical requirements — NFRs, integration constraints, security implications, scalability targets.</div>
-        <div class="forge-cmd">⚡ /forge:elaborate</div>
-        <div class="substep">
-          <div class="substep-title">4.1 — Provide the PRD</div>
-          <div class="prompt-block">
-            <div class="prompt-label">Forge starts cold — give it the PRD URL</div>
-            <p>Fetch PRD from this URL https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44432064526/PRD+Dining+Cash+Back+Web+Expansion+v3</p>
-            <button class="copy-btn" onclick="copyText(this,'Fetch PRD from this URL https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44432064526/PRD+Dining+Cash+Back+Web+Expansion+v3')">Copy</button>
-          </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Expands business requirements into technical requirements — deriving NFRs, integration constraints, security implications, and scalability targets. Writes <code>requirements/technical.md</code> from the BRs in <code>requirements/business.md</code>.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run:</p>
+        <div class="cmd-block">
+          <pre><span class="t-cmd">/forge:elaborate</span></pre>
+          <button class="copy-btn" onclick="copyText(this,'/forge:elaborate')">Copy</button>
         </div>
-        <div class="substep">
-          <div class="substep-title">4.2 — Answer Follow-up Questions</div>
-          <table class="dialog-table">
-            <tr><th>Question</th><th>Answer</th></tr>
-            <tr><td class="prompt-col">Q2 — Restaurant data schema</td><td class="answer-col"><code>OK</code></td></tr>
-            <tr><td class="prompt-col">Q3 — User authentication context</td><td class="answer-col"><code>no auth required</code></td></tr>
-            <tr><td class="prompt-col">Q4 — Entry point / navigation</td><td class="answer-col"><code>when user open endpoint /dining</code></td></tr>
-            <tr><td class="prompt-col">Q5 — Restaurant detail page URL</td><td class="answer-col"><code>id is fine</code></td></tr>
-            <tr><td class="prompt-col">Q6 — "Near me" geolocation</td><td class="answer-col"><code>ok</code></td></tr>
-            <tr><td class="prompt-col">Q7 — Cash back offer display</td><td class="answer-col"><code>sounds good</code></td></tr>
-            <tr><td class="prompt-col">Q8 — Card-linking CTA</td><td class="answer-col"><code>for now no need — out of scope</code></td></tr>
-            <tr><td class="prompt-col">Q9 — Search behaviour</td><td class="answer-col"><code>ok</code></td></tr>
-            <tr><td class="prompt-col">Q10 — Default sort order</td><td class="answer-col"><code>ok</code></td></tr>
-          </table>
-        </div>
-        <div class="substep">
-          <div class="substep-title">What gets written</div>
-          <div class="cmd-block">
-            <pre><span class="t-cmt"># requirements/business.md  — BR-1 through BR-5</span>
-<span class="t-cmt"># requirements/technical.md — TR-1 through TR-10</span>
+      `
+    },
 
-<span class="t-key">TR-2</span>  Restaurant JSON schema:
-        id, name, cuisineType, cashBackOffer,
-        thumbnailUrl, address, lat, lng
-
-<span class="t-key">TR-7</span>  Two new Next.js pages:
-        src/pages/dining/index.tsx
-        src/pages/dining/[id].tsx</pre>
-          </div>
+    // ── STEP 4.1 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'4.1', parentId:'step-4',
+      title:'Provide the PRD Document', desc:'Give Forge the PRD URL',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge starts cold with no existing artifacts and asks discovery questions. Provide the PRD URL so Forge can extract business requirements directly:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str">Fetch PRD from this URL <a href="https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44432064526/PRD+Dining+Cash+Back+Web+Expansion+v3" target="_blank" style="color:#aaa;text-decoration:underline;text-underline-offset:3px;">https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44432064526/PRD+Dining+Cash+Back+Web+Expansion+v3</a></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Fetch PRD from this URL https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44432064526/PRD+Dining+Cash+Back+Web+Expansion+v3')">Copy</button>
         </div>
+      `
+    },
+
+    // ── STEP 4.2 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'4.2', parentId:'step-4', markComplete: true,
+      title:'Answer Follow-up Questions', desc:'Clarify gaps after PRD fetch',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">After fetching the PRD, Forge asks clarifying questions about gaps. Answer each one to help produce accurate requirements.</p>
+
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .4rem;">Question 1 — Restaurant data schema</p>
+        <div class="cmd-block"><pre>Question 1 — Restaurant data schema
+
+The JSON file needs a defined structure. I'd recommend each restaurant object
+contains: id, name, cuisineType, cashBackOffer (e.g. "5% Cash Back"),
+thumbnailUrl, address, lat, lng. Does that cover everything needed for listing
+cards and detail pages, or are there additional fields (e.g. phone, hours,
+website, minimum spend for the offer)?</pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.6rem 0 .3rem;">Answer:</p>
+        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="OK"></span><span class="typing-cursor">▌</span></pre></div>
+
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .4rem;">Question 2 — User authentication context</p>
+        <div class="cmd-block"><pre>Question 2 — User authentication context
+
+The PRD mentions "click-through to card-linking page" as a success metric,
+implying users need to be logged in to actually earn cash back. I'd recommend
+the dining listing and detail pages are publicly accessible (no login required
+to browse), but the card-link CTA surfaces a prompt to log in if the user is
+unauthenticated. This maximises discovery while preserving the earning flow.
+Does that match the intended UX, or should the entire dining section require
+authentication?</pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.6rem 0 .3rem;">Answer:</p>
+        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="no auth required"></span><span class="typing-cursor">▌</span></pre></div>
+
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .4rem;">Question 3 — Entry point / navigation</p>
+        <div class="cmd-block"><pre>Question 3 — Entry point / navigation
+
+How do users get to the dining section? I'd recommend adding a "Dining" link
+to the existing top-level navigation (alongside Cash Back, Travel, etc.) so
+it's discoverable from any page. Is that the intended entry point, or should
+it be surfaced differently — e.g. a homepage banner, a new category in the
+store directory, or a dedicated marketing landing page that links in?</pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.6rem 0 .3rem;">Answer:</p>
+        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="when user open endpoint /dining"></span><span class="typing-cursor">▌</span></pre></div>
+
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .4rem;">Question 4 — Restaurant detail page URL</p>
+        <div class="cmd-block"><pre>Question 4 — Restaurant detail page URL
+
+For the restaurant detail page, I'd recommend the route be /dining/:id — e.g.
+/dining/123 — where id matches the restaurant's id field in the JSON. This
+keeps routing simple and makes deep-linking to a specific restaurant possible.
+Does that work, or should the URL use the restaurant name slug instead (e.g.
+/dining/nobu-los-angeles)?</pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.6rem 0 .3rem;">Answer:</p>
+        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="id is fine"></span><span class="typing-cursor">▌</span></pre></div>
+
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .4rem;">Question 5 — "Near me" geolocation behaviour</p>
+        <div class="cmd-block"><pre>Question 5 — "Near me" geolocation behaviour
+
+When the user clicks "near me", the browser will prompt for location
+permission. I'd recommend: if permission is granted, sort the listing by
+distance ascending and show distance on each card; if denied or unavailable,
+show a non-blocking inline message ("Location unavailable — enable location
+access to see distances") and display the listing in default order (no
+distance shown). Does that cover the expected behaviour, or should distance
+be hidden entirely until the user actively enables location?</pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.6rem 0 .3rem;">Answer:</p>
+        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="ok"></span><span class="typing-cursor">▌</span></pre></div>
+
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .4rem;">Question 6 — Cash back offer display format</p>
+        <div class="cmd-block"><pre>Question 6 — Cash back offer display format
+
+The PRD says "cash back offer" is displayed on cards and the detail page. I'd
+recommend showing it as a simple percentage string from the data (e.g. "5%
+Cash Back") with no calculation logic — the JSON field is the display value.
+Should the offer also show any minimum spend or expiry info, or is it just the
+offer string for this v1?</pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.6rem 0 .3rem;">Answer:</p>
+        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="sounds good"></span><span class="typing-cursor">▌</span></pre></div>
+
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .4rem;">Question 7 — Card-linking CTA on restaurant detail page</p>
+        <div class="cmd-block"><pre>Question 7 — Card-linking CTA on restaurant detail page
+
+The PRD lists "click-through to card-linking page" as a success metric. I'd
+recommend the detail page shows a CTA button — e.g. "Link a Card to Earn Cash
+Back" — that navigates to the existing card-linking page (whatever URL that
+lives at today). Does the card-linking page have a known URL, and should the
+CTA deep-link directly to it, or just link to a general "how it works" page?</pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.6rem 0 .3rem;">Answer:</p>
+        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="for now no need to do anything on this as it is out of scope"></span><span class="typing-cursor">▌</span></pre></div>
+
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .4rem;">Question 8 — Search behaviour</p>
+        <div class="cmd-block"><pre>Question 8 — Search behaviour
+
+Client-side name search: I'd recommend a live filter that narrows the listing
+as the user types (no submit button needed), case-insensitive, matching on
+name field only. Should it also match on cuisineType (e.g. typing "Italian"
+surfaces all Italian restaurants), or strictly name only as the PRD states?</pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.6rem 0 .3rem;">Answer:</p>
+        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="ok"></span><span class="typing-cursor">▌</span></pre></div>
+
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .4rem;">Question 9 — Default sort order on the listing</p>
+        <div class="cmd-block"><pre>Question 9 — Default sort order on the listing
+
+When "near me" is not active, the listing has no defined sort order yet. I'd
+recommend alphabetical by restaurant name as the default — it's predictable
+and easy to scan. Is alphabetical fine, or should it be a fixed editorial
+order (as-seeded in the JSON)?</pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.6rem 0 .3rem;">Answer:</p>
+        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="ok"></span><span class="typing-cursor">▌</span></pre></div>
       `
     },
 
     // ── STEP 5 ───────────────────────────────────────────────────
     {
-      type:'step', num:'5',
+      type:'step', num:'5', id:'step-5',
       title:'Classify Risk', desc:'Run /forge:classify',
       content:`
-        <div class="info-box">Re-evaluates the effort's risk level against the full requirements now that discovery is complete.</div>
-        <div class="forge-cmd">⚡ /forge:classify</div>
-        <div class="substep">
-          <div class="substep-title">5.1 — Review Classification Output</div>
-          <table class="dialog-table">
-            <tr><th>Field</th><th>Value</th></tr>
-            <tr><td>Current</td><td>R2 (set at effort creation)</td></tr>
-            <tr><td>Recommended</td><td><strong>R3</strong></td></tr>
-            <tr><td>Why R3</td><td>New UI pages, static JSON, no backend changes, no cross-team deps</td></tr>
-            <tr><td>Why not R2</td><td>No external integration, schema change, or cross-team dependency applies</td></tr>
-          </table>
-          <div class="info-box">Accept the recommendation — enter <strong>R3</strong>.</div>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Re-evaluates the effort's risk level against the full requirements now that discovery is complete.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run:</p>
+        <div class="cmd-block">
+          <pre><span class="t-cmd">/forge:classify</span></pre>
+          <button class="copy-btn" onclick="copyText(this,'/forge:classify')">Copy</button>
         </div>
+      `
+    },
+
+    // ── STEP 5.1 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'5.1', parentId:'step-5', markComplete: true,
+      title:'Review Classification Output', desc:'Accept the recommended risk level',
+      content:`
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge evaluates all requirements and proposes a risk level. You will see output like this:</p>
+        <div class="cmd-block">
+          <pre>Current classification: <span class="t-str">R2</span> (set at effort creation)
+
+Recommended: <span class="t-key">R3</span>
+
+Why R3:
+  <span class="t-str">+</span> New UI pages with no backend data model changes (all data is a static JSON file)
+  <span class="t-str">+</span> No external service integration — all logic is client-side
+  <span class="t-str">+</span> No cross-team dependencies — entirely self-contained in this repo
+  <span class="t-str">+</span> Changes limited to a single team's scope
+
+Why not R2:
+  <span class="t-cmt">-</span> "New user-facing capability with significant adoption expected" — R2 fires here,
+    but no indicator from the external integration, cross-team dependency, or schema
+    change categories applies.</pre>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Accept the recommendation — enter <strong style="color:var(--dark);">R3</strong>.</p>
       `
     },
 
@@ -1933,20 +2042,24 @@ Next steps:
   function startTypingAnimations() {
     const slide = document.getElementById('slide-' + current);
     if (!slide) return;
-    slide.querySelectorAll('.typing-text[data-type-text]').forEach(el => {
-      if (el.dataset.typed) return;
+    const els = [...slide.querySelectorAll('.typing-text[data-type-text]')].filter(el => !el.dataset.typed);
+    let delay = 300;
+    els.forEach(el => {
       el.dataset.typed = '1';
       const text = el.dataset.typeText;
-      const cursor = el.nextElementSibling;
-      let i = 0;
       el.textContent = '';
-      function type() {
-        if (i <= text.length) {
-          el.textContent = text.slice(0, i++);
-          setTimeout(type, 38);
+      const startAt = delay;
+      delay += text.length * 38 + 300;
+      setTimeout(() => {
+        let i = 0;
+        function type() {
+          if (i <= text.length) {
+            el.textContent = text.slice(0, i++);
+            setTimeout(type, 38);
+          }
         }
-      }
-      setTimeout(type, 400);
+        type();
+      }, startAt);
     });
   }
 
