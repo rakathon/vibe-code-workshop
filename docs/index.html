@@ -136,17 +136,47 @@
     }
     .sb-section:first-child { border-top: none; margin-top: 0; }
 
-    /* Sub-step items (indented, grayed) */
+    /* Sub-step items (indented, grayed) — collapsed by default */
     .sb-item.substep {
       padding-left: 2rem;
-      opacity: .55;
+      opacity: 0;
+      height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      margin: 0;
+      overflow: hidden;
+      border: none !important;
+      pointer-events: none;
+      transition: height .25s ease, opacity .2s, padding .25s ease;
     }
-    .sb-item.substep:hover { opacity: 1; }
-    .sb-item.substep.active { opacity: 1; }
-    .sb-item.substep.done   { opacity: 1; }
+    .sb-item.substep.expanded {
+      height: 44px;
+      padding-top: .55rem;
+      padding-bottom: .55rem;
+      opacity: .55;
+      border-left: 3px solid transparent !important;
+      pointer-events: auto;
+    }
+    .sb-item.substep.expanded:hover  { opacity: 1; }
+    .sb-item.substep.expanded.active { opacity: 1; border-left-color: var(--dark) !important; }
+    .sb-item.substep.expanded.done   { opacity: 1; border-left-color: #16a34a !important; }
     .sb-item.substep .sb-dot {
       width: 16px; height: 16px; font-size: .55rem;
     }
+
+    /* Locked sidebar items */
+    .sb-item.locked {
+      opacity: .3;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* chevron on parent step items that have substeps */
+    .sb-item .sb-chevron {
+      margin-left: auto; font-size: .65rem; color: var(--muted);
+      transition: transform .25s ease; flex-shrink: 0;
+    }
+    .sb-item.expanded-parent .sb-chevron { transform: rotate(90deg); }
 
     .expand-btn {
       position:absolute; left:0; top:50%; transform:translateY(-50%);
@@ -1180,12 +1210,14 @@ Commit these files so your team gets the workspace structure:
   // ═══════════════════════════════════════════════════════════════
   // STATE
   // ═══════════════════════════════════════════════════════════════
-  let current  = 0;
-  let doneSet  = new Set(JSON.parse(localStorage.getItem('lnl_done') || '[]'));
+  let current     = 0;
+  let doneSet     = new Set(JSON.parse(localStorage.getItem('lnl_done') || '[]'));
   let quizAnswers = JSON.parse(localStorage.getItem('lnl_quiz') || '{}');
+  let maxReached  = parseInt(localStorage.getItem('lnl_reached') || '0', 10);
 
-  function saveDone()  { localStorage.setItem('lnl_done', JSON.stringify([...doneSet])); }
-  function saveQuiz()  { localStorage.setItem('lnl_quiz', JSON.stringify(quizAnswers)); }
+  function saveDone()    { localStorage.setItem('lnl_done', JSON.stringify([...doneSet])); }
+  function saveQuiz()    { localStorage.setItem('lnl_quiz', JSON.stringify(quizAnswers)); }
+  function saveReached() { localStorage.setItem('lnl_reached', maxReached); }
 
   // ═══════════════════════════════════════════════════════════════
   // BUILD
@@ -1223,6 +1255,7 @@ Commit these files so your team gets the workspace structure:
       li.id = 'sb-' + i;
       li.onclick = () => goTo(i);
 
+      const hasChildren = s.type === 'step' && s.id && slides.some(x => x.type === 'substep' && x.parentId === s.id);
       let dotContent, labelText, subText, isSubstep = false;
       if (s.type === 'welcome')      { dotContent='★'; labelText='Welcome';       subText='Start here'; }
       else if (s.type === 'complete'){ dotContent='✦'; labelText='All Done';      subText='Certificate'; }
@@ -1234,10 +1267,11 @@ Commit these files so your team gets the workspace structure:
 
       li.innerHTML = `
         <div class="sb-dot"><span class="sb-num">${dotContent}</span></div>
-        <div>
+        <div style="flex:1;min-width:0;">
           <div class="sb-label">${labelText}</div>
           ${subText ? `<div class="sb-sublabel">${subText}</div>` : ''}
-        </div>`;
+        </div>
+        ${hasChildren ? '<span class="sb-chevron">›</span>' : ''}`;
       list.appendChild(li);
 
       // ── Sidebar: decorative sub-step items for steps WITHOUT real substep slides ──
@@ -1257,6 +1291,7 @@ Commit these files so your team gets the workspace structure:
 
     updateNav();
     updateProgress();
+    updateSidebarLocks();
   }
 
   // ═══════════════════════════════════════════════════════════════
@@ -1504,9 +1539,21 @@ Commit these files so your team gets the workspace structure:
     doneSet.add(idx);
     saveDone();
 
-    // Update sidebar
+    // Update sidebar item
     const sb = document.getElementById('sb-' + idx);
     if (sb) sb.classList.add('done');
+
+    // If this is a markComplete substep, also mark the parent step done in sidebar
+    const s = slides[idx];
+    if (s.type === 'substep' && s.markComplete && s.parentId) {
+      const parentIdx = slides.findIndex(x => x.id === s.parentId);
+      if (parentIdx !== -1) {
+        doneSet.add(parentIdx);
+        saveDone();
+        const parentSb = document.getElementById('sb-' + parentIdx);
+        if (parentSb) parentSb.classList.add('done');
+      }
+    }
 
     // Update button
     const btn = document.getElementById('done-btn-' + idx);
@@ -1516,8 +1563,20 @@ Commit these files so your team gets the workspace structure:
     }
 
     updateProgress();
-    showToast('Step marked complete!');
-    setTimeout(() => nextSlide(), 600);
+
+    // If completing a substep section, collapse substeps then jump to next non-quiz slide
+    if (s && s.type === 'substep' && s.markComplete) {
+      showToast('Section complete!');
+      setTimeout(() => {
+        let next = idx + 1;
+        while (next < slides.length && slides[next].type === 'quiz') next++;
+        if (next > maxReached) { maxReached = next; saveReached(); updateSidebarLocks(); }
+        if (next < slides.length) goTo(next); else nextSlide();
+      }, 600);
+    } else {
+      showToast('Step marked complete!');
+      setTimeout(() => nextSlide(), 600);
+    }
   }
 
   function updateProgress() {
@@ -1533,6 +1592,7 @@ Commit these files so your team gets the workspace structure:
   // ═══════════════════════════════════════════════════════════════
   function goTo(idx) {
     if (idx < 0 || idx >= slides.length) return;
+    if (idx > maxReached) { showToast('Complete the current step first'); return; }
     const prevEl = document.getElementById('slide-' + current);
     prevEl.classList.remove('active', 'welcome-active');
     document.getElementById('sb-' + current)?.classList.remove('active');
@@ -1543,10 +1603,58 @@ Commit these files so your team gets the workspace structure:
     const sb = document.getElementById('sb-' + current);
     sb?.classList.add('active');
     sb?.scrollIntoView({ block:'nearest' });
+    updateSubstepExpansion();
     updateNav();
   }
 
-  function nextSlide() { goTo(current + 1); }
+  function updateSidebarLocks() {
+    slides.forEach((s, i) => {
+      const el = document.getElementById('sb-' + i);
+      if (!el) return;
+      if (i > maxReached) {
+        el.classList.add('locked');
+      } else {
+        el.classList.remove('locked');
+      }
+    });
+  }
+
+  function updateSubstepExpansion() {
+    const cur = slides[current];
+    // Determine which parentId is currently "active"
+    const activeParentId = cur.type === 'substep' ? cur.parentId
+                         : cur.type === 'step' && slides.some(x => x.type === 'substep' && x.parentId === cur.id) ? cur.id
+                         : null;
+
+    slides.forEach((s, i) => {
+      if (s.type !== 'substep') return;
+      const sbEl = document.getElementById('sb-' + i);
+      if (!sbEl) return;
+      if (s.parentId === activeParentId) {
+        sbEl.classList.add('expanded');
+      } else {
+        sbEl.classList.remove('expanded');
+      }
+    });
+
+    // Update chevron on parent items
+    slides.forEach((s, i) => {
+      if (s.type !== 'step') return;
+      const sbEl = document.getElementById('sb-' + i);
+      if (!sbEl) return;
+      if (s.id === activeParentId) {
+        sbEl.classList.add('expanded-parent');
+      } else {
+        sbEl.classList.remove('expanded-parent');
+      }
+    });
+  }
+
+  function nextSlide() {
+    const next = current + 1;
+    if (next > maxReached) { maxReached = next; saveReached(); updateSidebarLocks(); }
+    goTo(next);
+  }
   function prevSlide() { goTo(current - 1); }
 
   function updateNav() {
