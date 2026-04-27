@@ -97,7 +97,7 @@
     }
     .sb-item:hover  { background:var(--pale); border-left-color:var(--light); }
     .sb-item.active { background:var(--pale); border-left-color:var(--dark); }
-    .sb-item.done   { border-left-color:var(--dark); }
+    .sb-item.done   { border-left-color:#16a34a; }
 
     .sb-dot {
       flex-shrink:0; width:20px; height:20px; border-radius:50%;
@@ -106,12 +106,35 @@
       transition:all .2s;
     }
     .sb-item.active .sb-dot { background:var(--dark); color:#fff; }
-    .sb-item.done   .sb-dot { background:var(--dark); color:#fff; }
+    .sb-item.done   .sb-dot { background:#16a34a; color:#fff; }
     .sb-item.done   .sb-dot::after { content:'✓'; font-size:.65rem; }
     .sb-item.done   .sb-dot .sb-num { display:none; }
 
     .sb-label    { font-size:.78rem; color:var(--text); line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .sb-sublabel { font-size:.68rem; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+    /* Section headers in sidebar */
+    .sb-section {
+      padding: .65rem 1rem .3rem;
+      font-size: .62rem; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--muted);
+      border-top: 1px solid var(--border);
+      margin-top: .3rem;
+      user-select: none;
+    }
+    .sb-section:first-child { border-top: none; margin-top: 0; }
+
+    /* Sub-step items (indented, grayed) */
+    .sb-item.substep {
+      padding-left: 2rem;
+      opacity: .55;
+    }
+    .sb-item.substep:hover { opacity: 1; }
+    .sb-item.substep.active { opacity: 1; }
+    .sb-item.substep.done   { opacity: 1; }
+    .sb-item.substep .sb-dot {
+      width: 16px; height: 16px; font-size: .55rem;
+    }
 
     .expand-btn {
       position:absolute; left:0; top:50%; transform:translateY(-50%);
@@ -519,6 +542,34 @@
   // ═══════════════════════════════════════════════════════════════
   // SLIDE DATA
   // ═══════════════════════════════════════════════════════════════
+  // Section definitions — maps slide index ranges to section labels
+  // Built after slides array is defined (see buildSections())
+  const SECTIONS = [
+    { label: 'Section 1: Getting Started',         slideIds: ['step-1','step-2'] },
+    { label: 'Section 2: Create a Forge Work Effort', slideIds: ['step-3'] },
+  ];
+
+  // Sub-steps that live under a parent step (displayed indented + grayed in sidebar)
+  const SUBSTEPS = {
+    'step-2': [
+      { id:'s2-1', label:'2.1 — Repository Type' },
+      { id:'s2-2', label:'2.2 — Legacy Repository Check' },
+      { id:'s2-3', label:'2.3 — Brownfield Analysis' },
+      { id:'s2-4', label:'2.4 — Branch Naming Convention' },
+      { id:'s2-5', label:'2.5 — Directory & File Creation' },
+      { id:'s2-6', label:'2.6 — Confirm & Commit' },
+    ],
+    'step-3': [
+      { id:'s3-1', label:'3.1 — Enter Effort Title' },
+      { id:'s3-2', label:'3.2 — Select Work Item Type' },
+      { id:'s3-3', label:'3.3 — Select Risk Level' },
+      { id:'s3-4', label:'3.4 — Skip Jira Association' },
+      { id:'s3-5', label:'3.5 — Allow Branch Creation' },
+      { id:'s3-6', label:'3.6 — Allow Effort Scaffold Commit' },
+      { id:'s3-7', label:'3.7 — Effort Creation Complete' },
+    ],
+  };
+
   const slides = [
 
     // ── WELCOME ──────────────────────────────────────────────────
@@ -526,7 +577,7 @@
 
     // ── STEP 1 ───────────────────────────────────────────────────
     {
-      type:'step', num:'1',
+      type:'step', num:'1', id:'step-1',
       title:'Clone the Repo', desc:'Get the codebase onto your machine',
       content:`
         <div class="info-box">Clone the lunch &amp; learn repo and switch into it.</div>
@@ -539,56 +590,100 @@
 
     // ── STEP 2 ───────────────────────────────────────────────────
     {
-      type:'step', num:'2',
+      type:'step', num:'2', id:'step-2',
       title:'Initialize Forge', desc:'Run /forge:init in Claude Code',
       content:`
-        <div class="info-box">Open Claude Code in the repo root and run the init skill.</div>
-        <div class="forge-cmd">⚡ /forge:init</div>
-        <hr class="div">
-        <div class="substep">
-          <div class="substep-title">2.1 — Repository Type</div>
-          <table class="dialog-table">
-            <tr><th>Option</th><th>Answer</th></tr>
-            <tr><td class="prompt-col">1 Source code / 2 Product / 3 Coordination</td><td class="answer-col"><code>1</code> — Source code repository</td></tr>
-          </table>
+        <div class="info-box">Open Claude Code in the repo root and run:</div>
+        <div class="cmd-block">
+          <pre><span class="t-cmd">/forge:init</span></pre>
+          <button class="copy-btn" onclick="copyText(this,'/forge:init')">Copy</button>
         </div>
-        <div class="substep">
-          <div class="substep-title">2.2 — Legacy Repository Check</div>
-          <table class="dialog-table">
-            <tr><th>Prompt</th><th>Answer</th></tr>
-            <tr><td class="prompt-col">Is this a legacy repository? [y/n]</td><td class="answer-col"><code>n</code> — active repo under development</td></tr>
-          </table>
+      `
+    },
+
+    // ── STEP 2.1 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'2.1', parentId:'step-2',
+      title:'Select Repository Type', desc:'Answer Forge\'s first prompt',
+      content:`
+        <p style="font-size:.9rem;color:var(--muted);margin-bottom:1rem;">Forge will prompt:</p>
+        <div class="info-box"><em>What best describes this repository?</em></div>
+        <table class="dialog-table">
+          <tr><th>Option</th><th>Answer</th></tr>
+          <tr><td class="prompt-col">1 Source code / 2 Product / 3 Coordination</td><td class="answer-col"><code>1</code> — Source code repository</td></tr>
+        </table>
+      `
+    },
+
+    // ── STEP 2.2 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'2.2', parentId:'step-2',
+      title:'Legacy Repository Check', desc:'Answer Forge\'s second prompt',
+      content:`
+        <p style="font-size:.9rem;color:var(--muted);margin-bottom:1rem;">Forge will prompt:</p>
+        <div class="info-box"><em>Is this a legacy repository?</em></div>
+        <table class="dialog-table">
+          <tr><th>Prompt</th><th>Answer</th></tr>
+          <tr><td class="prompt-col">Is this a legacy repository? [y/n]</td><td class="answer-col"><code>n</code> — active repo under development</td></tr>
+        </table>
+      `
+    },
+
+    // ── STEP 2.3 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'2.3', parentId:'step-2',
+      title:'Brownfield Analysis Offer', desc:'Forge detects existing source code',
+      content:`
+        <p style="font-size:.9rem;color:var(--muted);margin-bottom:1rem;">Forge detects existing source code and will prompt:</p>
+        <div class="info-box"><em>Analyze now and scaffold .forge/deployables/?</em></div>
+        <table class="dialog-table">
+          <tr><th>Prompt</th><th>Answer</th></tr>
+          <tr><td class="prompt-col">Analyze now and scaffold? [y/n]</td><td class="answer-col"><code>n</code> — skip for now</td></tr>
+        </table>
+      `
+    },
+
+    // ── STEP 2.4 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'2.4', parentId:'step-2',
+      title:'Branch Naming Convention', desc:'Accept the RR standard',
+      content:`
+        <p style="font-size:.9rem;color:var(--muted);margin-bottom:1rem;">Forge detects the RR CI/CD pipeline and proposes:</p>
+        <div class="info-box"><em>Proposed: &lt;type&gt;/&lt;description&gt; — feat, feature, release, hotfix, bugfix</em></div>
+        <table class="dialog-table">
+          <tr><th>Prompt</th><th>Answer</th></tr>
+          <tr><td class="prompt-col">Use this convention? [Y/n]</td><td class="answer-col"><code>Y</code> — accept <code>feat/</code>, <code>bugfix/</code>, <code>hotfix/</code></td></tr>
+        </table>
+      `
+    },
+
+    // ── STEP 2.5 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'2.5', parentId:'step-2',
+      title:'Allow Directory and File Creation', desc:'Grant persistent permission',
+      content:`
+        <p style="font-size:.9rem;color:var(--muted);margin-bottom:1rem;">Claude Code will ask permission to create the .forge/ directory structure:</p>
+        <div class="info-box"><em>mkdir -p .forge/spec/arch-decisions .forge/efforts .forge/deployables</em></div>
+        <table class="dialog-table">
+          <tr><th>Permission Prompt</th><th>Answer</th></tr>
+          <tr><td class="prompt-col">Create .forge/ directory structure?</td><td class="answer-col"><code>2</code> — Yes, and always allow access to spec/</td></tr>
+        </table>
+        <div class="info-box">Selecting <strong>2</strong> grants persistent permission and avoids repeated prompts.</div>
+      `
+    },
+
+    // ── STEP 2.6 ─────────────────────────────────────────────────
+    {
+      type:'substep', num:'2.6', parentId:'step-2', markComplete: true,
+      title:'Confirm Completion and Commit', desc:'Commit the scaffold to your local repo',
+      content:`
+        <p style="font-size:.9rem;color:var(--muted);margin-bottom:1rem;">Wait for Forge to finish, then commit:</p>
+        <div class="success-box">Forge creates <code>.forge/</code> files and <code>CLAUDE.md</code>. Commit them:</div>
+        <div class="cmd-block">
+          <pre><span class="t-cmd">git</span> add .forge/ CLAUDE.md <span class="t-flag">&amp;&amp;</span> <span class="t-cmd">git</span> commit <span class="t-flag">-m</span> <span class="t-str">"chore: initialize forge v0.9.0"</span></pre>
+          <button class="copy-btn" onclick="copyText(this,'git add .forge/ CLAUDE.md && git commit -m \\"chore: initialize forge v0.9.0\\"')">Copy</button>
         </div>
-        <div class="substep">
-          <div class="substep-title">2.3 — Brownfield Analysis</div>
-          <table class="dialog-table">
-            <tr><th>Prompt</th><th>Answer</th></tr>
-            <tr><td class="prompt-col">Analyze now and scaffold? [y/n]</td><td class="answer-col"><code>n</code> — skip for now</td></tr>
-          </table>
-        </div>
-        <div class="substep">
-          <div class="substep-title">2.4 — Branch Naming Convention</div>
-          <table class="dialog-table">
-            <tr><th>Prompt</th><th>Answer</th></tr>
-            <tr><td class="prompt-col">Use RR standard convention? [Y/n]</td><td class="answer-col"><code>Y</code> — accept <code>feat/</code>, <code>bugfix/</code>, <code>hotfix/</code></td></tr>
-          </table>
-        </div>
-        <div class="substep">
-          <div class="substep-title">2.5 — Allow Directory Creation</div>
-          <table class="dialog-table">
-            <tr><th>Permission Prompt</th><th>Answer</th></tr>
-            <tr><td class="prompt-col">Create .forge/ directory structure?</td><td class="answer-col"><code>2</code> — Yes, and always allow access to spec/</td></tr>
-          </table>
-        </div>
-        <div class="substep">
-          <div class="substep-title">2.6 — Confirm &amp; Commit</div>
-          <div class="success-box">Forge creates <code>.forge/</code> files and <code>CLAUDE.md</code>. Commit them:</div>
-          <div class="cmd-block">
-            <pre><span class="t-cmd">git</span> add .forge/ CLAUDE.md <span class="t-flag">&amp;&amp;</span> <span class="t-cmd">git</span> commit <span class="t-flag">-m</span> <span class="t-str">"chore: initialize forge v0.9.0"</span></pre>
-            <button class="copy-btn" onclick="copyText(this,'git add .forge/ CLAUDE.md && git commit -m \\"chore: initialize forge v0.9.0\\"')">Copy</button>
-          </div>
-          <div class="info-box">In Claude Code prefix shell commands with <strong>!</strong> to run them inline.</div>
-        </div>
+        <div class="info-box">In Claude Code prefix shell commands with <strong>!</strong> to run them inline.</div>
       `
     },
 
@@ -621,7 +716,7 @@
 
     // ── STEP 3 ───────────────────────────────────────────────────
     {
-      type:'step', num:'3',
+      type:'step', num:'3', id:'step-3',
       title:'Create a Work Effort', desc:'Run /forge:effort',
       content:`
         <div class="info-box">Creates a new work effort under <code>.forge/efforts/</code>, scaffolds the directory structure, creates a working branch, and commits everything atomically.</div>
@@ -1015,31 +1110,64 @@
     const list = document.getElementById('sidebar-list');
     document.getElementById('tot-slides').textContent = slides.length;
 
+    // Track which section we last emitted to avoid duplicate headers
+    const sectionBySlideId = {};
+    SECTIONS.forEach(sec => sec.slideIds.forEach(sid => sectionBySlideId[sid] = sec.label));
+    const emittedSections = new Set();
+
     slides.forEach((s, i) => {
+      // ── Slide element ──
       const el = document.createElement('div');
       el.className = 'slide' + (i === 0 ? ' active' + (s.type === 'welcome' ? ' welcome-active' : '') : '');
       el.id = 'slide-' + i;
       el.innerHTML = renderSlide(s, i);
       area.appendChild(el);
 
+      // ── Sidebar: inject section header if needed ──
+      if (s.id && sectionBySlideId[s.id] && !emittedSections.has(sectionBySlideId[s.id])) {
+        const secEl = document.createElement('div');
+        secEl.className = 'sb-section';
+        secEl.textContent = sectionBySlideId[s.id];
+        list.appendChild(secEl);
+        emittedSections.add(sectionBySlideId[s.id]);
+      }
+
+      // ── Sidebar: main item ──
       const li = document.createElement('div');
       li.className = 'sb-item' + (i === 0 ? ' active' : '') + (doneSet.has(i) ? ' done' : '');
       li.id = 'sb-' + i;
       li.onclick = () => goTo(i);
 
-      let dotContent, labelText, subText;
-      if (s.type === 'welcome')   { dotContent='★'; labelText='Welcome';       subText='Start here'; }
-      else if (s.type === 'complete'){ dotContent='✦'; labelText='All Done';   subText='Certificate'; }
-      else if (s.type === 'quiz') { dotContent='?'; labelText='Checkpoint';    subText=s.title; }
-      else                        { dotContent=s.num; labelText='Step '+s.num; subText=s.title; }
+      let dotContent, labelText, subText, isSubstep = false;
+      if (s.type === 'welcome')      { dotContent='★'; labelText='Welcome';       subText='Start here'; }
+      else if (s.type === 'complete'){ dotContent='✦'; labelText='All Done';      subText='Certificate'; }
+      else if (s.type === 'quiz')    { dotContent='?'; labelText='Checkpoint';    subText=s.title; }
+      else if (s.type === 'substep') { dotContent=s.num; labelText=s.num+' — '+s.title; subText=s.desc||''; isSubstep=true; }
+      else                           { dotContent=s.num; labelText='Step '+s.num; subText=s.title; }
+
+      if (isSubstep) li.classList.add('substep');
 
       li.innerHTML = `
         <div class="sb-dot"><span class="sb-num">${dotContent}</span></div>
         <div>
           <div class="sb-label">${labelText}</div>
-          <div class="sb-sublabel">${subText}</div>
+          ${subText ? `<div class="sb-sublabel">${subText}</div>` : ''}
         </div>`;
       list.appendChild(li);
+
+      // ── Sidebar: decorative sub-step items for steps WITHOUT real substep slides ──
+      if (s.id && SUBSTEPS[s.id] && !slides.some(x => x.type === 'substep' && x.parentId === s.id)) {
+        SUBSTEPS[s.id].forEach(sub => {
+          const subLi = document.createElement('div');
+          subLi.className = 'sb-item substep';
+          subLi.innerHTML = `
+            <div class="sb-dot"><span class="sb-num">·</span></div>
+            <div>
+              <div class="sb-label">${sub.label}</div>
+            </div>`;
+          list.appendChild(subLi);
+        });
+      }
     });
 
     updateNav();
@@ -1150,6 +1278,36 @@
       return renderQuiz(s, idx);
     }
 
+    if (s.type === 'substep') {
+      const isLast = s.markComplete === true;
+      const btnHTML = isLast
+        ? `<button class="btn-primary" onclick="markDone(${idx})" id="done-btn-${idx}"
+            style="${doneSet.has(idx) ? 'background:#16a34a;color:#fff;border:none;box-shadow:0 2px 8px rgba(22,163,74,.3);' : ''}">
+            ${doneSet.has(idx) ? '✓ Marked Complete' : 'Mark as Complete'}
+           </button>`
+        : `<button class="btn-primary" onclick="nextSlide()">Next Lesson →</button>`;
+      return `<div class="step-slide">
+        <div class="step-header">
+          <div class="step-badge" style="font-size:.75rem;width:36px;height:36px;">${s.num}</div>
+          <div class="step-title">
+            <h2>${s.title}</h2>
+            <p>${s.desc || ''}</p>
+          </div>
+        </div>
+        ${s.content}
+        <div style="margin-top:1.5rem;text-align:right;">${btnHTML}</div>
+      </div>`;
+    }
+
+    // For step slides that have substeps, show Next Lesson instead of Mark Complete
+    const hasSubsteps = s.id && slides.some(x => x.type === 'substep' && x.parentId === s.id);
+    const stepBtnHTML = hasSubsteps
+      ? `<button class="btn-primary" onclick="nextSlide()">Next Lesson →</button>`
+      : `<button class="btn-primary" onclick="markDone(${idx})" id="done-btn-${idx}"
+          style="${doneSet.has(idx) ? 'background:#16a34a;color:#fff;border:none;box-shadow:0 2px 8px rgba(22,163,74,.3);' : ''}">
+          ${doneSet.has(idx) ? '✓ Marked Complete' : 'Mark Step Complete'}
+        </button>`;
+
     return `<div class="step-slide">
       <div class="step-header">
         <div class="step-badge">${s.num}</div>
@@ -1159,12 +1317,7 @@
         </div>
       </div>
       ${s.content}
-      <div style="margin-top:1.5rem;text-align:right;">
-        <button class="btn-primary" onclick="markDone(${idx})" id="done-btn-${idx}"
-          style="${doneSet.has(idx) ? 'background:var(--pale);color:var(--dark);border:1px solid var(--border2);box-shadow:none;' : ''}">
-          ${doneSet.has(idx) ? '✓ Marked Complete' : 'Mark Step Complete'}
-        </button>
-      </div>
+      <div style="margin-top:1.5rem;text-align:right;">${stepBtnHTML}</div>
     </div>`;
   }
 
@@ -1276,7 +1429,7 @@
     const btn = document.getElementById('done-btn-' + idx);
     if (btn) {
       btn.textContent = '✓ Marked Complete';
-      btn.style.cssText = 'background:var(--pale);color:var(--dark);border:1px solid var(--border2);box-shadow:none;';
+      btn.style.cssText = 'background:#16a34a;color:#fff;border:none;box-shadow:0 2px 8px rgba(22,163,74,.3);';
     }
 
     updateProgress();
@@ -1284,8 +1437,8 @@
   }
 
   function updateProgress() {
-    const completable = slides.filter((s,i) => s.type === 'step' || s.type === 'quiz').length;
-    const done = slides.filter((s,i) => (s.type === 'step' || s.type === 'quiz') && doneSet.has(i)).length;
+    const completable = slides.filter((s,i) => s.type === 'step' || s.type === 'quiz' || (s.type === 'substep' && s.markComplete)).length;
+    const done = slides.filter((s,i) => (s.type === 'step' || s.type === 'quiz' || (s.type === 'substep' && s.markComplete)) && doneSet.has(i)).length;
     const pct = completable > 0 ? Math.round((done / completable) * 100) : 0;
     document.getElementById('progress-pct').textContent = pct + '%';
     document.getElementById('progress-fill').style.width = pct + '%';
