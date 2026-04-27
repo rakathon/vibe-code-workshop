@@ -1,0 +1,4 @@
+# credentials / signing keys — never commit these
+*.key
+*.p12
+*.cer
