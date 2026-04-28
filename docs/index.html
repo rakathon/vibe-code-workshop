@@ -2351,7 +2351,7 @@ The shared understanding is written. What next?
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run:</p>
         <div class="cmd-block">
           <pre><span class="t-str typing-text" data-type-text="Let's break this into implementation tasks list and then implement and validate it task by task"></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'Let\'s break this into implementation tasks list and then implement and validate it task by task')">Copy</button>
+          <button class="copy-btn" data-copy="Let's break this into implementation tasks list and then implement and validate it task by task" onclick="copyText(this, this.dataset.copy)">Copy</button>
         </div>
       `
       },
@@ -2374,8 +2374,11 @@ Step 3: Advisory Readiness Checks — discovery
 
 No validation report found. Run forge:validate before advancing out of
 discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.75rem 0 .3rem;">Enter <strong style="color:var(--dark);">yes</strong> — run validation before promoting.</p>
-        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="yes"></span><span class="typing-cursor">▌</span></pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.75rem 0 .3rem;">Enter</p>
+        <div class="cmd-block" style="margin-top:.4rem;">
+          <pre><span class="t-str typing-text" data-type-text="yes"></span><span class="typing-cursor">▌</span></pre>
+          <button class="copy-btn" onclick="copyText(this,'yes')">Copy</button>
+        </div>
         <div class="success-box" style="margin-top:.75rem;font-size:.82rem;">
           <strong>Tip</strong> — run validation explicitly at any time: If you want to validate discovery artifacts before this point, type <em>"I want you to validate the discovery artifacts"</em> in Claude Code. This is optional in the workshop but useful for a real project.
         </div>
@@ -2434,8 +2437,11 @@ discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
     <span class="t-str">✓</span> validation/report.md — PASS
 
     Proceed? <span class="t-key">(yes/no)</span></pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .4rem;">Enter <strong style="color:var(--dark);">yes</strong> — advance to the planning phase.</p>
-        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="yes"></span><span class="typing-cursor">▌</span></pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .4rem;">Enter</p>
+        <div class="cmd-block" style="margin-top:.4rem;">
+          <pre><span class="t-str typing-text" data-type-text="yes"></span><span class="typing-cursor">▌</span></pre>
+          <button class="copy-btn" onclick="copyText(this,'yes')">Copy</button>
+        </div>
       `
       },
 
