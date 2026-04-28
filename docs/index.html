@@ -2053,7 +2053,7 @@ Next steps:
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code, naming the project first and then attaching the PRD URL:</p>
         <div class="cmd-block">
           <pre><span class="t-str typing-text" data-type-text="I want to work on the dining-web project. Here is the PRD:&#10;  https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44435308663/PRD+Dining+Cash+Back+Web+Expansion+v4"></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'I want to work on the dining-web project. Here is the PRD:\n  https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44435308663/PRD+Dining+Cash+Back+Web+Expansion+v4')">Copy</button>
+          <button class="copy-btn" data-copy="I want to work on the dining-web project. Here is the PRD:&#10;  https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44435308663/PRD+Dining+Cash+Back+Web+Expansion+v4" onclick="copyText(this, this.dataset.copy)">Copy</button>
         </div>
         <p style="font-size:.88rem;color:var(--muted);margin-top:.75rem;">Forge picks up the project name, fetches the PRD, extracts business requirements, and then begins asking clarifying questions about any gaps or design decisions.</p>
       `
