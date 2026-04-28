@@ -703,6 +703,20 @@
       transform: translateY(-2px);
     }
 
+    .btn-skip {
+      display: inline-block;
+      background: transparent;
+      color: var(--muted);
+      font-size: .82rem;
+      font-weight: 600;
+      padding: .6rem 1.25rem;
+      border-radius: 999px;
+      border: 1px solid var(--border2);
+      cursor: pointer;
+      transition: color .2s, border-color .2s;
+    }
+    .btn-skip:hover { color: var(--text); border-color: var(--muted); }
+
     /* ══ STEP SLIDE ══════════════════════════════════════════════════════════ */
     .step-slide {
       max-width: 800px;
@@ -1566,7 +1580,7 @@
 
       // ── STEP 2 ───────────────────────────────────────────────────
       {
-        type: 'step', num: '2', id: 'step-2',
+        type: 'step', num: '2', id: 'step-2', optional: true,
         title: 'Initialize Forge', desc: 'Run /forge:init in Claude Code',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Let's run:</p>
@@ -2788,11 +2802,14 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
 
       // For step slides that have substeps, show Next Lesson instead of Mark Complete
       const hasSubsteps = s.id && slides.some(x => x.type === 'substep' && x.parentId === s.id);
+      const skipBtn = s.optional
+        ? `<button class="btn-skip" onclick="skipStep(${idx})" title="Mark as complete and skip ahead">Skip →</button>`
+        : '';
       const stepBtnHTML = hasSubsteps
-        ? `<button class="btn-primary" onclick="nextSlide()">Next Lesson →</button>`
-        : `<button class="btn-primary" onclick="markDone(${idx})" id="done-btn-${idx}">
+        ? `<div style="display:flex;align-items:center;gap:.75rem;justify-content:flex-end;">${skipBtn}<button class="btn-primary" onclick="nextSlide()">Next Lesson →</button></div>`
+        : `<div style="display:flex;align-items:center;gap:.75rem;justify-content:flex-end;">${skipBtn}<button class="btn-primary" onclick="markDone(${idx})" id="done-btn-${idx}">
           ${doneSet.has(idx) ? '<span style="color:#16a34a;font-size:1rem;">✓</span> Marked Complete' : 'Mark Step Complete'}
-        </button>`;
+        </button></div>`;
 
       return `<div class="step-slide">
       <div class="step-header">
@@ -2803,7 +2820,7 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
         </div>
       </div>
       ${s.content}
-      <div style="margin-top:1.5rem;text-align:right;">${stepBtnHTML}</div>
+      <div style="margin-top:1.5rem;">${stepBtnHTML}</div>
     </div>`;
     }
 
@@ -2903,6 +2920,31 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
     // ═══════════════════════════════════════════════════════════════
     // PROGRESS
     // ═══════════════════════════════════════════════════════════════
+    function skipStep(idx) {
+      const s = slides[idx];
+      // Mark the step itself done
+      doneSet.add(idx);
+      // Mark all its substeps done too
+      if (s.id) {
+        slides.forEach((sub, i) => {
+          if (sub.type === 'substep' && sub.parentId === s.id) doneSet.add(i);
+        });
+      }
+      saveDone();
+      updateProgress();
+      // Jump past all substeps of this step to the next step/section
+      let target = idx + 1;
+      if (s.id) {
+        for (let i = idx + 1; i < slides.length; i++) {
+          if (slides[i].type === 'substep' && slides[i].parentId === s.id) target = i + 1;
+          else break;
+        }
+      }
+      if (target > maxReached) { maxReached = target; localStorage.setItem('lnl_reached', maxReached); }
+      showToast('Step skipped & marked complete');
+      goTo(Math.min(target, slides.length - 1));
+    }
+
     function markDone(idx) {
       doneSet.add(idx);
       saveDone();
