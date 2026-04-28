@@ -2127,6 +2127,7 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
     document.getElementById('sidebar').style.display    = isWelcome ? 'none' : '';
     document.getElementById('expand-btn').style.display = isWelcome ? 'none' : '';
     document.getElementById('site-footer').style.display = isWelcome ? 'none' : '';
+    document.getElementById('support-widget').style.display = isWelcome ? 'none' : '';
   }
 
   // ═══════════════════════════════════════════════════════════════
@@ -2338,6 +2339,138 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
   })();
 
   build();
+  </script>
+
+  <!-- ── Support / Slack widget ── -->
+  <style>
+    #support-widget {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    #support-bubble {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 14px;
+      padding: 10px 15px;
+      font-size: 0.8rem;
+      color: #ccc;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 6px 24px rgba(0,0,0,.55);
+      opacity: 0;
+      transform: translateY(8px) scale(0.95);
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      white-space: nowrap;
+    }
+    #support-bubble.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    #support-bubble .bubble-close {
+      cursor: pointer;
+      color: #555;
+      font-size: 0.9rem;
+      line-height: 1;
+      padding: 0 2px;
+      transition: color 0.15s;
+    }
+    #support-bubble .bubble-close:hover { color: #aaa; }
+
+    #support-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #1a1a1a;
+      border: 1.5px solid #444;
+      box-shadow: 0 4px 16px rgba(0,0,0,.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+    #support-btn:hover {
+      transform: scale(1.08);
+      background: #2a2a2a;
+      box-shadow: 0 6px 22px rgba(0,0,0,.65);
+    }
+    #support-btn svg { width: 26px; height: 26px; fill: #aaa; }
+    #support-btn:hover svg { fill: #fff; }
+
+    #support-btn .notif-dot {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      width: 9px;
+      height: 9px;
+      background: #777;
+      border-radius: 50%;
+      border: 2px solid #0a0f1e;
+    }
+  </style>
+
+  <div id="support-widget" style="display:none">
+    <div id="support-bubble">
+      <span>💬 Need help? Chat with us on Slack</span>
+      <span class="bubble-close" id="bubble-close-btn" title="Dismiss">✕</span>
+    </div>
+    <div id="support-btn" title="Get help on Slack" onclick="window.open('https://rakuten-international.enterprise.slack.com/archives/C0ASGG80SHL','_blank')">
+      <!-- Slack-style headset / support icon -->
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.52 3.66 1.42 5.18L2 22l4.82-1.42A9.945 9.945 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.94 7.94 0 0 1-4.05-1.11l-.29-.17-2.98.88.84-2.98-.18-.3A7.96 7.96 0 0 1 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8zm4.29-5.71c-.23-.12-1.38-.68-1.59-.76-.21-.08-.37-.12-.52.12-.16.23-.61.76-.75.92-.14.16-.28.18-.51.06-.24-.12-1-.37-1.91-1.18-.71-.63-1.18-1.4-1.32-1.64-.14-.23-.01-.36.1-.48.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.52-1.26-.72-1.72-.19-.45-.38-.39-.52-.4h-.45c-.16 0-.41.06-.62.3-.21.23-.82.8-.82 1.95s.84 2.26.96 2.42c.12.16 1.66 2.53 4.02 3.55.56.24 1 .39 1.34.5.56.18 1.07.15 1.48.09.45-.07 1.38-.56 1.58-1.11.19-.55.19-1.02.13-1.11-.06-.09-.21-.15-.45-.27z"/>
+      </svg>
+      <span class="notif-dot"></span>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const bubble = document.getElementById('support-bubble');
+      const closeBtn = document.getElementById('bubble-close-btn');
+      let shown = false;
+      let dismissed = false;
+
+      function showBubble() {
+        if (dismissed) return;
+        bubble.classList.add('visible');
+        shown = true;
+        // auto-hide after 8s
+        setTimeout(() => {
+          if (!dismissed) bubble.classList.remove('visible');
+        }, 8000);
+      }
+
+      // Show after 20s on page
+      setTimeout(showBubble, 20000);
+
+      // Re-show if user has been idle on same slide for 90s (once more)
+      let reShown = false;
+      setTimeout(() => {
+        if (!dismissed && !reShown) { reShown = true; showBubble(); }
+      }, 90000);
+
+      closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dismissed = true;
+        bubble.classList.remove('visible');
+      });
+
+      // Clicking the button also hides bubble
+      document.getElementById('support-btn').addEventListener('click', () => {
+        bubble.classList.remove('visible');
+      });
+    })();
   </script>
 </body>
 </html>
