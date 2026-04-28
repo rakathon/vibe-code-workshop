@@ -1545,9 +1545,14 @@
         markComplete: true,
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.9rem;">The Forge status line shows your active effort, current phase, cost of session, model, current directory and risk level directly in the Claude Code interface. This keeps both you and the AI oriented throughout the session — you always know which effort is active and which phase you are in without having to ask.</p>
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run once after opening Claude Code in the repo:</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">First, open Claude Code in your terminal:</p>
         <div class="cmd-block">
-          <pre><span class="t-cmd">/forge:statusline</span></pre>
+          <pre><span class="t-cmd typing-text" data-type-text="claude"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'claude')">Copy</button>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .75rem;">Then run once to set up the status line:</p>
+        <div class="cmd-block">
+          <pre><span class="t-cmd typing-text" data-type-text="/forge:statusline"></span></pre>
           <button class="copy-btn" onclick="copyText(this,'/forge:statusline')">Copy</button>
         </div>
         <p style="font-size:.88rem;color:var(--muted);margin:.9rem 0 .5rem;">After setup, the status line will display context like <em>(e.g. not exactly the same)</em>:</p>
@@ -1564,14 +1569,9 @@
         type: 'step', num: '2', id: 'step-2',
         title: 'Initialize Forge', desc: 'Run /forge:init in Claude Code',
         content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">In your terminal, type:</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Let's run:</p>
         <div class="cmd-block">
-          <pre><span class="t-cmd">claude</span></pre>
-          <button class="copy-btn" onclick="copyText(this,'claude')">Copy</button>
-        </div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .75rem;">Open Claude Code in the repo root and run:</p>
-        <div class="cmd-block">
-          <pre><span class="t-cmd">/forge:init</span></pre>
+          <pre><span class="t-cmd typing-text" data-type-text="/forge:init"></span></pre>
           <button class="copy-btn" onclick="copyText(this,'/forge:init')">Copy</button>
         </div>
       `
