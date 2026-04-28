@@ -1168,6 +1168,15 @@
       opacity: .6;
     }
 
+    .quiz-opt code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: .8rem;
+      background: #e8e4f0;
+      color: #5b21b6;
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
     .quiz-opt .opt-letter {
       width: 22px;
       height: 22px;
@@ -1192,6 +1201,14 @@
       background: var(--dark);
       color: #fff;
       border-color: var(--dark);
+    }
+
+    .quiz-feedback code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: .78rem;
+      background: rgba(0,0,0,.08);
+      padding: 1px 5px;
+      border-radius: 4px;
     }
 
     .quiz-feedback {
@@ -1648,7 +1665,11 @@
 
 <span class="t-key">Enter 1, 2, or 3:</span></pre>
         </div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter <strong style="color:var(--dark);">1</strong> — Source code repository</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter</p>
+        <div class="cmd-block" style="margin-top:.4rem;">
+          <pre><span class="t-str typing-text" data-type-text="1 — Source code repository"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'1 — Source code repository')">Copy</button>
+        </div>
       `
       },
 
@@ -1669,7 +1690,11 @@
 
 <span class="t-key">Enter y/n [n]:</span></pre>
         </div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter <strong style="color:var(--dark);">n</strong> — this is an active repo under development.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter</p>
+        <div class="cmd-block" style="margin-top:.4rem;">
+          <pre><span class="t-str typing-text" data-type-text="n — this is an active repo under development"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'n — this is an active repo under development')">Copy</button>
+        </div>
       `
       },
 
@@ -1694,7 +1719,11 @@ You can skip this and run the analysis later using forge:discover.
 
 <span class="t-key">Enter y/n [n]:</span></pre>
         </div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter <strong style="color:var(--dark);">n</strong> — skip for now.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter</p>
+        <div class="cmd-block" style="margin-top:.4rem;">
+          <pre><span class="t-str typing-text" data-type-text="n — skip for now"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'n — skip for now')">Copy</button>
+        </div>
       `
       },
 
@@ -1714,7 +1743,11 @@ Proposed default branch convention: <span class="t-key">&lt;type&gt;/&lt;descrip
 <span class="t-key">Use this convention? [Y/n]</span>
 Or describe your convention in plain English or as a regex:</pre>
         </div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter <strong style="color:var(--dark);">Y</strong> — accept the RR standard branch naming convention.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter</p>
+        <div class="cmd-block" style="margin-top:.4rem;">
+          <pre><span class="t-str typing-text" data-type-text="Y — accept the RR standard branch naming convention"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Y — accept the RR standard branch naming convention')">Copy</button>
+        </div>
       `
       },
 
@@ -1737,7 +1770,11 @@ Or describe your convention in plain English or as a regex:</pre>
   <span class="t-str">2.</span> Yes, and always allow access to spec/ from this project
   <span class="t-str">3.</span> No</pre>
         </div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select <strong style="color:var(--dark);">2. Yes, and always allow access to spec/ from this project</strong> — grants persistent permission and avoids repeated prompts.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select</p>
+        <div class="cmd-block" style="margin-top:.4rem;">
+          <pre><span class="t-str typing-text" data-type-text="2. Yes, and always allow access to spec/ from this project — grants persistent permission and avoids repeated prompts"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'2. Yes, and always allow access to spec/ from this project — grants persistent permission and avoids repeated prompts')">Copy</button>
+        </div>
       `
       },
 
@@ -1784,21 +1821,21 @@ Commit these files so your team gets the workspace structure:
         questions: [
           {
             q: 'Which option do you enter when Forge asks "What best describes this repository?"',
-            opts: ['1 — Source code repository', '2 — Product repository', '3 — Coordination repository', 'Skip — not required'],
+            opts: ['<code>1</code> — Source code repository', '<code>2</code> — Product repository', '<code>3</code> — Coordination repository', '<code>Skip</code> — not required'],
             answer: 0,
             explain: 'Option 1 (Source code repository) is correct — this is an active Next.js codebase that engineers build and ship.'
           },
           {
             q: 'When Forge detects existing source code and offers brownfield analysis, what should you enter?',
-            opts: ['y — analyze now', 'n — skip for now', 'skip — run later via forge:discover', 'It does not ask this question'],
+            opts: ['<code>y</code> — analyze now', '<code>n</code> — skip for now', '<code>skip</code> — run later via forge:discover', 'It does not ask this question'],
             answer: 1,
-            explain: 'Enter n to skip brownfield analysis for now. You can run it later with forge:discover.'
+            explain: 'Enter <code>n</code> to skip brownfield analysis for now. You can run it later with <code>forge:discover</code>.'
           },
           {
             q: 'After forge:init completes, what do you commit?',
-            opts: ['Only CLAUDE.md', 'Only .forge/ directory', 'Both .forge/ and CLAUDE.md', 'Nothing — auto-committed'],
+            opts: ['Only <code>CLAUDE.md</code>', 'Only <code>.forge/</code> directory', 'Both <code>.forge/</code> and <code>CLAUDE.md</code>', 'Nothing — auto-committed'],
             answer: 2,
-            explain: 'You commit both: git add .forge/ CLAUDE.md && git commit -m "chore: initialize forge v0.9.0"'
+            explain: 'You commit both: <code>git add .forge/ CLAUDE.md && git commit -m "chore: initialize forge v0.9.0"</code>'
           }
         ]
       },
@@ -1845,7 +1882,11 @@ Commit these files so your team gets the workspace structure:
 
 <span class="t-key">Enter type:</span></pre>
         </div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter <strong style="color:var(--dark);">epic</strong> — Forge automatically sets tier to full for epics — no tier prompt.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter</p>
+        <div class="cmd-block" style="margin-top:.4rem;">
+          <pre><span class="t-str typing-text" data-type-text="epic — Forge automatically sets tier to full for epics — no tier prompt"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'epic — Forge automatically sets tier to full for epics — no tier prompt')">Copy</button>
+        </div>
       `
       },
 
@@ -1865,7 +1906,11 @@ Commit these files so your team gets the workspace structure:
 
 <span class="t-key">Enter R1, R2, R3, or R4:</span></pre>
         </div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter <strong style="color:var(--dark);">R2</strong> — this is a core feature integrating with existing external Dining APIs.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter</p>
+        <div class="cmd-block" style="margin-top:.4rem;">
+          <pre><span class="t-str typing-text" data-type-text="R2 — this is a core feature integrating with existing external Dining APIs"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'R2 — this is a core feature integrating with existing external Dining APIs')">Copy</button>
+        </div>
       `
       },
 
@@ -1886,7 +1931,11 @@ Commit these files so your team gets the workspace structure:
   <span class="t-str">2.</span> Yes, and don't ask again for plugin:forge:atlassian commands in this project
   <span class="t-str">3.</span> No</pre>
         </div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select <strong style="color:var(--dark);">3. No</strong> — skip Jira association for this workshop.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select</p>
+        <div class="cmd-block" style="margin-top:.4rem;">
+          <pre><span class="t-str typing-text" data-type-text="3. No — skip Jira association for this workshop"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'3. No — skip Jira association for this workshop')">Copy</button>
+        </div>
       `
       },
 
@@ -1909,7 +1958,11 @@ This command requires approval
   <span class="t-str">2.</span> Yes, and don't ask again for: git checkout *
   <span class="t-str">3.</span> No</pre>
         </div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select <strong style="color:var(--dark);">1. Yes</strong> — allow Forge to create the working branch <code>feat/dining-experience-on-web</code>.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select</p>
+        <div class="cmd-block" style="margin-top:.4rem;">
+          <pre><span class="t-str typing-text" data-type-text="1. Yes — allow Forge to create the working branch feat/dining-experience-on-web"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'1. Yes — allow Forge to create the working branch feat/dining-experience-on-web')">Copy</button>
+        </div>
       `
       },
 
@@ -1931,7 +1984,11 @@ This command requires approval
   <span class="t-str">2.</span> Yes, and don't ask again for git add and git commit commands in this project
   <span class="t-str">3.</span> No</pre>
         </div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select <strong style="color:var(--dark);">1. Yes</strong> — commit the effort scaffold to your local branch.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select</p>
+        <div class="cmd-block" style="margin-top:.4rem;">
+          <pre><span class="t-str typing-text" data-type-text="1. Yes — commit the effort scaffold to your local branch"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'1. Yes — commit the effort scaffold to your local branch')">Copy</button>
+        </div>
       `
       },
 
@@ -2069,31 +2126,31 @@ Next steps:
         questions: [
           {
             q: 'What work item type did we choose for the dining experience effort?',
-            opts: ['story', 'task', 'epic', 'initiative'],
+            opts: ['<code>story</code>', '<code>task</code>', '<code>epic</code>', '<code>initiative</code>'],
             answer: 2,
-            explain: 'We chose epic — it automatically sets the tier to "full", giving us the complete discovery/planning/implementation workflow.'
+            explain: 'We chose <code>epic</code> — it automatically sets the tier to "full", giving us the complete discovery/planning/implementation workflow.'
           },
           {
             q: 'Why did forge:classify confirm R2 for the dining experience effort?',
             opts: [
               'It has payment processing and PII collection',
-              'It introduces two new external API dependencies — feedapi and Nominatim',
+              'It introduces two new external API dependencies — <code>feedapi</code> and <code>Nominatim</code>',
               'Static JSON always triggers R2',
               'Forge always confirms the initial classification'
             ],
             answer: 1,
-            explain: 'R2 is confirmed because the effort integrates with two external APIs: feedapi (api.engager.ecbsn.com) for restaurant data and OpenStreetMap Nominatim for geocoding. External integrations are a clear R2 indicator.'
+            explain: 'R2 is confirmed because the effort integrates with two external APIs: <code>feedapi</code> (api.engager.ecbsn.com) for restaurant data and OpenStreetMap <code>Nominatim</code> for geocoding. External integrations are a clear R2 indicator.'
           },
           {
             q: 'What is the correct data schema for each restaurant in TR-2?',
             opts: [
-              'id, name, price, rating, category',
-              'id, name, cuisineType, cashBackOffer, thumbnailUrl, address, lat, lng',
-              'restaurantId, title, cuisine, discount, imageUrl, coordinates',
-              'id, name, location, offers'
+              '<code>id, name, price, rating, category</code>',
+              '<code>id, name, cuisineType, cashBackOffer, thumbnailUrl, address, lat, lng</code>',
+              '<code>restaurantId, title, cuisine, discount, imageUrl, coordinates</code>',
+              '<code>id, name, location, offers</code>'
             ],
             answer: 1,
-            explain: 'TR-2 defines: id, name, cuisineType, cashBackOffer, thumbnailUrl, address, lat, lng — all needed for listing cards, detail pages, and geolocation sorting.'
+            explain: 'TR-2 defines: <code>id, name, cuisineType, cashBackOffer, thumbnailUrl, address, lat, lng</code> — all needed for listing cards, detail pages, and geolocation sorting.'
           }
         ]
       },
@@ -2596,7 +2653,7 @@ src/hooks/useGeolocation.test.ts — 4 unit tests</pre></div>
             q: 'What development methodology does forge:ui apply during implementation?',
             opts: ['BDD — write scenarios first', 'TDD — write tests first, confirm red, then implement', 'Waterfall — full design before any code', 'No methodology — just implement'],
             answer: 1,
-            explain: 'forge:ui uses TDD: tests are written first, confirmed to fail for the right reason, then the implementation is added to make them pass.'
+            explain: '<code>forge:ui</code> uses TDD: tests are written first, confirmed to fail for the right reason, then the implementation is added to make them pass.'
           },
           {
             q: 'When a user clicks "Near Me" and location is denied, what should the UI show?',
@@ -2613,7 +2670,7 @@ src/hooks/useGeolocation.test.ts — 4 unit tests</pre></div>
             q: 'Which wave does the RestaurantCard component belong to?',
             opts: ['Wave 1 — Foundation', 'Wave 2 — Components', 'Wave 3 — Pages', 'It has no wave'],
             answer: 1,
-            explain: 'TASK-005 (RestaurantCard) is Wave 2. Wave 1 is data + utilities + hooks; Wave 3 is the pages that consume the card.'
+            explain: '<code>TASK-005</code> (RestaurantCard) is Wave 2. Wave 1 is data + utilities + hooks; Wave 3 is the pages that consume the card.'
           }
         ]
       },
