@@ -1583,7 +1583,25 @@
         type: 'step', num: '2', id: 'step-2', optional: true,
         title: 'Initialize Forge', desc: 'Run /forge:init in Claude Code',
         content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Let's run:</p>
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:1rem;"><code>/forge:init</code> sets up the <code>.forge/</code> workspace in a repository. This folder holds everything related to the feature lifecycle — requirements, architecture decisions, UI specs, and task plans — so the whole team and the AI are working from the same shared context. It also creates a <code>CLAUDE.md</code> file so Claude Code understands the repository structure from the start. You run it <strong>once per repository</strong>, not once per feature.</p>
+        <div style="margin-bottom:1rem;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+            <div class="info-box" style="margin:0;">
+              <strong>When you need it</strong>
+              <ul style="margin-top:.4rem;padding-left:1.1rem;line-height:1.8;">
+                <li><strong>Greenfield repo</strong> — a brand new repository with no <code>.forge/</code> folder yet</li>
+                <li><strong>Brownfield repo</strong> — an existing codebase you want to bring under Forge for the first time</li>
+              </ul>
+            </div>
+            <div class="info-box" style="margin:0;border-left:3px solid #888;">
+              <strong>When you don't need it</strong>
+              <ul style="margin-top:.4rem;padding-left:1.1rem;line-height:1.8;">
+                <li>The repository already has a <code>.forge/</code> folder — Forge is already initialized <em>(this workshop repo falls into this category)</em></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.25rem 0 .75rem;">Let's run:</p>
         <div class="cmd-block">
           <pre><span class="t-cmd typing-text" data-type-text="/forge:init"></span></pre>
           <button class="copy-btn" onclick="copyText(this,'/forge:init')">Copy</button>
@@ -2649,7 +2667,7 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
         else if (s.type === 'complete') { dotContent = '✦'; labelText = 'All Done'; subText = 'Certificate'; }
         else if (s.type === 'quiz') { dotContent = '?'; labelText = 'Checkpoint'; subText = s.title; }
         else if (s.type === 'substep') { dotContent = s.num; labelText = s.num + ' — ' + s.title; subText = s.desc || ''; isSubstep = true; }
-        else { dotContent = s.num; labelText = 'Step ' + s.num; subText = s.title; }
+        else { dotContent = s.num; labelText = 'Step ' + s.num + (s.optional ? ' <span style="font-size:.6rem;opacity:.55;font-weight:400;letter-spacing:.04em;">[optional]</span>' : ''); subText = s.title; }
 
         if (isSubstep) li.classList.add('substep');
 
@@ -2991,9 +3009,18 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
       }
     }
 
+    function isOptionalSlide(s) {
+      if (s.optional) return true;
+      if (s.type === 'substep' && s.parentId) {
+        const parent = slides.find(x => x.id === s.parentId);
+        if (parent && parent.optional) return true;
+      }
+      return false;
+    }
+
     function updateProgress() {
-      const completable = slides.filter((s, i) => s.type === 'step' || s.type === 'quiz' || (s.type === 'substep' && s.markComplete)).length;
-      const done = slides.filter((s, i) => (s.type === 'step' || s.type === 'quiz' || (s.type === 'substep' && s.markComplete)) && doneSet.has(i)).length;
+      const completable = slides.filter(s => !isOptionalSlide(s) && (s.type === 'step' || s.type === 'quiz' || (s.type === 'substep' && s.markComplete))).length;
+      const done = slides.filter((s, i) => !isOptionalSlide(s) && (s.type === 'step' || s.type === 'quiz' || (s.type === 'substep' && s.markComplete)) && doneSet.has(i)).length;
       const pct = completable > 0 ? Math.round((done / completable) * 100) : 0;
       document.getElementById('progress-pct').textContent = pct + '%';
       document.getElementById('progress-fill').style.width = pct + '%';
@@ -3064,6 +3091,14 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
     }
 
     function nextSlide() {
+      // Mark current slide done so sidebar turns green
+      if (!doneSet.has(current)) {
+        doneSet.add(current);
+        saveDone();
+        const li = document.getElementById('sb-' + current);
+        if (li) li.classList.add('done');
+        updateProgress();
+      }
       const next = current + 1;
       if (next > maxReached) { maxReached = next; saveReached(); updateSidebarLocks(); }
       goTo(next);
