@@ -1587,7 +1587,6 @@
       {
         type: 'substep', num: '1.1', parentId: 'step-1', id: 'step-1-1',
         title: 'Set Up the Forge Status Line', desc: 'Keep effort context visible in Claude Code',
-        markComplete: true,
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.9rem;">The Forge status line shows your active effort, current phase, cost of session, model, current directory and risk level directly in the Claude Code interface. This keeps both you and the AI oriented throughout the session — you always know which effort is active and which phase you are in without having to ask.</p>
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">First, open Claude Code in your terminal:</p>
@@ -1609,7 +1608,44 @@
       `
       },
 
-      // ── STEP 3 ───────────────────────────────────────────────────
+      // ── STEP 1.2 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '1.2', parentId: 'step-1', markComplete: true,
+        title: 'Select Model — Sonnet 1M Context', desc: 'Switch to the long-context model for this session',
+        content: `
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run the model picker to switch to Sonnet with 1M context — this keeps the full effort context in memory throughout the workshop session.</p>
+        <div class="cmd-block">
+          <pre><span class="t-cmd typing-text" data-type-text="/model"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'/model')">Copy</button>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .5rem;">Claude Code will show the model picker. Select option 3:</p>
+        <div class="cmd-block" style="font-size:.8rem;">
+          <pre style="line-height:1.7;"><span class="t-key">❯ /model</span>
+
+<span class="t-str">──────────────────────────────────────────────────────────────────────────────────────────────────────────</span>
+  <span class="t-key">Select model</span>
+  Switch between Claude models. Applies to this session and future Claude Code sessions. For
+  other/previous model names, specify with --model.
+
+    <span class="t-muted">1. Default                Use the default model (currently Sonnet 4.5)</span>
+    <span class="t-muted">2. Sonnet                 Sonnet 4.6 · Best for everyday tasks</span>
+  <span class="t-str">❯ 3. Sonnet (1M context) ✔  Sonnet 4.6 for long sessions</span>
+    <span class="t-muted">4. Opus 4.1               Opus 4.1 · Legacy</span>
+    <span class="t-muted">5. Opus 4.7               Opus 4.7 · Most capable for complex work</span>
+    <span class="t-muted">6. Opus 4.7 (1M context)  Opus 4.7 for long sessions</span>
+    <span class="t-muted">7. Opus 4.6               Opus 4.6 · Most capable for complex work</span>
+    <span class="t-muted">8. Opus 4.6 (1M context)  Opus 4.6 for long sessions</span>
+    <span class="t-muted">9. Haiku                  Haiku 4.5 · Fastest for quick answers</span>
+
+  <span class="t-flag">● High effort (default)</span> <span class="t-muted">← → to adjust</span>
+
+  <span class="t-muted">Enter to confirm · Esc to exit</span></pre>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.75rem;">Use arrow keys to highlight <strong>3. Sonnet (1M context)</strong> and press <kbd style="background:#222;border:1px solid #555;border-radius:3px;padding:1px 6px;font-size:.78rem;">Enter</kbd> to confirm.</p>
+      `
+      },
+
+      // ── STEP 2 ───────────────────────────────────────────────────
       {
         type: 'step', num: '2', id: 'step-2',
         title: 'Create a Work Effort', desc: 'Run /forge:effort',
