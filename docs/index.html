@@ -3085,8 +3085,14 @@ src/hooks/useGeolocation.test.ts — 4 unit tests</pre></div>
     }
 
     function updateProgress() {
-      const completable = slides.filter(s => !isOptionalSlide(s) && (s.type === 'step' || s.type === 'quiz' || (s.type === 'substep' && s.markComplete))).length;
-      const done = slides.filter((s, i) => !isOptionalSlide(s) && (s.type === 'step' || s.type === 'quiz' || (s.type === 'substep' && s.markComplete)) && doneSet.has(i)).length;
+      let completable = 0, done = 0;
+      slides.forEach((s, i) => {
+        if (isOptionalSlide(s)) return;
+        if (s.type === 'quiz' || (s.type === 'substep' && s.markComplete)) {
+          completable++;
+          if (doneSet.has(i)) done++;
+        }
+      });
       const pct = completable > 0 ? Math.round((done / completable) * 100) : 0;
       document.getElementById('progress-pct').textContent = pct + '%';
       document.getElementById('progress-fill').style.width = pct + '%';
@@ -3110,6 +3116,7 @@ src/hooks/useGeolocation.test.ts — 4 unit tests</pre></div>
       sb?.scrollIntoView({ block: 'nearest' });
       updateSubstepExpansion();
       updateNav();
+      updateProgress();
       startTypingAnimations();
     }
 
