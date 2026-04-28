@@ -1539,10 +1539,10 @@
     // Section definitions — maps slide index ranges to section labels
     // Built after slides array is defined (see buildSections())
     const SECTIONS = [
-      { label: 'Section 1: Getting Started', slideIds: ['step-1', 'step-2'] },
-      { label: 'Section 2: Create a Forge Work Effort', slideIds: ['step-3'] },
-      { label: 'Section 3: Elaborate Requirements', slideIds: ['step-4', 'step-5'] },
-      { label: 'Section 4: Promote & Implement', slideIds: ['step-6', 'step-7', 'step-8', 'step-9'] },
+      { label: 'Section 1: Getting Started', slideIds: ['step-1'] },
+      { label: 'Section 2: Create a Forge Work Effort', slideIds: ['step-2'] },
+      { label: 'Section 3: Elaborate Requirements', slideIds: ['step-3', 'step-4'] },
+      { label: 'Section 4: Promote & Implement', slideIds: ['step-5', 'step-6', 'step-7', 'step-8'] },
     ];
 
     // Sub-steps that live under a parent step (displayed indented + grayed in sidebar)
@@ -1555,7 +1555,7 @@
         { id: 's2-5', label: '2.5 — Directory & File Creation' },
         { id: 's2-6', label: '2.6 — Confirm & Commit' },
       ],
-      'step-3': [
+      'step-2': [
         { id: 's3-1', label: '3.1 — Select Work Item Type' },
         { id: 's3-2', label: '3.2 — Select Risk Level' },
         { id: 's3-3', label: '3.3 — Skip Jira Association' },
@@ -1609,233 +1609,9 @@
       `
       },
 
-      // ── STEP 2 ───────────────────────────────────────────────────
-      {
-        type: 'step', num: '2', id: 'step-2', optional: true,
-        title: 'Initialize Forge', desc: 'Run /forge:init in Claude Code',
-        content: `
-        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:1rem;"><code>/forge:init</code> sets up the <code>.forge/</code> workspace in a repository. This folder holds everything related to the feature lifecycle — requirements, architecture decisions, UI specs, and task plans — so the whole team and the AI are working from the same shared context. It also creates a <code>CLAUDE.md</code> file so Claude Code understands the repository structure from the start. You run it <strong>once per repository</strong>, not once per feature.</p>
-        <div style="margin-bottom:1rem;">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
-            <div class="info-box" style="margin:0;">
-              <strong>When you need it</strong>
-              <ul style="margin-top:.4rem;padding-left:1.1rem;line-height:1.8;">
-                <li><strong>Greenfield repo</strong> — a brand new repository with no <code>.forge/</code> folder yet</li>
-                <li><strong>Brownfield repo</strong> — an existing codebase you want to bring under Forge for the first time</li>
-              </ul>
-            </div>
-            <div class="info-box" style="margin:0;border-left:3px solid #888;">
-              <strong>When you don't need it</strong>
-              <ul style="margin-top:.4rem;padding-left:1.1rem;line-height:1.8;">
-                <li>The repository already has a <code>.forge/</code> folder — Forge is already initialized <em>(this workshop repo falls into this category)</em></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.25rem 0 .75rem;">Let's run:</p>
-        <div class="cmd-block">
-          <pre><span class="t-cmd typing-text" data-type-text="/forge:init"></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'/forge:init')">Copy</button>
-        </div>
-      `
-      },
-
-      // ── STEP 2.1 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '2.1', parentId: 'step-2',
-        title: 'Select Repository Type', desc: 'Answer Forge\'s first prompt',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will prompt:</p>
-        <div class="cmd-block">
-          <pre><span class="t-key">What best describes this repository?</span>
-
-  <span class="t-str">1. Source code repository</span>   — a service, application, or library that engineers
-                                build and ship. Tracks deployables (the named units of
-                                source code, each with its own requirements, design,
-                                and test strategy) and active work items.
-
-  <span class="t-str">2. Product repository</span>       — owned by a product manager. Tracks product strategy,
-                                roadmap, and cross-team requirements. Contains no
-                                source code; references deployables that live in other
-                                repositories.
-
-  <span class="t-str">3. Coordination repository</span>  — houses planning artifacts for a project that spans
-                                multiple repositories. Contains no source code. Use
-                                this for a dedicated cross-team project repo.
-
-<span class="t-key">Enter 1, 2, or 3:</span></pre>
-        </div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter</p>
-        <div class="cmd-block" style="margin-top:.4rem;">
-          <pre><span class="t-str typing-text" data-type-text="1 — Source code repository"></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'1 — Source code repository')">Copy</button>
-        </div>
-      `
-      },
-
-      // ── STEP 2.2 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '2.2', parentId: 'step-2',
-        title: 'Legacy Repository Check', desc: 'Answer Forge\'s second prompt',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will prompt:</p>
-        <div class="cmd-block">
-          <pre><span class="t-key">Is this a legacy repository?</span>
-
-  A legacy repository is one that is maintained but no longer under active
-  development — only bug fixes or minor changes, no new features.
-
-  In legacy mode, coding standards are not injected before code generation,
-  and version enforcement checks are suppressed.
-
-<span class="t-key">Enter y/n [n]:</span></pre>
-        </div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter</p>
-        <div class="cmd-block" style="margin-top:.4rem;">
-          <pre><span class="t-str typing-text" data-type-text="n — this is an active repo under development"></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'n — this is an active repo under development')">Copy</button>
-        </div>
-      `
-      },
-
-      // ── STEP 2.3 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '2.3', parentId: 'step-2',
-        title: 'Brownfield Analysis Offer', desc: 'Forge detects existing source code',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge detects existing source code and will prompt:</p>
-        <div class="cmd-block">
-          <pre>This appears to be a brownfield repository with existing source code.
-
-Forge can analyze this repository to identify its deployables and capabilities,
-then generate initial .forge/deployables/ scaffolding (requirements stubs, spec
-outlines) based on what it finds. This gives your team a head start on the
-documentation and avoids a blank-slate discovery session later.
-
-You can skip this and run the analysis later using forge:discover.
-
-  <span class="t-str">y</span>  Analyze now and scaffold .forge/deployables/
-  <span class="t-str">n</span>  Skip — initialize without analysis [default]
-
-<span class="t-key">Enter y/n [n]:</span></pre>
-        </div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter</p>
-        <div class="cmd-block" style="margin-top:.4rem;">
-          <pre><span class="t-str typing-text" data-type-text="n — skip for now"></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'n — skip for now')">Copy</button>
-        </div>
-      `
-      },
-
-      // ── STEP 2.4 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '2.4', parentId: 'step-2',
-        title: 'Branch Naming Convention', desc: 'Accept the RR standard',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge detects the RR CI/CD pipeline and proposes:</p>
-        <div class="cmd-block">
-          <pre>Detected Rakuten Rewards standard CI/CD pipeline (helm-upgrade-nonprod).
-
-Proposed default branch convention: <span class="t-key">&lt;type&gt;/&lt;description&gt;</span>
-  where &lt;type&gt; is one of: <span class="t-str">feat, feature, release, hotfix, bugfix</span>
-  Examples: feat/add-user-preferences, bugfix/auth-timeout, hotfix/payment-crash
-
-<span class="t-key">Use this convention? [Y/n]</span>
-Or describe your convention in plain English or as a regex:</pre>
-        </div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter</p>
-        <div class="cmd-block" style="margin-top:.4rem;">
-          <pre><span class="t-str typing-text" data-type-text="Y — accept the RR standard branch naming convention"></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'Y — accept the RR standard branch naming convention')">Copy</button>
-        </div>
-      `
-      },
-
-      // ── STEP 2.5 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '2.5', parentId: 'step-2',
-        title: 'Allow Directory and File Creation', desc: 'Grant persistent permission',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Claude Code will ask permission to create the .forge/ directory structure:</p>
-        <div class="cmd-block">
-          <pre><span class="t-key">Bash command</span>
-
-  mkdir -p .forge/spec/arch-decisions \
-    .forge/efforts \
-    .forge/deployables &amp;&amp; echo "dirs created"
-  <span class="t-cmt">Create .forge directory structure</span>
-
-<span class="t-key">Do you want to proceed?</span>
-  <span class="t-str">1.</span> Yes
-  <span class="t-str">2.</span> Yes, and always allow access to spec/ from this project
-  <span class="t-str">3.</span> No</pre>
-        </div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select</p>
-        <div class="cmd-block" style="margin-top:.4rem;">
-          <pre><span class="t-str typing-text" data-type-text="2. Yes, and always allow access to spec/ from this project — grants persistent permission and avoids repeated prompts"></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'2. Yes, and always allow access to spec/ from this project — grants persistent permission and avoids repeated prompts')">Copy</button>
-        </div>
-      `
-      },
-
-      // ── STEP 2.6 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '2.6', parentId: 'step-2', markComplete: true,
-        title: 'Confirm Completion and Commit', desc: 'Commit the scaffold to your local repo',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Wait for Forge to finish. You will see the following summary:</p>
-        <div class="success-box">This step creates and saves all <code>.forge/</code> files and <code>CLAUDE.md</code> to your local repository.</div>
-        <div class="cmd-block">
-          <pre><span class="t-key">forge:init complete — forge v0.9.0</span>
-
-Repository type: Source code repository
-
-  Created:
-    <span class="t-str">.forge/README.md</span>
-    <span class="t-str">.forge/spec/README.md</span>
-    <span class="t-str">.forge/spec/arch-decisions/README.md</span>
-    <span class="t-str">.forge/efforts/README.md</span>
-    <span class="t-str">.forge/deployables/README.md</span>
-    <span class="t-str">.forge/branching.md</span>
-    <span class="t-str">.forge/version</span>
-    <span class="t-str">.forge/.gitignore</span>
-    <span class="t-str">CLAUDE.md</span>
-
-Plugin: rr-standards/forge/0.9.0
-Pin: unpinned
-
-Commit these files so your team gets the workspace structure:
-  git add .forge/ CLAUDE.md
-  git commit -m "chore: initialize forge v0.9.0"</pre>
-        </div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .5rem;">Go ahead and commit it locally:</p>
-        <p style="font-size:.88rem;color:var(--dark);font-family:'SF Mono','Fira Code','Courier New',monospace;background:var(--pale);border:1px solid var(--border);border-radius:7px;padding:.6rem .9rem;">! git add .forge/ CLAUDE.md &amp;&amp; git commit -m "chore: initialize forge v0.9.0"</p>
-      `
-      },
-
-      // ── QUIZ 1 ───────────────────────────────────────────────────
-      {
-        type: 'quiz', id: 'q1',
-        title: 'Checkpoint — Steps 1 & 2',
-        desc: 'Quick check before moving on',
-        questions: [
-          {
-            q: 'What does forge:init do?',
-            opts: [
-              'Initializes a repository for the Forge AI-accelerated development framework',
-              'Creates a new GitHub repository',
-              'Installs Claude Code dependencies',
-              'Generates a CLAUDE.md file only'
-            ],
-            answer: 0,
-            explain: '<code>forge:init</code> initializes a repository for the Forge AI-accelerated development framework — setting up the <code>.forge/</code> workspace and <code>CLAUDE.md</code>.'
-          }
-        ]
-      },
-
       // ── STEP 3 ───────────────────────────────────────────────────
       {
-        type: 'step', num: '3', id: 'step-3',
+        type: 'step', num: '2', id: 'step-2',
         title: 'Create a Work Effort', desc: 'Run /forge:effort',
         content: `
         <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>/forge:effort</code> registers a new work item inside the <code>.forge/</code> workspace. Each feature, bug fix, or investigation in Forge is tracked as an effort with a title, type (epic, story, task, etc.), risk level, and its own folder for requirements, specs, and plans. This command creates that folder, assigns a unique ID based on the title, creates a dedicated git branch, and commits the scaffold atomically, so the effort is tracked in version control immediately. Run it <strong>once per feature</strong> at the start of work.</p>
@@ -1859,7 +1635,7 @@ Commit these files so your team gets the workspace structure:
 
       // ── STEP 3.1 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '3.1', parentId: 'step-3',
+        type: 'substep', num: '2.1', parentId: 'step-2',
         title: 'Select Work Item Type', desc: 'Choose the effort type',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will prompt:</p>
@@ -1885,7 +1661,7 @@ Commit these files so your team gets the workspace structure:
 
       // ── STEP 3.3 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '3.2', parentId: 'step-3',
+        type: 'substep', num: '2.2', parentId: 'step-2',
         title: 'Select Risk Level', desc: 'Choose the risk classification',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will prompt:</p>
@@ -1909,7 +1685,7 @@ Commit these files so your team gets the workspace structure:
 
       // ── STEP 3.4 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '3.3', parentId: 'step-3',
+        type: 'substep', num: '2.3', parentId: 'step-2',
         title: 'Jira Association', desc: 'Link or skip a Jira ticket',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will attempt to check Atlassian authentication and prompt:</p>
@@ -1949,7 +1725,7 @@ Commit these files so your team gets the workspace structure:
 
       // ── STEP 3.5 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '3.4', parentId: 'step-3',
+        type: 'substep', num: '2.4', parentId: 'step-2',
         title: 'Allow Branch Creation', desc: 'Approve the git checkout',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge derives the branch name from the effort title and prompts:</p>
@@ -1976,7 +1752,7 @@ This command requires approval
 
       // ── STEP 3.6 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '3.5', parentId: 'step-3',
+        type: 'substep', num: '2.5', parentId: 'step-2',
         title: 'Allow Effort Scaffold Commit', desc: 'Approve the git commit',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge stages and commits the new effort directory atomically:</p>
@@ -2002,7 +1778,7 @@ This command requires approval
 
       // ── STEP 3.7 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '3.6', parentId: 'step-3', markComplete: true,
+        type: 'substep', num: '2.6', parentId: 'step-2', markComplete: true,
         title: 'Effort Creation Complete', desc: 'Your work effort is ready',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will confirm the active effort and print a summary:</p>
@@ -2038,7 +1814,7 @@ Next steps:
 
       // ── STEP 4 ───────────────────────────────────────────────────
       {
-        type: 'step', num: '4', id: 'step-4',
+        type: 'step', num: '3', id: 'step-3',
         title: 'Elaborate Technical Requirements', desc: 'Run /forge:elaborate',
         content: `
         <p style="font-size:.93rem;color:var(--muted);line-height:1.7;"><code>/forge:elaborate</code> reads your PRD, extracts business requirements, and derives the matching technical requirements — NFRs, integration constraints, security implications, and scalability targets. It writes <code>requirements/business.md</code> and <code>requirements/technical.md</code> inside the effort folder.</p>
@@ -2047,7 +1823,7 @@ Next steps:
 
       // ── STEP 4.1 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '4.1', parentId: 'step-4',
+        type: 'substep', num: '3.1', parentId: 'step-3',
         title: 'Start with Your PRD', desc: 'Give Forge the project name and PRD URL',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code, naming the project first and then attaching the PRD URL:</p>
@@ -2061,7 +1837,7 @@ Next steps:
 
       // ── STEP 4.2 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '4.2', parentId: 'step-4', markComplete: true,
+        type: 'substep', num: '3.2', parentId: 'step-3', markComplete: true,
         title: 'Workshop Shortcut: Auto-Accept All Questions', desc: 'Let Forge apply its own best recommendations',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">After fetching the PRD, Forge asks a series of clarifying questions. Use this follow-up prompt to tell Forge to take its own best recommendation for every question and document it automatically:</p>
@@ -2075,7 +1851,7 @@ Next steps:
 
       // ── STEP 5 ───────────────────────────────────────────────────
       {
-        type: 'step', num: '5', id: 'step-5',
+        type: 'step', num: '4', id: 'step-4',
         title: 'Classify Risk', desc: 'Run /forge:classify',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Re-evaluates the effort's risk level against the full requirements now that discovery is complete.</p>
@@ -2089,7 +1865,7 @@ Next steps:
 
       // ── STEP 5.1 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '5.1', parentId: 'step-5', markComplete: true,
+        type: 'substep', num: '4.1', parentId: 'step-4', markComplete: true,
         title: 'Review Classification Output', desc: 'Accept the recommended risk level',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge evaluates all requirements and proposes a risk level. You will see output like this:</p>
@@ -2130,29 +1906,9 @@ Next steps:
       `
       },
 
-      // ── QUIZ 2 ───────────────────────────────────────────────────
-      {
-        type: 'quiz', id: 'q2',
-        title: 'Checkpoint — Steps 3–5',
-        desc: 'Check your understanding of effort creation and risk',
-        questions: [
-          {
-            q: 'What is forge:classify used for?',
-            opts: [
-              'Assign an R1–R4 risk classification to the active effort',
-              'Generate a UI spec from requirements',
-              'Create a new Jira ticket for the effort',
-              'Break the effort into implementation tasks'
-            ],
-            answer: 0,
-            explain: '<code>forge:classify</code> assigns an R1–R4 risk classification to the active effort, evaluating requirements against the risk rubric and confirming or updating the level.'
-          }
-        ]
-      },
-
       // ── STEP 6 ───────────────────────────────────────────────────
       {
-        type: 'step', num: '6', id: 'step-6',
+        type: 'step', num: '5', id: 'step-5',
         title: 'Design the UI', desc: 'Run /forge:ui-design',
         content: `
         <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>/forge:ui-design</code> generates a UI spec from the business and technical requirements — defining page layouts, component structure, and interaction patterns. You may also be able to bring your Figma design layout if you have a Figma account and MCP configured.</p>
@@ -2166,7 +1922,7 @@ Next steps:
 
       // ── STEP 6.1 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '6.1', parentId: 'step-6',
+        type: 'substep', num: '5.1', parentId: 'step-5',
         title: 'Provide Context', desc: 'Point Forge at your requirements',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will ask what you are building and what is driving it:</p>
@@ -2181,7 +1937,7 @@ Next steps:
 
       // ── STEP 6.2 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '6.2', parentId: 'step-6',
+        type: 'substep', num: '5.2', parentId: 'step-5',
         title: 'Confirm Scope and Mode', desc: 'Review what Forge inferred',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge reads the requirements and confirms scope before proceeding:</p>
@@ -2220,7 +1976,7 @@ Are there any additional states I'm missing?</pre></div>
 
       // ── STEP 6.3 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '6.3', parentId: 'step-6',
+        type: 'substep', num: '5.3', parentId: 'step-5',
         title: 'Confirm Page States and Accessibility', desc: 'Approve the confirmed states list',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">After confirming UIKit compatibility, Forge presents the full confirmed state list and asks about accessibility requirements:</p>
@@ -2246,7 +2002,7 @@ or screen reader text for the cash back offer badge?</pre></div>
 
       // ── STEP 6.4 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '6.4', parentId: 'step-6',
+        type: 'substep', num: '5.4', parentId: 'step-5',
         title: 'Confirm Out of Scope', desc: 'Approve the boundary list',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge confirms the out-of-scope boundary before writing the spec:</p>
@@ -2271,7 +2027,7 @@ Does that list look right, or anything to add/remove?</pre></div>
 
       // ── STEP 6.5 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '6.5', parentId: 'step-6',
+        type: 'substep', num: '5.5', parentId: 'step-5',
         title: 'Approve Final Summary Before Spec Is Written', desc: 'Confirm before spec is written',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge presents a complete summary of everything it has gathered and asks for final approval before writing the spec:</p>
@@ -2302,7 +2058,7 @@ Does this look right? Anything to change before I write the spec?</pre></div>
 
       // ── STEP 6.6 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '6.6', parentId: 'step-6', markComplete: true,
+        type: 'substep', num: '5.6', parentId: 'step-5', markComplete: true,
         title: 'Spec Written — Choose Next Step', desc: 'Trigger commit and plan',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge writes the spec to <code>.forge/efforts/dining-experience-on-web/spec/ui-spec.md</code> and presents the next step options:</p>
@@ -2326,7 +2082,7 @@ The shared understanding is written. What next?
 
       // ── STEP 7 ───────────────────────────────────────────────────
       {
-        type: 'step', num: '7', id: 'step-7',
+        type: 'step', num: '6', id: 'step-6',
         title: 'Commit Discovery Artifacts and Promote to Planning', desc: 'Break into tasks and implement',
         content: `
         <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.75rem;">Forge needs to commit discovery work and promote the effort to the planning phase before running forge:plan. Forge automatically detects the phase and runs forge:promote first.</p>
@@ -2341,7 +2097,7 @@ The shared understanding is written. What next?
 
       // ── STEP 7.1 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '7.1', parentId: 'step-7',
+        type: 'substep', num: '6.1', parentId: 'step-6',
         title: 'Forge Promotes to Planning First', desc: 'Readiness check on discovery artifacts',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge detects <code>currentPhase = "discovery"</code> and invokes forge:promote to advance before planning can begin. It runs a readiness check on all discovery artifacts:</p>
@@ -2370,7 +2126,7 @@ discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
 
       // ── STEP 7.2 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '7.2', parentId: 'step-7',
+        type: 'substep', num: '6.2', parentId: 'step-6',
         title: 'Validation Result', desc: 'Forge runs forge:validate',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge runs forge:validate and reports the result:</p>
@@ -2402,7 +2158,7 @@ discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
 
       // ── STEP 7.3 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '7.3', parentId: 'step-7', markComplete: true,
+        type: 'substep', num: '6.3', parentId: 'step-6', markComplete: true,
         title: 'Confirm Promotion to Planning', desc: 'Advance to the planning phase',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge presents the final readiness summary and asks for confirmation to advance:</p>
@@ -2430,7 +2186,7 @@ discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
 
       // ── STEP 8 ───────────────────────────────────────────────────
       {
-        type: 'step', num: '8', id: 'step-8',
+        type: 'step', num: '7', id: 'step-7',
         title: 'Actual Plan Implementation', desc: 'Tasks broken into sequenced waves',
         content: `
         <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.75rem;">Breaks the effort into concrete implementation tasks organized into sequenced waves.</p>
@@ -2483,7 +2239,7 @@ discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
 
       // ── STEP 8.1 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '8.1', parentId: 'step-8', markComplete: true,
+        type: 'substep', num: '7.1', parentId: 'step-7', markComplete: true,
         title: 'Plan Complete', desc: 'Tasks written, effort in implementation phase',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge writes the task plan and promotes the effort to the implementation phase:</p>
@@ -2523,7 +2279,7 @@ discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
 
       // ── STEP 9 ───────────────────────────────────────────────────
       {
-        type: 'step', num: '9', id: 'step-9',
+        type: 'step', num: '8', id: 'step-8',
         title: 'Implement', desc: 'forge:plan → forge:ui → TDD mode, task by task',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Executes the planned tasks wave by wave. forge:plan detects the effort's UI spec and delegates to forge:ui, which loads UIKit guides and applies TDD mode (write tests first, confirm red, then implement).</p>
@@ -2566,7 +2322,7 @@ discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
 
       // ── STEP 9.1 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '9.1', parentId: 'step-9',
+        type: 'substep', num: '8.1', parentId: 'step-8',
         title: 'TASK-001: Restaurant JSON Data and Page Scaffold', desc: 'Wave 1',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge detects no forge:implement skill and automatically loads forge:ui — the correct skill for frontend work. It loads UIKit implementation guides before writing any code.</p>
@@ -2581,7 +2337,7 @@ discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
 
       // ── STEP 9.2 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '9.2', parentId: 'step-9',
+        type: 'substep', num: '8.2', parentId: 'step-8',
         title: 'TASK-002, 003, 004: Wave 1 Utilities and Hook', desc: 'Parallel, TDD',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Wave 1 tasks are independent — Forge implements all three in parallel after checking the test setup. TDD mode is active: tests are written first, confirmed to fail for the right reason, then the implementation is added.</p>
@@ -2607,7 +2363,7 @@ src/hooks/useGeolocation.test.ts — 4 unit tests</pre></div>
 
       // ── STEP 9.3 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '9.3', parentId: 'step-9',
+        type: 'substep', num: '8.3', parentId: 'step-8',
         title: 'All Tasks Complete', desc: '24/24 tests pass · 6 suites · 0 failures',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">All tasks complete on branch <code>feat/dining-experience-on-web-for-rakutencom</code>.</p>
@@ -2633,7 +2389,7 @@ src/hooks/useGeolocation.test.ts — 4 unit tests</pre></div>
 
       // ── STEP 9.4 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '9.4', parentId: 'step-9', markComplete: true,
+        type: 'substep', num: '8.4', parentId: 'step-8', markComplete: true,
         title: 'Validate Layout', desc: 'Design tokens, rendering, UX review',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Final validation pass — ask Claude to review the full implementation against Rakuten design standards.</p>
@@ -2646,8 +2402,8 @@ src/hooks/useGeolocation.test.ts — 4 unit tests</pre></div>
 
       // ── QUIZ 3 ───────────────────────────────────────────────────
       {
-        type: 'quiz', id: 'q3',
-        title: 'Checkpoint — Steps 6–9',
+        type: 'quiz', id: 'q1',
+        title: 'Checkpoint — Steps 5–8',
         desc: 'Final check on UI design and implementation',
         questions: [
           {
