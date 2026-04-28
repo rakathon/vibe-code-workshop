@@ -1917,7 +1917,7 @@ Commit these files so your team gets the workspace structure:
       // ── STEP 3.4 ─────────────────────────────────────────────────
       {
         type: 'substep', num: '3.3', parentId: 'step-3',
-        title: 'Skip Jira Association', desc: 'Decline the Atlassian plugin request',
+        title: 'Jira Association', desc: 'Link or skip a Jira ticket',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will attempt to check Atlassian authentication and prompt:</p>
         <div class="cmd-block">
@@ -1933,8 +1933,23 @@ Commit these files so your team gets the workspace structure:
         </div>
         <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select</p>
         <div class="cmd-block" style="margin-top:.4rem;">
-          <pre><span class="t-str typing-text" data-type-text="3. No — skip Jira association for this workshop"></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'3. No — skip Jira association for this workshop')">Copy</button>
+          <pre><span class="t-str typing-text" data-type-text="1. Yes"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'1. Yes')">Copy</button>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .5rem;">Claude's next question:</p>
+        <div class="cmd-block">
+          <pre><span class="t-key">Do you have a Jira ticket for this effort?</span>
+
+  <span class="t-str">1.</span> Yes — I have an existing ticket
+  <span class="t-str">2.</span> No  — Create one now
+  <span class="t-str">3.</span> Skip — No Jira association (not recommended)
+
+<span class="t-key">Enter 1, 2, or 3 [1]:</span></pre>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter</p>
+        <div class="cmd-block" style="margin-top:.4rem;">
+          <pre><span class="t-str typing-text" data-type-text="3 — Skip — No Jira association for this workshop"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'3')">Copy</button>
         </div>
       `
       },
