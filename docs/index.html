@@ -2367,14 +2367,53 @@ discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
       // ── STEP 8 ───────────────────────────────────────────────────
       {
         type: 'step', num: '8', id: 'step-8',
-        title: 'Plan the Implementation', desc: 'Run /forge:plan',
+        title: 'Actual Plan Implementation', desc: 'Tasks broken into sequenced waves',
         content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Breaks the effort into concrete implementation tasks organized into sequenced waves.</p>
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run:</p>
-        <div class="cmd-block">
-          <pre><span class="t-cmd">/forge:plan</span></pre>
-          <button class="copy-btn" onclick="copyText(this,'/forge:plan')">Copy</button>
-        </div>
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.75rem;">Breaks the effort into concrete implementation tasks organized into sequenced waves.</p>
+        <div class="cmd-block"><pre><span class="t-key">&gt; Promoted.</span>
+
+  Promoted: <span class="t-str">dining-experience-for-web</span>
+    discovery → approved  (2026-04-28T04:45:20Z)
+  Now in:   <span class="t-key">planning</span>
+
+  Note: approved artifacts remain editable — promotion does not lock them.
+
+  Now resuming forge:plan — phase is planning, effort type is epic. Proceeding to generate the task list.
+
+  I have everything I need. Now generating the full task breakdown.
+
+  Task analysis (internal):
+
+  From the BRs, TRs, and UI spec, the implementation breaks into these logical groups:
+
+  1. Foundation — install deps, set up API routes (proxy + geocode), page scaffold
+  ...
+  ...
+  7. Polish + testing — loading/error states, edge cases, component tests
+
+  Dependency graph → waves:
+  - Wave 1: deps + scaffolding (no dependencies)
+  ...
+  ...
+  - Wave 6: tests + polish (depends on wave 5)
+.
+.
+.
+  <span class="t-flag">Skill(forge:promote)</span>
+  <span class="t-str">⎿  Successfully loaded skill</span>
+
+<span class="t-key">⏺ Bash</span>(grep -c "^### TASK-" .forge/efforts/dining-experience-for-web/plan/tasks.md &amp;&amp; git branch --show-current)
+  <span class="t-str">⎿  15
+     feat/dining-experience-for-web</span>
+
+<span class="t-key">⏺ Gap: [planning] → target: implementation.</span>
+
+  Advisory — planning:
+  - plan/tasks.md — <span class="t-str">✓</span> present (15 tasks)
+
+  Ready to mark planning as approved and advance to implementation? (yes/no)
+
+  <span class="t-key">&gt; yes</span></pre></div>
       `
       },
 
@@ -2384,17 +2423,37 @@ discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
         title: 'Plan Complete', desc: 'Tasks written, effort in implementation phase',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge writes the task plan and promotes the effort to the implementation phase:</p>
-        <div class="cmd-block"><pre>Promoted: <span class="t-key">dining-experience-on-web-for-rakutencom</span>
-  planning -> approved (2026-04-27T05:32:27Z)
-Now in:   <span class="t-str">implementation</span>
+        <div class="cmd-block"><pre>Promoted: <span class="t-str">dining-experience-for-web</span>
+    planning → approved  (2026-04-28T04:51:01Z)
+  Now in:   <span class="t-key">implementation</span>
 
----
-Plan written: .forge/efforts/dining-experience-on-web-for-rakutencom/plan/tasks.md
-Tasks:        <span class="t-key">7 tasks across 3 waves</span>
-Waves:        wave:1 (4), wave:2 (1), wave:3 (2)
+  Note: approved artifacts remain editable — promotion does not lock them.
 
-Next: Begin implementation with forge:implement dining-experience-on-web-for-rakutencom TASK-001</pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">The effort is now in the implementation phase with 7 tasks planned across 3 waves. Proceed to Step 9.</p>
+  ---
+  Plan written: .forge/efforts/dining-experience-for-web/plan/tasks.md
+  Tasks:        <span class="t-key">15 tasks across 6 waves</span>
+  Waves:        wave:1 (3), wave:2 (2), wave:3 (4), wave:4 (3), wave:5 (1), wave:6 (2)
+
+  Next:         Begin implementation with forge:implement dining-experience-for-web TASK-001
+
+  The effort is ready for implementation. Here's a summary of what was produced today:
+
+  ┌─────────────────────────────────┬──────────────────────────────────────────────────────────────────────────┐
+  │            Artifact             │                              Location                                    │
+  ├─────────────────────────────────┼──────────────────────────────────────────────────────────────────────────┤
+  │ Business requirements (12 BRs)  │ .forge/efforts/dining-experience-for-web/requirements/business.md        │
+  ├─────────────────────────────────┼──────────────────────────────────────────────────────────────────────────┤
+  │ Technical requirements (13 TRs) │ .forge/efforts/dining-experience-for-web/requirements/technical.md       │
+  ├─────────────────────────────────┼──────────────────────────────────────────────────────────────────────────┤
+  │ User stories                    │ .forge/efforts/dining-experience-for-web/requirements/user-stories.md    │
+  ├─────────────────────────────────┼──────────────────────────────────────────────────────────────────────────┤
+  │ UI spec                         │ .forge/efforts/dining-experience-for-web/spec/ui-spec.md                 │
+  ├─────────────────────────────────┼──────────────────────────────────────────────────────────────────────────┤
+  │ Validation report (PASS)        │ .forge/efforts/dining-experience-for-web/validation/report.md            │
+  ├─────────────────────────────────┼──────────────────────────────────────────────────────────────────────────┤
+  │ Implementation plan (15 tasks)  │ .forge/efforts/dining-experience-for-web/plan/tasks.md                   │
+  └─────────────────────────────────┴──────────────────────────────────────────────────────────────────────────┘</pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">The effort is now in the implementation phase with 15 tasks planned across 6 waves. Proceed to Step 9.</p>
       `
       },
 
