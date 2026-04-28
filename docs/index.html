@@ -834,6 +834,12 @@
       font-weight: 600;
     }
 
+    .t-bullet { color: #a78bfa; }
+    .t-skill  { color: #f59e0b; font-weight: 600; }
+    .t-tool   { color: #a78bfa; font-weight: 600; }
+    .t-muted  { color: #6b7280; }
+    .t-user   { color: #60a5fa; font-weight: 600; }
+
     .typing-cursor {
       display: inline-block;
       color: #aaa;
@@ -2460,14 +2466,43 @@ discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
       // ── STEP 9 ───────────────────────────────────────────────────
       {
         type: 'step', num: '9', id: 'step-9',
-        title: 'Implement', desc: 'Run each task in order — TDD mode active',
+        title: 'Implement', desc: 'forge:plan → forge:ui → TDD mode, task by task',
         content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Executes the planned tasks wave by wave. forge:implement detects the effort's UI spec and delegates to forge:ui, which loads UIKit guides and applies TDD mode (write tests first, confirm red, then implement).</p>
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run each task in order:</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Executes the planned tasks wave by wave. forge:plan detects the effort's UI spec and delegates to forge:ui, which loads UIKit guides and applies TDD mode (write tests first, confirm red, then implement).</p>
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin-bottom:.5rem;">Run task if it was paused:</p>
         <div class="cmd-block">
-          <pre><span class="t-cmd">/forge:implement</span> dining-experience-on-web-for-rakutencom TASK-001</pre>
-          <button class="copy-btn" onclick="copyText(this,'/forge:implement dining-experience-on-web-for-rakutencom TASK-001')">Copy</button>
+          <pre><span class="t-str typing-text" data-type-text="Continue Implementation for each task by task using forge and Verify and Validate when it is ready give me URL to access"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Continue Implementation for each task by task using forge and Verify and Validate when it is ready give me URL to access')">Copy</button>
         </div>
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .5rem;">Progress on:</p>
+        <div class="cmd-block"><pre><span class="t-skill">❯ continue</span>
+
+<span class="t-bullet">⏺</span> The effort is in implementation. Wave 1 tasks are ready to start — and since this is a UI-first effort with a complete
+  ui-spec.md, let me kick off forge:ui to generate the implementation:
+
+<span class="t-bullet">⏺</span> <span class="t-tool">Skill(forge:ui)</span>
+  <span class="t-muted">⎿  Successfully loaded skill</span>
+
+  <span class="t-muted">Searched for 1 pattern (ctrl+o to expand)</span>
+
+<span class="t-bullet">⏺</span> Web platform detected. Loading standards and guides now.
+
+  <span class="t-muted">Read 4 files (ctrl+o to expand)</span>
+
+<span class="t-bullet">⏺</span> Now loading the relevant UI design system guides for a full-page production implementation:
+
+  <span class="t-muted">Read 4 files (ctrl+o to expand)</span>
+
+<span class="t-bullet">⏺</span> Standards loaded. UI spec is already in context. Now let me check the existing codebase structure before generating:
+
+  <span class="t-muted">Searched for 1 pattern, listed 2 directories (ctrl+o to expand)</span>
+
+<span class="t-bullet">⏺</span> Good — src/ based structure with src/pages/ and src/components/. Let me check an existing page for patterns:
+
+  <span class="t-muted">Read 2 files (ctrl+o to expand)</span>
+
+<span class="t-bullet">⏺</span> Good. Source tree: src/pages/, src/components/. Uses @rakuten-rewards/next/app, UIKit imports confirmed. Path alias ~ for
+  src/.</pre></div>
       `
       },
 
@@ -2508,68 +2543,46 @@ src/hooks/useGeolocation.test.ts — 4 unit tests</pre></div>
           <div class="result-row"><span class="result-file">searchFilter.test.ts</span><span class="result-desc">Case-insensitive name filter</span><span class="result-pass">5/5 PASS</span></div>
           <div class="result-row"><span class="result-file">useGeolocation.test.ts</span><span class="result-desc">idle/loading/granted/denied/unavailable</span><span class="result-pass">4/4 PASS</span></div>
         </div>
-        <div class="success-box" style="margin-top:.75rem;">All 12 tests pass across all three suites.<br><span style="font-size:.8rem;color:#777;">Warnings are React deprecation notices from UIKit library internals — not test failures.</span></div>
+        <div class="success-box" style="margin-top:.75rem;">TASK-002, TASK-003, and TASK-004 are committed atomically.<br><span style="font-size:.8rem;color:#777;">Warnings are React deprecation notices from UIKit library internals — not test failures.</span></div>
       `
       },
 
       // ── STEP 9.3 ─────────────────────────────────────────────────
       {
         type: 'substep', num: '9.3', parentId: 'step-9',
-        title: 'TASK-005: RestaurantCard Component', desc: 'Wave 2',
+        title: 'All Tasks Complete', desc: '24/24 tests pass · 6 suites · 0 failures',
         content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Wave 2 has a single task: the shared card component used by the listing page.</p>
-        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin-bottom:.5rem;">What gets created:</p>
-        <div class="cmd-block"><pre>src/components/dining/RestaurantCard.tsx      — UIKit card component
-                                               Uses TagInLineCashBack for the offer badge
-                                               Accepts optional distance prop
-                                               Links to /dining/:id
-src/components/dining/RestaurantCard.test.tsx — component tests</pre></div>
-      `
-      },
-
-      // ── STEP 9.4 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '9.4', parentId: 'step-9',
-        title: 'TASK-006 and TASK-007: Pages', desc: 'Wave 3, Parallel',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Wave 3 pages are implemented in parallel with their test suites.</p>
-        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin-bottom:.5rem;">What gets created:</p>
-        <div class="cmd-block"><pre>src/pages/dining/index.tsx       — Listing page
-                                   Live name search (client-side filter, keystroke)
-                                   "Near me" button (Geolocation -> Haversine sort)
-                                   Alphabetical default / distance sort when near-me active
-                                   Empty search results state
-src/pages/dining/index.test.tsx  — 7 tests
-
-src/pages/dining/[id].tsx        — Detail page
-                                   Restaurant not-found handling (invalid id)
-                                   Back link to /dining
-src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
-        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .5rem;">Test results — both page suites:</p>
-        <div class="result-grid">
-          <div class="result-row"><span class="result-file">dining/index.test.tsx</span><span class="result-desc">search, near-me, sort, empty state</span><span class="result-pass">7/7 PASS</span></div>
-          <div class="result-row"><span class="result-file">dining/[id].test.tsx</span><span class="result-desc">detail page, not-found, back link</span><span class="result-pass">3/3 PASS</span></div>
-        </div>
-        <div class="success-box" style="margin-top:.75rem;">10/10 tests pass across both page test suites.<br><span style="font-size:.8rem;color:#777;">Warnings are React 18 deprecation notices from UIKit library internals — not test failures.</span></div>
-      `
-      },
-
-      // ── STEP 9.5 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '9.5', parentId: 'step-9', markComplete: true,
-        title: 'All Tasks Complete', desc: '24/24 tests pass, 6 suites, 0 failures',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">All 7 tasks complete on branch <code>feat/dining-experience-on-web-for-rakutencom</code>.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">All tasks complete on branch <code>feat/dining-experience-on-web-for-rakutencom</code>.</p>
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin-bottom:.5rem;">Wave 1</p>
         <div class="result-grid">
           <div class="result-row"><span class="result-file">src/data/restaurants.json</span><span class="result-desc">15 mock restaurants, all TR-2 fields</span><span class="result-pass">PASS</span></div>
           <div class="result-row"><span class="result-file">src/utils/distance.ts</span><span class="result-desc">Haversine + formatDistance (4 tests)</span><span class="result-pass">4/4 PASS</span></div>
           <div class="result-row"><span class="result-file">src/utils/searchFilter.ts</span><span class="result-desc">case-insensitive name filter (5 tests)</span><span class="result-pass">5/5 PASS</span></div>
           <div class="result-row"><span class="result-file">src/hooks/useGeolocation.ts</span><span class="result-desc">idle/loading/granted/denied/unavailable (4 tests)</span><span class="result-pass">4/4 PASS</span></div>
+        </div>
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .5rem;">Wave 2</p>
+        <div class="result-grid">
           <div class="result-row"><span class="result-file">src/components/dining/RestaurantCard.tsx</span><span class="result-desc">UIKit card, TagInLineCashBack, distance prop, links to /dining/:id</span><span class="result-pass">PASS</span></div>
+        </div>
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .5rem;">Wave 3</p>
+        <div class="result-grid">
           <div class="result-row"><span class="result-file">src/pages/dining/index.tsx</span><span class="result-desc">listing page: search, near-me, sort, empty state (7 tests)</span><span class="result-pass">7/7 PASS</span></div>
           <div class="result-row"><span class="result-file">src/pages/dining/[id].tsx</span><span class="result-desc">detail page: not-found handling, back link (3 tests)</span><span class="result-pass">3/3 PASS</span></div>
         </div>
-        <div class="success-box" style="margin-top:.75rem;"><strong>24/24 tests pass · 6 suites · 0 failures</strong></div>
+        <div class="success-box" style="margin-top:.75rem;"><strong>24/24 tests pass · 6 suites · 0 failures</strong><br><span style="font-size:.8rem;color:#777;">Branch: feat/dining-experience-on-web-for-rakutencom</span></div>
+      `
+      },
+
+      // ── STEP 9.4 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '9.4', parentId: 'step-9', markComplete: true,
+        title: 'Validate Layout', desc: 'Design tokens, rendering, UX review',
+        content: `
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Final validation pass — ask Claude to review the full implementation against Rakuten design standards.</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Please validate layout, Rendering, User Experience and everything else it should be looking modern and strictly first preference to rakuten design tokens only."></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Please validate layout, Rendering, User Experience and everything else it should be looking modern and strictly first preference to rakuten design tokens only.')">Copy</button>
+        </div>
       `
       },
 
