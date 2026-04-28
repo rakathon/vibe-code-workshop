@@ -2122,7 +2122,11 @@ Next steps:
 
   Confirm R2, or would you like to override?</pre>
         </div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Accept the recommendation or enter <strong style="color:var(--dark);">R2</strong>.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter</p>
+        <div class="cmd-block" style="margin-top:.4rem;">
+          <pre><span class="t-str typing-text" data-type-text="R2"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'R2')">Copy</button>
+        </div>
       `
       },
 
@@ -2172,7 +2176,7 @@ Next steps:
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code:</p>
         <div class="cmd-block">
           <pre><span class="t-str typing-text" data-type-text="I want to design the UI for this let's strictly use rakuten UI kit design tokens and standards only for implementation"></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'I want to design the UI for this let\'s strictly use rakuten UI kit design tokens and standards only for implementation')">Copy</button>
+          <button class="copy-btn" data-copy="I want to design the UI for this let's strictly use rakuten UI kit design tokens and standards only for implementation" onclick="copyText(this, this.dataset.copy)">Copy</button>
         </div>
       `
       },
