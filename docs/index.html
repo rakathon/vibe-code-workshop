@@ -2137,32 +2137,15 @@ Next steps:
         desc: 'Check your understanding of effort creation and risk',
         questions: [
           {
-            q: 'What work item type did we choose for the dining experience effort?',
-            opts: ['<code>story</code>', '<code>task</code>', '<code>epic</code>', '<code>initiative</code>'],
-            answer: 2,
-            explain: 'We chose <code>epic</code> — it automatically sets the tier to "full", giving us the complete discovery/planning/implementation workflow.'
-          },
-          {
-            q: 'Why did forge:classify confirm R2 for the dining experience effort?',
+            q: 'What is forge:classify used for?',
             opts: [
-              'It has payment processing and PII collection',
-              'It introduces two new external API dependencies — <code>feedapi</code> and <code>Nominatim</code>',
-              'Static JSON always triggers R2',
-              'Forge always confirms the initial classification'
+              'Assign an R1–R4 risk classification to the active effort',
+              'Generate a UI spec from requirements',
+              'Create a new Jira ticket for the effort',
+              'Break the effort into implementation tasks'
             ],
-            answer: 1,
-            explain: 'R2 is confirmed because the effort integrates with two external APIs: <code>feedapi</code> (api.engager.ecbsn.com) for restaurant data and OpenStreetMap <code>Nominatim</code> for geocoding. External integrations are a clear R2 indicator.'
-          },
-          {
-            q: 'What is the correct data schema for each restaurant in TR-2?',
-            opts: [
-              '<code>id, name, price, rating, category</code>',
-              '<code>id, name, cuisineType, cashBackOffer, thumbnailUrl, address, lat, lng</code>',
-              '<code>restaurantId, title, cuisine, discount, imageUrl, coordinates</code>',
-              '<code>id, name, location, offers</code>'
-            ],
-            answer: 1,
-            explain: 'TR-2 defines: <code>id, name, cuisineType, cashBackOffer, thumbnailUrl, address, lat, lng</code> — all needed for listing cards, detail pages, and geolocation sorting.'
+            answer: 0,
+            explain: '<code>forge:classify</code> assigns an R1–R4 risk classification to the active effort, evaluating requirements against the risk rubric and confirming or updating the level.'
           }
         ]
       },
