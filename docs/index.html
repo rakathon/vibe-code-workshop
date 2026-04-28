@@ -792,15 +792,16 @@
       margin: .9rem 0;
       position: relative;
       box-shadow: 0 4px 14px rgba(0, 0, 0, .18);
+      overflow-x: auto;
     }
 
     .cmd-block pre {
       color: #e0e0e0;
       font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
       font-size: .82rem;
-      white-space: pre-wrap;
-      word-break: break-all;
+      white-space: pre;
       line-height: 1.65;
+      min-width: 0;
     }
 
     /* ── Syntax highlight tokens inside cmd-block ── */
@@ -1524,13 +1525,12 @@
         { id: 's2-6', label: '2.6 — Confirm & Commit' },
       ],
       'step-3': [
-        { id: 's3-1', label: '3.1 — Enter Effort Title' },
-        { id: 's3-2', label: '3.2 — Select Work Item Type' },
-        { id: 's3-3', label: '3.3 — Select Risk Level' },
-        { id: 's3-4', label: '3.4 — Skip Jira Association' },
-        { id: 's3-5', label: '3.5 — Allow Branch Creation' },
-        { id: 's3-6', label: '3.6 — Allow Effort Scaffold Commit' },
-        { id: 's3-7', label: '3.7 — Effort Creation Complete' },
+        { id: 's3-1', label: '3.1 — Select Work Item Type' },
+        { id: 's3-2', label: '3.2 — Select Risk Level' },
+        { id: 's3-3', label: '3.3 — Skip Jira Association' },
+        { id: 's3-4', label: '3.4 — Allow Branch Creation' },
+        { id: 's3-5', label: '3.5 — Allow Effort Scaffold Commit' },
+        { id: 's3-6', label: '3.6 — Effort Creation Complete' },
       ],
     };
 
@@ -1794,11 +1794,21 @@ Commit these files so your team gets the workspace structure:
         type: 'step', num: '3', id: 'step-3',
         title: 'Create a Work Effort', desc: 'Run /forge:effort',
         content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Creates a new work effort under <code>.forge/efforts/</code>, scaffolds the directory structure, creates a working branch, and commits everything atomically.</p>
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run:</p>
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>/forge:effort</code> registers a new work item inside the <code>.forge/</code> workspace. Each feature, bug fix, or investigation in Forge is tracked as an effort with a title, type (epic, story, task, etc.), risk level, and its own folder for requirements, specs, and plans. This command creates that folder, assigns a unique ID based on the title, creates a dedicated git branch, and commits the scaffold atomically, so the effort is tracked in version control immediately. Run it <strong>once per feature</strong> at the start of work.</p>
+        <p style="font-size:.93rem;color:var(--muted);margin-bottom:.6rem;">Type this in Claude Code:</p>
         <div class="cmd-block">
-          <pre><span class="t-cmd">/forge:effort</span></pre>
-          <button class="copy-btn" onclick="copyText(this,'/forge:effort')">Copy</button>
+          <pre><span class="t-str typing-text" data-type-text="we want to start planning a new project called dining experience for web"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'we want to start planning a new project called dining experience for web')">Copy</button>
+        </div>
+        <p style="font-size:.88rem;color:var(--muted);margin:.75rem 0 .5rem;">Forge picks up the project name from your message and skips asking for a title — it will ask all other questions as usual.</p>
+        <p style="font-size:.88rem;color:var(--muted);margin:.75rem 0 .4rem;">Claude will respond with something like:</p>
+        <div class="cmd-block" style="font-size:.82rem;">
+          <pre style="line-height:1.7;"><span class="t-flag">Skill(forge:effort)</span>
+  <span class="t-str">⎿  Successfully loaded skill</span>
+<span class="t-muted" style="color:#6b7280;">Forge is initialized and no collision. The effort ID will be:</span> <span class="t-key">dining-experience-for-web</span></pre>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Note:</strong> This step will load the <code>forge:effort</code> skill. If it doesn't, add <code>/forge:effort</code> to your prompt.
         </div>
       `
       },
@@ -1806,23 +1816,6 @@ Commit these files so your team gets the workspace structure:
       // ── STEP 3.1 ─────────────────────────────────────────────────
       {
         type: 'substep', num: '3.1', parentId: 'step-3',
-        title: 'Effort Title', desc: 'Answer Forge\'s first prompt',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will prompt:</p>
-        <div class="cmd-block">
-          <pre><span class="t-key">What is the effort title?</span></pre>
-        </div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .75rem;">Enter:</p>
-        <div class="cmd-block">
-          <pre><span class="t-str typing-text" data-type-text="let's create dining experience on web for rakuten.com"></span><span class="typing-cursor">▌</span></pre>
-          <button class="copy-btn" onclick="copyText(this,&quot;let's create dining experience on web for rakuten.com&quot;)">Copy</button>
-        </div>
-      `
-      },
-
-      // ── STEP 3.2 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '3.2', parentId: 'step-3',
         title: 'Select Work Item Type', desc: 'Choose the effort type',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will prompt:</p>
@@ -1844,7 +1837,7 @@ Commit these files so your team gets the workspace structure:
 
       // ── STEP 3.3 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '3.3', parentId: 'step-3',
+        type: 'substep', num: '3.2', parentId: 'step-3',
         title: 'Select Risk Level', desc: 'Choose the risk classification',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will prompt:</p>
@@ -1864,7 +1857,7 @@ Commit these files so your team gets the workspace structure:
 
       // ── STEP 3.4 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '3.4', parentId: 'step-3',
+        type: 'substep', num: '3.3', parentId: 'step-3',
         title: 'Skip Jira Association', desc: 'Decline the Atlassian plugin request',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will attempt to check Atlassian authentication and prompt:</p>
@@ -1885,7 +1878,7 @@ Commit these files so your team gets the workspace structure:
 
       // ── STEP 3.5 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '3.5', parentId: 'step-3',
+        type: 'substep', num: '3.4', parentId: 'step-3',
         title: 'Allow Branch Creation', desc: 'Approve the git checkout',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge derives the branch name from the effort title and prompts:</p>
@@ -1908,7 +1901,7 @@ This command requires approval
 
       // ── STEP 3.6 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '3.6', parentId: 'step-3',
+        type: 'substep', num: '3.5', parentId: 'step-3',
         title: 'Allow Effort Scaffold Commit', desc: 'Approve the git commit',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge stages and commits the new effort directory atomically:</p>
@@ -1930,7 +1923,7 @@ This command requires approval
 
       // ── STEP 3.7 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '3.7', parentId: 'step-3', markComplete: true,
+        type: 'substep', num: '3.6', parentId: 'step-3', markComplete: true,
         title: 'Effort Creation Complete', desc: 'Your work effort is ready',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will confirm the active effort and print a summary:</p>
@@ -1953,6 +1946,14 @@ Next steps:
   Run forge:arch-review when discovery artifacts are ready.</pre>
         </div>
         <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">The effort is now scaffolded and ready. You are on branch <code>feat/dining-experience-on-web</code> and in the discovery phase.</p>
+        <p style="font-size:.88rem;color:var(--muted);margin:.75rem 0 .4rem;">In the Claude Code status line you can now see the active effort and current phase:</p>
+        <div class="cmd-block" style="font-size:.78rem;">
+          <pre style="white-space:pre;line-height:1.7;"><span class="t-key">❯</span>
+<span class="t-str">────────────────────────────────────────────────────────────────────────────────────────────────────────────────</span>
+    <span class="t-flag">🌿 feat/dining-experience-for-web</span> [<span class="t-key">dining-experience-for-web · discovery</span>] | <span class="t-num">$0.33 6m37s</span> | <span class="t-cmd">Sonnet 4.6</span> | <span class="t-key">📁 rr-lunchnlearn-web</span>
+    <span class="t-str">██░░░░░░░░ 21% context</span>
+  <span class="t-muted" style="color:#6b7280;">⏵⏵ accept edits on (shift+tab to cycle)</span></pre>
+        </div>
       `
       },
 
