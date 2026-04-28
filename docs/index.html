@@ -2074,15 +2074,15 @@ Next steps:
             explain: 'We chose epic — it automatically sets the tier to "full", giving us the complete discovery/planning/implementation workflow.'
           },
           {
-            q: 'Why was the risk re-classified from R2 to R3 after forge:classify?',
+            q: 'Why did forge:classify confirm R2 for the dining experience effort?',
             opts: [
-              'The team decided it was too risky',
-              'No external integration, schema change, or cross-team dependency applies',
-              'Static JSON is always R3',
-              'Forge always downgrades risk after classify'
+              'It has payment processing and PII collection',
+              'It introduces two new external API dependencies — feedapi and Nominatim',
+              'Static JSON always triggers R2',
+              'Forge always confirms the initial classification'
             ],
             answer: 1,
-            explain: 'R3 (Moderate) is correct because the feature is entirely client-side with no backend changes, no external APIs, and no cross-team dependencies.'
+            explain: 'R2 is confirmed because the effort integrates with two external APIs: feedapi (api.engager.ecbsn.com) for restaurant data and OpenStreetMap Nominatim for geocoding. External integrations are a clear R2 indicator.'
           },
           {
             q: 'What is the correct data schema for each restaurant in TR-2?',
