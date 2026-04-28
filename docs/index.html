@@ -1,140 +1,348 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dining Web Expansion — Lunch &amp; Learn</title>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg:          #f7f7f7;
-      --surface:     #ffffff;
-      --surface2:    #fafafa;
-      --border:      #e0e0e0;
-      --border2:     #bbbbbb;
-      --text:        #111111;
-      --muted:       #777777;
-      --pale:        #f2f2f2;
-      --black:       #000000;
-      --dark:        #111111;
-      --mid:         #333333;
-      --light:       #666666;
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    html, body { height: 100%; }
+    :root {
+      --bg: #f7f7f7;
+      --surface: #ffffff;
+      --surface2: #fafafa;
+      --border: #e0e0e0;
+      --border2: #bbbbbb;
+      --text: #111111;
+      --muted: #777777;
+      --pale: #f2f2f2;
+      --black: #000000;
+      --dark: #111111;
+      --mid: #333333;
+      --light: #666666;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg); color: var(--text);
-      overflow: hidden; display: flex; flex-direction: column;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     /* ══ HEADER ══════════════════════════════════════════════════════════════ */
     .header {
       background: linear-gradient(135deg, #000 0%, #1a1a1a 60%, #3a3a3a 100%);
       padding: 0.9rem 2rem;
-      display: flex; align-items: center; justify-content: space-between;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-      flex-shrink: 0; position: relative; overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
     }
+
     .header::before {
-      content: ''; position: absolute; inset: 0;
+      content: '';
+      position: absolute;
+      inset: 0;
       background: url('data:image/svg+xml,<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="1.2" fill="rgba(255,255,255,0.1)"/></svg>');
-      pointer-events: none; animation: bgmove 25s linear infinite;
+      pointer-events: none;
+      animation: bgmove 25s linear infinite;
     }
-    @keyframes bgmove { from{background-position:0 0} to{background-position:60px 60px} }
 
-    .header-left { display:flex; align-items:center; gap:0.75rem; position:relative; z-index:1; }
-    .header-emoji { font-size:1.8rem; animation:float 3s ease-in-out infinite; }
-    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
-    .header-title { color:#fff; font-size:1.1rem; font-weight:700; }
-    .header-sub   { color:rgba(255,255,255,.75); font-size:0.75rem; margin-top:1px; }
+    @keyframes bgmove {
+      from {
+        background-position: 0 0
+      }
 
-    .header-right { display:flex; align-items:center; gap:0.6rem; position:relative; z-index:1; }
+      to {
+        background-position: 60px 60px
+      }
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header-emoji {
+      font-size: 1.8rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(-4px)
+      }
+    }
+
+    .header-title {
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .header-sub {
+      color: rgba(255, 255, 255, .75);
+      font-size: 0.75rem;
+      margin-top: 1px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      position: relative;
+      z-index: 1;
+    }
+
     .h-pill {
-      background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.25);
-      color:#fff; padding:0.3rem 0.85rem; border-radius:999px;
-      font-size:0.75rem; font-weight:600; white-space:nowrap;
+      background: rgba(255, 255, 255, .18);
+      border: 1px solid rgba(255, 255, 255, .25);
+      color: #fff;
+      padding: 0.3rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
     }
-    .h-pill.progress-pill { min-width:120px; }
 
-    .progress-bar-wrap { position:absolute; bottom:0; left:0; right:0; height:3px; background:rgba(255,255,255,.15); }
-    .progress-bar-fill { height:100%; background:linear-gradient(90deg,#888,#fff); transition:width .35s ease; }
+    .h-pill.progress-pill {
+      min-width: 120px;
+    }
+
+    .progress-bar-wrap {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: rgba(255, 255, 255, .15);
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #888, #fff);
+      transition: width .35s ease;
+    }
 
     /* ══ LAYOUT ══════════════════════════════════════════════════════════════ */
-    .layout { display:flex; flex:1; min-height:0; position:relative; }
+    .layout {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+      position: relative;
+    }
 
     /* ══ SIDEBAR ══════════════════════════════════════════════════════════════ */
     .sidebar {
-      width:300px; min-width:180px; max-width:520px; flex-shrink:0;
-      background:var(--surface); border-right:1px solid var(--border);
-      display:flex; flex-direction:column; overflow:hidden;
-      transition:width .3s ease; position:relative;
+      width: 300px;
+      min-width: 180px;
+      max-width: 520px;
+      flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: width .3s ease;
+      position: relative;
     }
-    .sidebar.collapsed { width:0 !important; border-right:none; }
-    .sidebar.collapsed .sidebar-resizer { display:none; }
+
+    .sidebar.collapsed {
+      width: 0 !important;
+      border-right: none;
+    }
+
+    .sidebar.collapsed .sidebar-resizer {
+      display: none;
+    }
 
     /* drag handle */
     .sidebar-resizer {
-      position:absolute; top:0; right:-3px; width:6px; height:100%;
-      cursor:col-resize; z-index:20;
-      background:transparent;
+      position: absolute;
+      top: 0;
+      right: -3px;
+      width: 6px;
+      height: 100%;
+      cursor: col-resize;
+      z-index: 20;
+      background: transparent;
     }
-    .sidebar-resizer:hover, .sidebar-resizer.dragging {
-      background:var(--border2);
+
+    .sidebar-resizer:hover,
+    .sidebar-resizer.dragging {
+      background: var(--border2);
     }
 
     .sidebar-head {
-      padding:.8rem 1rem; border-bottom:1px solid var(--border);
-      display:flex; align-items:center; justify-content:space-between;
-      background:var(--surface2); flex-shrink:0;
+      padding: .8rem 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface2);
+      flex-shrink: 0;
     }
-    .sidebar-head h3 { font-size:.72rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--dark); }
-    .collapse-btn {
-      background:none; border:1px solid var(--border); border-radius:5px;
-      cursor:pointer; padding:2px 6px; color:var(--muted); font-size:.75rem;
-      transition:all .15s;
-    }
-    .collapse-btn:hover { background:var(--pale); color:var(--dark); border-color:var(--dark); }
 
-    .sidebar-list { overflow-y:auto; flex:1; padding:.4rem 0; }
-    .sidebar-list::-webkit-scrollbar { width:4px; }
-    .sidebar-list::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+    .sidebar-head h3 {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--dark);
+    }
+
+    .collapse-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      cursor: pointer;
+      padding: 2px 6px;
+      color: var(--muted);
+      font-size: .75rem;
+      transition: all .15s;
+    }
+
+    .collapse-btn:hover {
+      background: var(--pale);
+      color: var(--dark);
+      border-color: var(--dark);
+    }
+
+    .sidebar-list {
+      overflow-y: auto;
+      flex: 1;
+      padding: .4rem 0;
+    }
+
+    .sidebar-list::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .sidebar-list::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 2px;
+    }
 
     .sb-item {
-      display:flex; align-items:flex-start; gap:.55rem;
-      padding:.55rem 1rem; cursor:pointer;
-      border-left:3px solid transparent; transition:all .15s;
-      overflow:hidden;
+      display: flex;
+      align-items: flex-start;
+      gap: .55rem;
+      padding: .55rem 1rem;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all .15s;
+      overflow: hidden;
     }
-    .sb-item:hover  { background:var(--pale); border-left-color:var(--light); }
-    .sb-item.active { background:var(--pale); border-left-color:var(--dark); }
-    .sb-item.done   { border-left-color:#16a34a; }
+
+    .sb-item:hover {
+      background: var(--pale);
+      border-left-color: var(--light);
+    }
+
+    .sb-item.active {
+      background: var(--pale);
+      border-left-color: var(--dark);
+    }
+
+    .sb-item.done {
+      border-left-color: #16a34a;
+    }
 
     .sb-dot {
-      flex-shrink:0; width:20px; height:20px; border-radius:3px;
-      background:var(--border); display:flex; align-items:center; justify-content:center;
-      font-size:.62rem; font-weight:700; color:var(--muted); margin-top:1px;
-      transition:all .2s;
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 3px;
+      background: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .62rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-top: 1px;
+      transition: all .2s;
     }
-    .sb-item.active .sb-dot { background:var(--dark); color:#fff; }
-    .sb-item.done   .sb-dot { background:#16a34a; color:#fff; }
-    .sb-item.done   .sb-dot::after { content:'✓'; font-size:.65rem; }
-    .sb-item.done   .sb-dot .sb-num { display:none; }
 
-    .sb-label    { font-size:.78rem; color:var(--text); line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .sb-sublabel { font-size:.68rem; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .sb-item.active .sb-dot {
+      background: var(--dark);
+      color: #fff;
+    }
+
+    .sb-item.done .sb-dot {
+      background: #16a34a;
+      color: #fff;
+    }
+
+    .sb-item.done .sb-dot::after {
+      content: '✓';
+      font-size: .65rem;
+    }
+
+    .sb-item.done .sb-dot .sb-num {
+      display: none;
+    }
+
+    .sb-label {
+      font-size: .78rem;
+      color: var(--text);
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sb-sublabel {
+      font-size: .68rem;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
     /* Section headers in sidebar */
     .sb-section {
       padding: .65rem 1rem .3rem;
-      font-size: .62rem; font-weight: 700; letter-spacing: .1em;
-      text-transform: uppercase; color: var(--muted);
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
       border-top: 1px solid var(--border);
       margin-top: .3rem;
       user-select: none;
     }
-    .sb-section:first-child { border-top: none; margin-top: 0; }
+
+    .sb-section:first-child {
+      border-top: none;
+      margin-top: 0;
+    }
 
     /* Sub-step items (indented, grayed) — collapsed by default */
     .sb-item.substep {
@@ -149,6 +357,7 @@
       pointer-events: none;
       transition: height .25s ease, opacity .2s, padding .25s ease;
     }
+
     .sb-item.substep.expanded {
       height: 44px;
       padding-top: .55rem;
@@ -157,11 +366,26 @@
       border-left: 3px solid transparent !important;
       pointer-events: auto;
     }
-    .sb-item.substep.expanded:hover  { opacity: 1; }
-    .sb-item.substep.expanded.active { opacity: 1; border-left-color: var(--dark) !important; }
-    .sb-item.substep.expanded.done   { opacity: 1; border-left-color: #16a34a !important; }
+
+    .sb-item.substep.expanded:hover {
+      opacity: 1;
+    }
+
+    .sb-item.substep.expanded.active {
+      opacity: 1;
+      border-left-color: var(--dark) !important;
+    }
+
+    .sb-item.substep.expanded.done {
+      opacity: 1;
+      border-left-color: #16a34a !important;
+    }
+
     .sb-item.substep .sb-dot {
-      width: 16px; height: 16px; font-size: .55rem; border-radius: 2px;
+      width: 16px;
+      height: 16px;
+      font-size: .55rem;
+      border-radius: 2px;
     }
 
     /* Locked sidebar items */
@@ -173,32 +397,81 @@
 
     /* chevron on parent step items that have substeps */
     .sb-item .sb-chevron {
-      margin-left: auto; font-size: .65rem; color: var(--muted);
-      transition: transform .25s ease; flex-shrink: 0;
+      margin-left: auto;
+      font-size: .65rem;
+      color: var(--muted);
+      transition: transform .25s ease;
+      flex-shrink: 0;
     }
-    .sb-item.expanded-parent .sb-chevron { transform: rotate(90deg); }
+
+    .sb-item.expanded-parent .sb-chevron {
+      transform: rotate(90deg);
+    }
 
     .expand-btn {
-      position:absolute; left:0; top:50%; transform:translateY(-50%);
-      width:20px; height:44px; background:var(--dark); border:none;
-      border-radius:0 5px 5px 0; color:#fff; cursor:pointer;
-      display:none; align-items:center; justify-content:center; font-size:.65rem;
-      z-index:10; box-shadow:2px 0 8px rgba(0,0,0,.2);
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 44px;
+      background: var(--dark);
+      border: none;
+      border-radius: 0 5px 5px 0;
+      color: #fff;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: .65rem;
+      z-index: 10;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, .2);
     }
-    .expand-btn.visible { display:flex; }
+
+    .expand-btn.visible {
+      display: flex;
+    }
 
     /* ══ SLIDE AREA ══════════════════════════════════════════════════════════ */
-    .slide-area { flex:1; overflow:hidden; position:relative; }
+    .slide-area {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
 
     .slide {
-      position:absolute; inset:0; overflow-y:auto;
-      padding:2rem 2.5rem 5rem; display:none;
-      animation:fadeIn .22s ease;
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      padding: 2rem 2.5rem 5rem;
+      display: none;
+      animation: fadeIn .22s ease;
     }
-    .slide.active { display:block; }
-    @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-    .slide::-webkit-scrollbar { width:5px; }
-    .slide::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }
+
+    .slide.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .slide::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .slide::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 3px;
+    }
 
     /* ══ WELCOME ══════════════════════════════════════════════════════════════ */
     .welcome-slide {
@@ -222,325 +495,950 @@
       justify-content: center;
       border-right: 1px solid var(--border);
     }
+
     .wl-eyebrow {
-      display: flex; align-items: center; gap: .5rem;
-      font-size: .72rem; font-weight: 600; letter-spacing: .1em;
-      text-transform: uppercase; color: var(--muted); margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
     }
-    .wl-eyebrow svg { flex-shrink: 0; }
+
+    .wl-eyebrow svg {
+      flex-shrink: 0;
+    }
+
     .wl-left h1 {
-      font-size: 3rem; font-weight: 800; color: var(--dark);
-      line-height: 1.1; margin-bottom: 1.25rem; letter-spacing: -.5px;
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--dark);
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+      letter-spacing: -.5px;
     }
+
     .wl-left p {
-      font-size: .97rem; color: var(--muted); line-height: 1.65;
-      max-width: 380px; margin-bottom: 2rem;
-    }
-    .wl-meta {
-      display: flex; align-items: center; gap: 1.5rem;
+      font-size: .97rem;
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 380px;
       margin-bottom: 2rem;
     }
-    .wl-meta-item {
-      display: flex; align-items: center; gap: .4rem;
-      font-size: .85rem; color: var(--text);
+
+    .wl-meta {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
     }
-    .wl-meta-item svg { color: var(--muted); flex-shrink: 0; }
+
+    .wl-meta-item {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: .85rem;
+      color: var(--text);
+    }
+
+    .wl-meta-item svg {
+      color: var(--muted);
+      flex-shrink: 0;
+    }
 
     .btn-begin {
-      display: inline-flex; align-items: center; gap: .5rem;
-      background: var(--dark); color: #fff;
-      font-size: .9rem; font-weight: 700;
-      padding: .75rem 1.6rem; border-radius: 9px; border: none;
-      cursor: pointer; transition: opacity .2s; width: fit-content;
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--dark);
+      color: #fff;
+      font-size: .9rem;
+      font-weight: 700;
+      padding: .75rem 1.6rem;
+      border-radius: 9px;
+      border: none;
+      cursor: pointer;
+      transition: opacity .2s;
+      width: fit-content;
     }
-    .btn-begin:hover { opacity: .82; }
+
+    .btn-begin:hover {
+      opacity: .82;
+    }
 
     .wl-autosave {
-      margin-top: .9rem; font-size: .75rem; color: var(--muted);
+      margin-top: .9rem;
+      font-size: .75rem;
+      color: var(--muted);
     }
 
     .wl-right {
       padding: 4rem 3.5rem;
       overflow-y: auto;
-      display: flex; flex-direction: column; justify-content: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
+
     .wl-outline-label {
-      font-size: .68rem; font-weight: 700; letter-spacing: .12em;
-      text-transform: uppercase; color: var(--muted); margin-bottom: 1.25rem;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.25rem;
     }
-    .outline-list { display: flex; flex-direction: column; gap: .65rem; }
+
+    .outline-list {
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+    }
+
     .outline-item {
-      display: flex; align-items: center; gap: 1rem;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 10px; padding: .95rem 1.1rem;
-      cursor: pointer; transition: border-color .15s, box-shadow .15s;
-      text-decoration: none; color: inherit;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: .95rem 1.1rem;
+      cursor: pointer;
+      transition: border-color .15s, box-shadow .15s;
+      text-decoration: none;
+      color: inherit;
     }
-    .outline-item:hover { border-color: var(--border2); box-shadow: 0 2px 10px rgba(0,0,0,.06); }
-    .outline-item.cert-item { border-style: dashed; }
+
+    .outline-item:hover {
+      border-color: var(--border2);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, .06);
+    }
+
+    .outline-item.cert-item {
+      border-style: dashed;
+    }
 
     .oi-num {
-      width: 34px; height: 34px; border-radius: 50%;
-      background: var(--pale); border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      font-size: .82rem; font-weight: 700; color: var(--dark); flex-shrink: 0;
-    }
-    .oi-icon {
-      width: 34px; height: 34px; border-radius: 50%;
-      background: var(--pale); border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--pale);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--dark);
       flex-shrink: 0;
     }
-    .oi-body { flex: 1; }
-    .oi-title { font-size: .92rem; font-weight: 600; color: var(--dark); margin-bottom: .18rem; }
-    .oi-meta  { font-size: .75rem; color: var(--muted); }
-    .oi-arrow { color: var(--border2); font-size: 1rem; margin-left: auto; flex-shrink: 0; }
+
+    .oi-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--pale);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .oi-body {
+      flex: 1;
+    }
+
+    .oi-title {
+      font-size: .92rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: .18rem;
+    }
+
+    .oi-meta {
+      font-size: .75rem;
+      color: var(--muted);
+    }
+
+    .oi-arrow {
+      color: var(--border2);
+      font-size: 1rem;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
 
     .badge-pill {
-      display:inline-block; background:var(--dark); color:#fff;
-      font-size:.62rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
-      padding:3px 13px; border-radius:999px; margin-bottom:1.25rem;
+      display: inline-block;
+      background: var(--dark);
+      color: #fff;
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 3px 13px;
+      border-radius: 999px;
+      margin-bottom: 1.25rem;
     }
 
     .btn-primary {
-      display:inline-block; background:var(--dark); color:#fff;
-      font-size:.92rem; font-weight:700; padding:.7rem 2.25rem;
-      border-radius:999px; border:none; cursor:pointer;
-      transition:opacity .2s, transform .15s; box-shadow:0 4px 14px rgba(0,0,0,.18);
+      display: inline-block;
+      background: var(--dark);
+      color: #fff;
+      font-size: .92rem;
+      font-weight: 700;
+      padding: .7rem 2.25rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      transition: opacity .2s, transform .15s;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, .18);
     }
-    .btn-primary:hover { opacity:.85; transform:translateY(-2px); }
+
+    .btn-primary:hover {
+      opacity: .85;
+      transform: translateY(-2px);
+    }
 
     /* ══ STEP SLIDE ══════════════════════════════════════════════════════════ */
-    .step-slide { max-width:800px; margin:0 auto; }
-
-    .step-header { display:flex; align-items:center; gap:.85rem; margin-bottom:1.4rem; }
-    .step-badge {
-      flex-shrink:0; width:42px; height:42px; border-radius:6px;
-      background:var(--dark); display:flex; align-items:center; justify-content:center;
-      font-size:1.05rem; font-weight:800; color:#fff; box-shadow:0 4px 12px rgba(0,0,0,.2);
+    .step-slide {
+      max-width: 800px;
+      margin: 0 auto;
     }
-    .step-title h2 { font-size:1.28rem; font-weight:700; color:var(--text); }
-    .step-title p  { font-size:.82rem; color:var(--muted); margin-top:2px; }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: .85rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .step-badge {
+      flex-shrink: 0;
+      width: 42px;
+      height: 42px;
+      border-radius: 6px;
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .2);
+    }
+
+    .step-title h2 {
+      font-size: 1.28rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .step-title p {
+      font-size: .82rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
 
     /* ══ BLOCKS ══════════════════════════════════════════════════════════════ */
     .info-box {
-      background:var(--pale); border:1px solid var(--border); border-radius:9px;
-      padding:.85rem 1rem; margin:.9rem 0; font-size:.84rem; color:var(--text); line-height:1.6;
+      background: var(--pale);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: .85rem 1rem;
+      margin: .9rem 0;
+      font-size: .84rem;
+      color: var(--text);
+      line-height: 1.6;
     }
-    .info-box strong { color:var(--dark); }
+
+    .info-box strong {
+      color: var(--dark);
+    }
 
     .success-box {
-      background:var(--pale); border:1px solid var(--border2);
-      border-left:4px solid var(--dark); border-radius:0 9px 9px 0;
-      padding:.85rem 1rem; margin:.9rem 0; font-size:.84rem; color:var(--text); line-height:1.6;
+      background: var(--pale);
+      border: 1px solid var(--border2);
+      border-left: 4px solid var(--dark);
+      border-radius: 0 9px 9px 0;
+      padding: .85rem 1rem;
+      margin: .9rem 0;
+      font-size: .84rem;
+      color: var(--text);
+      line-height: 1.6;
     }
 
     .cmd-block {
-      background:#111; border-radius:9px; padding:.9rem 1.1rem;
-      margin:.9rem 0; position:relative; box-shadow:0 4px 14px rgba(0,0,0,.18);
+      background: #111;
+      border-radius: 9px;
+      padding: .9rem 1.1rem;
+      margin: .9rem 0;
+      position: relative;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, .18);
     }
+
     .cmd-block pre {
-      color:#e0e0e0; font-family:'SF Mono','Fira Code','Courier New',monospace;
-      font-size:.82rem; white-space:pre-wrap; word-break:break-all; line-height:1.65;
+      color: #e0e0e0;
+      font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+      font-size: .82rem;
+      white-space: pre-wrap;
+      word-break: break-all;
+      line-height: 1.65;
     }
 
     /* ── Syntax highlight tokens inside cmd-block ── */
-    .t-cmd    { color:#fff; font-weight:600; }
-    .t-flag   { color:#aaa; }
-    .t-str    { color:#d0d0d0; font-style:italic; }
-    .t-cmt    { color:#555; font-style:italic; }
-    .t-key    { color:#ccc; font-weight:600; }
+    .t-cmd {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .t-flag {
+      color: #aaa;
+    }
+
+    .t-str {
+      color: #d0d0d0;
+      font-style: italic;
+    }
+
+    .t-cmt {
+      color: #555;
+      font-style: italic;
+    }
+
+    .t-key {
+      color: #ccc;
+      font-weight: 600;
+    }
 
     .typing-cursor {
       display: inline-block;
       color: #aaa;
       animation: blink .9s step-end infinite;
     }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0
+      }
+    }
 
     .copy-btn {
-      position:absolute; top:.55rem; right:.55rem;
-      background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2);
-      color:rgba(255,255,255,.8); border-radius:5px; padding:2px 9px;
-      font-size:.68rem; font-weight:600; cursor:pointer; transition:all .15s;
+      position: absolute;
+      top: .55rem;
+      right: .55rem;
+      background: rgba(255, 255, 255, .12);
+      border: 1px solid rgba(255, 255, 255, .2);
+      color: rgba(255, 255, 255, .8);
+      border-radius: 5px;
+      padding: 2px 9px;
+      font-size: .68rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s;
     }
-    .copy-btn:hover { background:rgba(255,255,255,.22); color:#fff; }
-    .copy-btn.copied { background:#333; color:#fff; border-color:#333; }
+
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, .22);
+      color: #fff;
+    }
+
+    .copy-btn.copied {
+      background: #333;
+      color: #fff;
+      border-color: #333;
+    }
 
     /* prompt block (Claude input) */
     .prompt-block {
-      background:var(--surface2); border:1px solid var(--border);
-      border-left:4px solid var(--dark); border-radius:0 9px 9px 0;
-      padding:.85rem 1rem; margin:.9rem 0; position:relative;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--dark);
+      border-radius: 0 9px 9px 0;
+      padding: .85rem 1rem;
+      margin: .9rem 0;
+      position: relative;
     }
-    .prompt-label { font-size:.65rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--dark); margin-bottom:.45rem; }
-    .prompt-block p { font-size:.88rem; color:var(--text); line-height:1.6; padding-right:3.5rem; }
+
+    .prompt-label {
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--dark);
+      margin-bottom: .45rem;
+    }
+
+    .prompt-block p {
+      font-size: .88rem;
+      color: var(--text);
+      line-height: 1.6;
+      padding-right: 3.5rem;
+    }
+
     .prompt-block .copy-btn {
-      background:var(--pale); border:1px solid var(--border2); color:var(--dark);
+      background: var(--pale);
+      border: 1px solid var(--border2);
+      color: var(--dark);
     }
-    .prompt-block .copy-btn:hover { background:var(--dark); color:#fff; border-color:var(--dark); }
-    .prompt-block .copy-btn.copied { background:#111; color:#fff; border-color:#111; }
+
+    .prompt-block .copy-btn:hover {
+      background: var(--dark);
+      color: #fff;
+      border-color: var(--dark);
+    }
+
+    .prompt-block .copy-btn.copied {
+      background: #111;
+      color: #fff;
+      border-color: #111;
+    }
 
     .forge-cmd {
-      display:inline-flex; align-items:center; gap:.4rem;
-      background:var(--dark); color:#fff; font-family:'SF Mono',monospace;
-      font-size:.85rem; font-weight:600; padding:.38rem .95rem; border-radius:7px; margin:.45rem 0;
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: var(--dark);
+      color: #fff;
+      font-family: 'SF Mono', monospace;
+      font-size: .85rem;
+      font-weight: 600;
+      padding: .38rem .95rem;
+      border-radius: 7px;
+      margin: .45rem 0;
     }
 
     /* dialog table */
-    .dialog-table { width:100%; border-collapse:collapse; margin:.7rem 0; font-size:.82rem; }
-    .dialog-table th {
-      background:var(--pale); color:var(--dark); padding:.45rem .75rem;
-      text-align:left; font-size:.68rem; font-weight:700; text-transform:uppercase;
-      letter-spacing:.08em; border-bottom:1px solid var(--border);
+    .dialog-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: .7rem 0;
+      font-size: .82rem;
     }
-    .dialog-table td { padding:.5rem .75rem; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
-    .dialog-table tr:last-child td { border-bottom:none; }
-    .dialog-table .prompt-col { color:var(--muted); font-style:italic; font-size:.8rem; }
-    .dialog-table .answer-col code { background:var(--dark); color:#fff; padding:1px 7px; border-radius:4px; font-size:.77rem; font-weight:600; }
+
+    .dialog-table th {
+      background: var(--pale);
+      color: var(--dark);
+      padding: .45rem .75rem;
+      text-align: left;
+      font-size: .68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dialog-table td {
+      padding: .5rem .75rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .dialog-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .dialog-table .prompt-col {
+      color: var(--muted);
+      font-style: italic;
+      font-size: .8rem;
+    }
+
+    .dialog-table .answer-col code {
+      background: var(--dark);
+      color: #fff;
+      padding: 1px 7px;
+      border-radius: 4px;
+      font-size: .77rem;
+      font-weight: 600;
+    }
 
     /* result rows */
-    .result-grid { display:flex; flex-direction:column; gap:.35rem; margin:.7rem 0; }
-    .result-row {
-      display:flex; align-items:baseline; gap:.7rem;
-      font-size:.8rem; padding:.28rem 0; border-bottom:1px solid var(--border);
+    .result-grid {
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+      margin: .7rem 0;
     }
-    .result-row:last-child { border-bottom:none; }
-    .result-file { font-family:'SF Mono',monospace; font-size:.75rem; color:var(--dark); min-width:270px; flex-shrink:0; }
-    .result-desc { color:var(--muted); flex:1; }
-    .result-pass { font-size:.67rem; font-weight:700; padding:1px 6px; border-radius:999px; background:var(--pale); color:var(--dark); border:1px solid var(--border2); white-space:nowrap; }
+
+    .result-row {
+      display: flex;
+      align-items: baseline;
+      gap: .7rem;
+      font-size: .8rem;
+      padding: .28rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .result-row:last-child {
+      border-bottom: none;
+    }
+
+    .result-file {
+      font-family: 'SF Mono', monospace;
+      font-size: .75rem;
+      color: var(--dark);
+      min-width: 270px;
+      flex-shrink: 0;
+    }
+
+    .result-desc {
+      color: var(--muted);
+      flex: 1;
+    }
+
+    .result-pass {
+      font-size: .67rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: var(--pale);
+      color: var(--dark);
+      border: 1px solid var(--border2);
+      white-space: nowrap;
+    }
 
     /* substep card */
-    .substep { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1rem 1.15rem; margin:.9rem 0; }
-    .substep-title {
-      font-size:.78rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
-      color:var(--dark); margin-bottom:.7rem; display:flex; align-items:center; gap:.4rem;
+    .substep {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.15rem;
+      margin: .9rem 0;
     }
-    .substep-title::before { content:''; width:7px; height:7px; border-radius:50%; background:var(--dark); flex-shrink:0; }
 
-    hr.div { border:none; border-top:1px solid var(--border); margin:1.1rem 0; }
+    .substep-title {
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--dark);
+      margin-bottom: .7rem;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+
+    .substep-title::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--dark);
+      flex-shrink: 0;
+    }
+
+    hr.div {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 1.1rem 0;
+    }
 
     /* ══ QUIZ ════════════════════════════════════════════════════════════════ */
-    .quiz-slide { max-width:680px; margin:0 auto; }
-    .quiz-header { display:flex; align-items:center; gap:.7rem; margin-bottom:1.3rem; }
-    .quiz-badge {
-      width:38px; height:38px; border-radius:6px; background:var(--dark);
-      display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0;
+    .quiz-slide {
+      max-width: 680px;
+      margin: 0 auto;
     }
-    .quiz-header h2 { font-size:1.2rem; font-weight:700; color:var(--dark); }
-    .quiz-header p  { font-size:.8rem; color:var(--muted); margin-top:2px; }
 
-    .quiz-q { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.25rem; margin:.85rem 0; }
-    .quiz-q p { font-size:.9rem; font-weight:600; color:var(--text); margin-bottom:.8rem; }
-    .quiz-options { display:flex; flex-direction:column; gap:.45rem; }
+    .quiz-header {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      margin-bottom: 1.3rem;
+    }
+
+    .quiz-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 6px;
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .quiz-header h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .quiz-header p {
+      font-size: .8rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .quiz-q {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.1rem 1.25rem;
+      margin: .85rem 0;
+    }
+
+    .quiz-q p {
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: .8rem;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: .45rem;
+    }
+
     .quiz-opt {
-      display:flex; align-items:center; gap:.6rem;
-      padding:.55rem .85rem; border:1.5px solid var(--border); border-radius:7px;
-      cursor:pointer; font-size:.85rem; color:var(--text); transition:all .15s;
-      background:var(--surface); user-select:none;
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .55rem .85rem;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: .85rem;
+      color: var(--text);
+      transition: all .15s;
+      background: var(--surface);
+      user-select: none;
     }
-    .quiz-opt:hover { border-color:var(--border2); background:var(--pale); }
-    .quiz-opt.selected { border-color:var(--dark); background:var(--pale); font-weight:600; }
-    .quiz-opt.correct  { border-color:var(--dark); background:#e8e8e8; }
-    .quiz-opt.wrong    { border-color:#999; background:#f5f5f5; opacity:.6; }
+
+    .quiz-opt:hover {
+      border-color: var(--border2);
+      background: var(--pale);
+    }
+
+    .quiz-opt.selected {
+      border-color: var(--dark);
+      background: var(--pale);
+      font-weight: 600;
+    }
+
+    .quiz-opt.correct {
+      border-color: var(--dark);
+      background: #e8e8e8;
+    }
+
+    .quiz-opt.wrong {
+      border-color: #999;
+      background: #f5f5f5;
+      opacity: .6;
+    }
+
     .quiz-opt .opt-letter {
-      width:22px; height:22px; border-radius:50%; border:1.5px solid var(--border2);
-      display:flex; align-items:center; justify-content:center; font-size:.7rem; font-weight:700;
-      flex-shrink:0; transition:all .15s;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      transition: all .15s;
     }
-    .quiz-opt.selected .opt-letter { background:var(--dark); color:#fff; border-color:var(--dark); }
-    .quiz-opt.correct  .opt-letter { background:var(--dark); color:#fff; border-color:var(--dark); }
+
+    .quiz-opt.selected .opt-letter {
+      background: var(--dark);
+      color: #fff;
+      border-color: var(--dark);
+    }
+
+    .quiz-opt.correct .opt-letter {
+      background: var(--dark);
+      color: #fff;
+      border-color: var(--dark);
+    }
 
     .quiz-feedback {
-      margin-top:.7rem; padding:.65rem .9rem; border-radius:7px;
-      font-size:.82rem; font-weight:600; display:none;
+      margin-top: .7rem;
+      padding: .65rem .9rem;
+      border-radius: 7px;
+      font-size: .82rem;
+      font-weight: 600;
+      display: none;
     }
-    .quiz-feedback.show { display:block; }
-    .quiz-feedback.ok  { background:#e8e8e8; color:var(--dark); border:1px solid var(--border2); }
-    .quiz-feedback.err { background:#f5f5f5; color:#555; border:1px solid var(--border); }
+
+    .quiz-feedback.show {
+      display: block;
+    }
+
+    .quiz-feedback.ok {
+      background: #e8e8e8;
+      color: var(--dark);
+      border: 1px solid var(--border2);
+    }
+
+    .quiz-feedback.err {
+      background: #f5f5f5;
+      color: #555;
+      border: 1px solid var(--border);
+    }
 
     .quiz-submit {
-      margin-top:1rem; background:var(--dark); color:#fff; border:none;
-      border-radius:999px; padding:.6rem 1.8rem; font-size:.85rem; font-weight:600;
-      cursor:pointer; transition:opacity .2s;
+      margin-top: 1rem;
+      background: var(--dark);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: .6rem 1.8rem;
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity .2s;
     }
-    .quiz-submit:hover { opacity:.85; }
-    .quiz-submit:disabled { background:var(--border); color:var(--muted); cursor:default; }
+
+    .quiz-submit:hover {
+      opacity: .85;
+    }
+
+    .quiz-submit:disabled {
+      background: var(--border);
+      color: var(--muted);
+      cursor: default;
+    }
 
     .quiz-score {
-      margin-top:1rem; padding:.8rem 1rem; border-radius:9px; text-align:center;
-      background:var(--pale); border:1px solid var(--border2); display:none;
+      margin-top: 1rem;
+      padding: .8rem 1rem;
+      border-radius: 9px;
+      text-align: center;
+      background: var(--pale);
+      border: 1px solid var(--border2);
+      display: none;
     }
-    .quiz-score.show { display:block; }
-    .quiz-score .score-num { font-size:1.8rem; font-weight:800; color:var(--dark); }
-    .quiz-score .score-label { font-size:.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:.07em; }
+
+    .quiz-score.show {
+      display: block;
+    }
+
+    .quiz-score .score-num {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--dark);
+    }
+
+    .quiz-score .score-label {
+      font-size: .75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
 
     /* ══ COMPLETE ════════════════════════════════════════════════════════════ */
-    .complete-slide { max-width:640px; margin:1.5rem auto; text-align:center; }
-    .complete-emoji { font-size:3.5rem; margin-bottom:.9rem; }
-    .complete-slide h1 { font-size:2rem; font-weight:800; color:var(--dark); margin-bottom:.7rem; }
-    .complete-slide > p { color:var(--muted); font-size:.95rem; margin-bottom:1.5rem; }
+    .complete-slide {
+      max-width: 640px;
+      margin: 1.5rem auto;
+      text-align: center;
+    }
 
-    .stats-row { display:flex; justify-content:center; gap:1.25rem; margin-bottom:1.5rem; flex-wrap:wrap; }
-    .stat-box { background:var(--pale); border:1px solid var(--border2); border-radius:10px; padding:.85rem 1.35rem; min-width:90px; }
-    .stat-num   { font-size:1.7rem; font-weight:800; color:var(--dark); }
-    .stat-label { font-size:.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:.07em; margin-top:2px; }
+    .complete-emoji {
+      font-size: 3.5rem;
+      margin-bottom: .9rem;
+    }
+
+    .complete-slide h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: .7rem;
+    }
+
+    .complete-slide>p {
+      color: var(--muted);
+      font-size: .95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stats-row {
+      display: flex;
+      justify-content: center;
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      background: var(--pale);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: .85rem 1.35rem;
+      min-width: 90px;
+    }
+
+    .stat-num {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: var(--dark);
+    }
+
+    .stat-label {
+      font-size: .68rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-top: 2px;
+    }
 
     /* Certificate section */
     .cert-section {
-      background:var(--surface); border:1px solid var(--border); border-radius:12px;
-      padding:1.5rem; margin:1.25rem 0; text-align:left;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.25rem 0;
+      text-align: left;
     }
-    .cert-section h3 { font-size:.85rem; font-weight:700; margin-bottom:.75rem; color:var(--dark); }
-    .cert-name-row { display:flex; gap:.6rem; margin-bottom:.75rem; }
+
+    .cert-section h3 {
+      font-size: .85rem;
+      font-weight: 700;
+      margin-bottom: .75rem;
+      color: var(--dark);
+    }
+
+    .cert-name-row {
+      display: flex;
+      gap: .6rem;
+      margin-bottom: .75rem;
+    }
+
     .cert-name-input {
-      flex:1; padding:.6rem .85rem; border:1.5px solid var(--border); border-radius:7px;
-      font-size:.9rem; color:var(--text); outline:none; transition:border-color .15s;
-      background:var(--surface);
+      flex: 1;
+      padding: .6rem .85rem;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      font-size: .9rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color .15s;
+      background: var(--surface);
     }
-    .cert-name-input:focus { border-color:var(--dark); }
-    .cert-name-input::placeholder { color:#bbb; }
+
+    .cert-name-input:focus {
+      border-color: var(--dark);
+    }
+
+    .cert-name-input::placeholder {
+      color: #bbb;
+    }
+
     .btn-download-cert {
-      background:var(--dark); color:#fff; border:none; border-radius:7px;
-      padding:.6rem 1.25rem; font-size:.85rem; font-weight:600; cursor:pointer;
-      white-space:nowrap; transition:opacity .2s;
-      display:flex; align-items:center; gap:.4rem;
+      background: var(--dark);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: .6rem 1.25rem;
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity .2s;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
     }
-    .btn-download-cert:hover { opacity:.85; }
+
+    .btn-download-cert:hover {
+      opacity: .85;
+    }
 
     /* ══ CERTIFICATE CANVAS (hidden, used for download) ══════════════════════ */
-    #cert-canvas { display:none; }
+    #cert-canvas {
+      display: none;
+    }
 
     /* ══ NAV BAR ══════════════════════════════════════════════════════════════ */
     .nav-bar {
-      background:var(--surface); border-top:1px solid var(--border);
-      padding:.65rem 2rem; display:flex; align-items:center; justify-content:space-between;
-      flex-shrink:0; box-shadow:0 -2px 10px rgba(0,0,0,.04);
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: .65rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, .04);
     }
+
     .nav-btn {
-      background:var(--dark); color:#fff; border:none; border-radius:999px;
-      padding:.5rem 1.5rem; font-size:.85rem; font-weight:600;
-      cursor:pointer; transition:opacity .2s, transform .15s;
+      background: var(--dark);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: .5rem 1.5rem;
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity .2s, transform .15s;
     }
-    .nav-btn:hover:not(:disabled) { opacity:.85; transform:translateY(-1px); }
-    .nav-btn:disabled { background:var(--border); color:var(--muted); cursor:default; }
+
+    .nav-btn:hover:not(:disabled) {
+      opacity: .85;
+      transform: translateY(-1px);
+    }
+
+    .nav-btn:disabled {
+      background: var(--border);
+      color: var(--muted);
+      cursor: default;
+    }
+
     .nav-btn.sec {
-      background:var(--pale); color:var(--dark);
-      border:1px solid var(--border2);
+      background: var(--pale);
+      color: var(--dark);
+      border: 1px solid var(--border2);
     }
-    .nav-btn.sec:hover:not(:disabled) { background:var(--border); }
-    .nav-hint { font-size:.72rem; color:var(--muted); }
+
+    .nav-btn.sec:hover:not(:disabled) {
+      background: var(--border);
+    }
+
+    .nav-hint {
+      font-size: .72rem;
+      color: var(--muted);
+    }
 
     /* ══ TOAST ════════════════════════════════════════════════════════════════ */
     .toast {
-      position:fixed; bottom:5rem; left:50%; transform:translateX(-50%) translateY(16px);
-      background:var(--dark); color:#fff; padding:.55rem 1.3rem; border-radius:999px;
-      font-size:.8rem; font-weight:600; opacity:0; pointer-events:none;
-      transition:all .22s ease; z-index:9999; white-space:nowrap;
+      position: fixed;
+      bottom: 5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: var(--dark);
+      color: #fff;
+      padding: .55rem 1.3rem;
+      border-radius: 999px;
+      font-size: .8rem;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: all .22s ease;
+      z-index: 9999;
+      white-space: nowrap;
     }
-    .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
   </style>
 </head>
+
 <body>
 
   <!-- Header -->
@@ -577,7 +1475,8 @@
 
 
   <!-- Footer -->
-  <div id="site-footer" style="text-align:center;padding:.55rem;font-size:.72rem;color:#aaa;flex-shrink:0;background:var(--bg);">
+  <div id="site-footer"
+    style="text-align:center;padding:.55rem;font-size:.72rem;color:#aaa;flex-shrink:0;background:var(--bg);">
     🌿 Platform Engineering Trainings 🌿 &nbsp;·&nbsp; © Rakuten Rewards
   </div>
 
@@ -588,62 +1487,83 @@
   <canvas id="cert-canvas" width="1200" height="900"></canvas>
 
   <script>
-  // ═══════════════════════════════════════════════════════════════
-  // SLIDE DATA
-  // ═══════════════════════════════════════════════════════════════
-  // Section definitions — maps slide index ranges to section labels
-  // Built after slides array is defined (see buildSections())
-  const SECTIONS = [
-    { label: 'Section 1: Getting Started',            slideIds: ['step-1','step-2'] },
-    { label: 'Section 2: Create a Forge Work Effort', slideIds: ['step-3'] },
-    { label: 'Section 3: Elaborate Requirements',     slideIds: ['step-4','step-5'] },
-    { label: 'Section 4: Promote & Implement',        slideIds: ['step-6','step-7','step-8','step-9'] },
-  ];
+    // ═══════════════════════════════════════════════════════════════
+    // SLIDE DATA
+    // ═══════════════════════════════════════════════════════════════
+    // Section definitions — maps slide index ranges to section labels
+    // Built after slides array is defined (see buildSections())
+    const SECTIONS = [
+      { label: 'Section 1: Getting Started', slideIds: ['step-1', 'step-2'] },
+      { label: 'Section 2: Create a Forge Work Effort', slideIds: ['step-3'] },
+      { label: 'Section 3: Elaborate Requirements', slideIds: ['step-4', 'step-5'] },
+      { label: 'Section 4: Promote & Implement', slideIds: ['step-6', 'step-7', 'step-8', 'step-9'] },
+    ];
 
-  // Sub-steps that live under a parent step (displayed indented + grayed in sidebar)
-  const SUBSTEPS = {
-    'step-2': [
-      { id:'s2-1', label:'2.1 — Repository Type' },
-      { id:'s2-2', label:'2.2 — Legacy Repository Check' },
-      { id:'s2-3', label:'2.3 — Brownfield Analysis' },
-      { id:'s2-4', label:'2.4 — Branch Naming Convention' },
-      { id:'s2-5', label:'2.5 — Directory & File Creation' },
-      { id:'s2-6', label:'2.6 — Confirm & Commit' },
-    ],
-    'step-3': [
-      { id:'s3-1', label:'3.1 — Enter Effort Title' },
-      { id:'s3-2', label:'3.2 — Select Work Item Type' },
-      { id:'s3-3', label:'3.3 — Select Risk Level' },
-      { id:'s3-4', label:'3.4 — Skip Jira Association' },
-      { id:'s3-5', label:'3.5 — Allow Branch Creation' },
-      { id:'s3-6', label:'3.6 — Allow Effort Scaffold Commit' },
-      { id:'s3-7', label:'3.7 — Effort Creation Complete' },
-    ],
-  };
+    // Sub-steps that live under a parent step (displayed indented + grayed in sidebar)
+    const SUBSTEPS = {
+      'step-2': [
+        { id: 's2-1', label: '2.1 — Repository Type' },
+        { id: 's2-2', label: '2.2 — Legacy Repository Check' },
+        { id: 's2-3', label: '2.3 — Brownfield Analysis' },
+        { id: 's2-4', label: '2.4 — Branch Naming Convention' },
+        { id: 's2-5', label: '2.5 — Directory & File Creation' },
+        { id: 's2-6', label: '2.6 — Confirm & Commit' },
+      ],
+      'step-3': [
+        { id: 's3-1', label: '3.1 — Enter Effort Title' },
+        { id: 's3-2', label: '3.2 — Select Work Item Type' },
+        { id: 's3-3', label: '3.3 — Select Risk Level' },
+        { id: 's3-4', label: '3.4 — Skip Jira Association' },
+        { id: 's3-5', label: '3.5 — Allow Branch Creation' },
+        { id: 's3-6', label: '3.6 — Allow Effort Scaffold Commit' },
+        { id: 's3-7', label: '3.7 — Effort Creation Complete' },
+      ],
+    };
 
-  const slides = [
+    const slides = [
 
-    // ── WELCOME ──────────────────────────────────────────────────
-    { type:'welcome', title:'Welcome' },
+      // ── WELCOME ──────────────────────────────────────────────────
+      { type: 'welcome', title: 'Welcome' },
 
-    // ── STEP 1 ───────────────────────────────────────────────────
-    {
-      type:'step', num:'1', id:'step-1',
-      title:'Clone the Repo', desc:'Get the codebase onto your machine',
-      content:`
+      // ── STEP 1 ───────────────────────────────────────────────────
+      {
+        type: 'step', num: '1', id: 'step-1',
+        title: 'Clone the Repo', desc: 'Get the codebase onto your machine',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Clone the lunch &amp; learn repo and switch into it.</p>
         <div class="cmd-block">
-          <pre><span class="t-cmd">gh</span> repo clone rewards-guilds/rr-lunchnlearn-web <span class="t-flag">&amp;&amp;</span> <span class="t-cmd">cd</span> rr-lunchnlearn-web</pre>
-          <button class="copy-btn" onclick="copyText(this,'gh repo clone rewards-guilds/rr-lunchnlearn-web && cd rr-lunchnlearn-web')">Copy</button>
+          <pre><span class="t-cmd">git</span> clone git@github.com:rewards-guilds/rr-lunchnlearn-web.git <span class="t-flag">&amp;&amp;</span> <span class="t-cmd">cd</span> rr-lunchnlearn-web</pre>
+          <button class="copy-btn" onclick="copyText(this,'git clone git@github.com:rewards-guilds/rr-lunchnlearn-web.git && cd rr-lunchnlearn-web')">Copy</button>
         </div>
       `
-    },
+      },
 
-    // ── STEP 2 ───────────────────────────────────────────────────
-    {
-      type:'step', num:'2', id:'step-2',
-      title:'Initialize Forge', desc:'Run /forge:init in Claude Code',
-      content:`
+      // ── STEP 1.1 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '1.1', parentId: 'step-1', id: 'step-1-1',
+        title: 'Set Up the Forge Status Line', desc: 'Keep effort context visible in Claude Code',
+        markComplete: true,
+        content: `
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.9rem;">The Forge status line shows your active effort, current phase, cost of session, model, current directory and risk level directly in the Claude Code interface. This keeps both you and the AI oriented throughout the session — you always know which effort is active and which phase you are in without having to ask.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run once after opening Claude Code in the repo:</p>
+        <div class="cmd-block">
+          <pre><span class="t-cmd">/forge:statusline</span></pre>
+          <button class="copy-btn" onclick="copyText(this,'/forge:statusline')">Copy</button>
+        </div>
+        <p style="font-size:.88rem;color:var(--muted);margin:.9rem 0 .5rem;">After setup, the status line will display context like <em>(e.g. not exactly the same)</em>:</p>
+        <div class="cmd-block" style="font-size:.78rem;">
+          <pre style="white-space:pre;line-height:1.6;"><span class="t-key">❯</span>
+<span class="t-str">──────────────────────────────────────────────────────────────────────────────────────────────────</span>
+    <span class="t-flag">🌿 main</span> | <span class="t-num">$0.11 16m19s</span> | <span class="t-cmd">Sonnet 4.6</span> | <span class="t-key">📁 rr-lunchnlearn-web</span> | <span class="t-str">█░░░░░░░░░ 14% context</span></pre>
+        </div>
+      `
+      },
+
+      // ── STEP 2 ───────────────────────────────────────────────────
+      {
+        type: 'step', num: '2', id: 'step-2',
+        title: 'Initialize Forge', desc: 'Run /forge:init in Claude Code',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">In your terminal, type:</p>
         <div class="cmd-block">
           <pre><span class="t-cmd">claude</span></pre>
@@ -655,13 +1575,13 @@
           <button class="copy-btn" onclick="copyText(this,'/forge:init')">Copy</button>
         </div>
       `
-    },
+      },
 
-    // ── STEP 2.1 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'2.1', parentId:'step-2',
-      title:'Select Repository Type', desc:'Answer Forge\'s first prompt',
-      content:`
+      // ── STEP 2.1 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '2.1', parentId: 'step-2',
+        title: 'Select Repository Type', desc: 'Answer Forge\'s first prompt',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will prompt:</p>
         <div class="cmd-block">
           <pre><span class="t-key">What best describes this repository?</span>
@@ -684,13 +1604,13 @@
         </div>
         <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter <strong style="color:var(--dark);">1</strong> — Source code repository</p>
       `
-    },
+      },
 
-    // ── STEP 2.2 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'2.2', parentId:'step-2',
-      title:'Legacy Repository Check', desc:'Answer Forge\'s second prompt',
-      content:`
+      // ── STEP 2.2 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '2.2', parentId: 'step-2',
+        title: 'Legacy Repository Check', desc: 'Answer Forge\'s second prompt',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will prompt:</p>
         <div class="cmd-block">
           <pre><span class="t-key">Is this a legacy repository?</span>
@@ -705,13 +1625,13 @@
         </div>
         <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter <strong style="color:var(--dark);">n</strong> — this is an active repo under development.</p>
       `
-    },
+      },
 
-    // ── STEP 2.3 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'2.3', parentId:'step-2',
-      title:'Brownfield Analysis Offer', desc:'Forge detects existing source code',
-      content:`
+      // ── STEP 2.3 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '2.3', parentId: 'step-2',
+        title: 'Brownfield Analysis Offer', desc: 'Forge detects existing source code',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge detects existing source code and will prompt:</p>
         <div class="cmd-block">
           <pre>This appears to be a brownfield repository with existing source code.
@@ -730,13 +1650,13 @@ You can skip this and run the analysis later using forge:discover.
         </div>
         <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter <strong style="color:var(--dark);">n</strong> — skip for now.</p>
       `
-    },
+      },
 
-    // ── STEP 2.4 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'2.4', parentId:'step-2',
-      title:'Branch Naming Convention', desc:'Accept the RR standard',
-      content:`
+      // ── STEP 2.4 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '2.4', parentId: 'step-2',
+        title: 'Branch Naming Convention', desc: 'Accept the RR standard',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge detects the RR CI/CD pipeline and proposes:</p>
         <div class="cmd-block">
           <pre>Detected Rakuten Rewards standard CI/CD pipeline (helm-upgrade-nonprod).
@@ -750,13 +1670,13 @@ Or describe your convention in plain English or as a regex:</pre>
         </div>
         <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter <strong style="color:var(--dark);">Y</strong> — accept the RR standard branch naming convention.</p>
       `
-    },
+      },
 
-    // ── STEP 2.5 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'2.5', parentId:'step-2',
-      title:'Allow Directory and File Creation', desc:'Grant persistent permission',
-      content:`
+      // ── STEP 2.5 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '2.5', parentId: 'step-2',
+        title: 'Allow Directory and File Creation', desc: 'Grant persistent permission',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Claude Code will ask permission to create the .forge/ directory structure:</p>
         <div class="cmd-block">
           <pre><span class="t-key">Bash command</span>
@@ -773,13 +1693,13 @@ Or describe your convention in plain English or as a regex:</pre>
         </div>
         <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select <strong style="color:var(--dark);">2. Yes, and always allow access to spec/ from this project</strong> — grants persistent permission and avoids repeated prompts.</p>
       `
-    },
+      },
 
-    // ── STEP 2.6 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'2.6', parentId:'step-2', markComplete: true,
-      title:'Confirm Completion and Commit', desc:'Commit the scaffold to your local repo',
-      content:`
+      // ── STEP 2.6 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '2.6', parentId: 'step-2', markComplete: true,
+        title: 'Confirm Completion and Commit', desc: 'Commit the scaffold to your local repo',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Wait for Forge to finish. You will see the following summary:</p>
         <div class="success-box">This step creates and saves all <code>.forge/</code> files and <code>CLAUDE.md</code> to your local repository.</div>
         <div class="cmd-block">
@@ -808,40 +1728,40 @@ Commit these files so your team gets the workspace structure:
         <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .5rem;">Go ahead and commit it locally:</p>
         <p style="font-size:.88rem;color:var(--dark);font-family:'SF Mono','Fira Code','Courier New',monospace;background:var(--pale);border:1px solid var(--border);border-radius:7px;padding:.6rem .9rem;">! git add .forge/ CLAUDE.md &amp;&amp; git commit -m "chore: initialize forge v0.9.0"</p>
       `
-    },
+      },
 
-    // ── QUIZ 1 ───────────────────────────────────────────────────
-    {
-      type:'quiz', id:'q1',
-      title:'Checkpoint — Steps 1 & 2',
-      desc:'Quick check before moving on',
-      questions:[
-        {
-          q:'Which option do you enter when Forge asks "What best describes this repository?"',
-          opts:['1 — Source code repository','2 — Product repository','3 — Coordination repository','Skip — not required'],
-          answer:0,
-          explain:'Option 1 (Source code repository) is correct — this is an active Next.js codebase that engineers build and ship.'
-        },
-        {
-          q:'When Forge detects existing source code and offers brownfield analysis, what should you enter?',
-          opts:['y — analyze now','n — skip for now','skip — run later via forge:discover','It does not ask this question'],
-          answer:1,
-          explain:'Enter n to skip brownfield analysis for now. You can run it later with forge:discover.'
-        },
-        {
-          q:'After forge:init completes, what do you commit?',
-          opts:['Only CLAUDE.md','Only .forge/ directory','Both .forge/ and CLAUDE.md','Nothing — auto-committed'],
-          answer:2,
-          explain:'You commit both: git add .forge/ CLAUDE.md && git commit -m "chore: initialize forge v0.9.0"'
-        }
-      ]
-    },
+      // ── QUIZ 1 ───────────────────────────────────────────────────
+      {
+        type: 'quiz', id: 'q1',
+        title: 'Checkpoint — Steps 1 & 2',
+        desc: 'Quick check before moving on',
+        questions: [
+          {
+            q: 'Which option do you enter when Forge asks "What best describes this repository?"',
+            opts: ['1 — Source code repository', '2 — Product repository', '3 — Coordination repository', 'Skip — not required'],
+            answer: 0,
+            explain: 'Option 1 (Source code repository) is correct — this is an active Next.js codebase that engineers build and ship.'
+          },
+          {
+            q: 'When Forge detects existing source code and offers brownfield analysis, what should you enter?',
+            opts: ['y — analyze now', 'n — skip for now', 'skip — run later via forge:discover', 'It does not ask this question'],
+            answer: 1,
+            explain: 'Enter n to skip brownfield analysis for now. You can run it later with forge:discover.'
+          },
+          {
+            q: 'After forge:init completes, what do you commit?',
+            opts: ['Only CLAUDE.md', 'Only .forge/ directory', 'Both .forge/ and CLAUDE.md', 'Nothing — auto-committed'],
+            answer: 2,
+            explain: 'You commit both: git add .forge/ CLAUDE.md && git commit -m "chore: initialize forge v0.9.0"'
+          }
+        ]
+      },
 
-    // ── STEP 3 ───────────────────────────────────────────────────
-    {
-      type:'step', num:'3', id:'step-3',
-      title:'Create a Work Effort', desc:'Run /forge:effort',
-      content:`
+      // ── STEP 3 ───────────────────────────────────────────────────
+      {
+        type: 'step', num: '3', id: 'step-3',
+        title: 'Create a Work Effort', desc: 'Run /forge:effort',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Creates a new work effort under <code>.forge/efforts/</code>, scaffolds the directory structure, creates a working branch, and commits everything atomically.</p>
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run:</p>
         <div class="cmd-block">
@@ -849,13 +1769,13 @@ Commit these files so your team gets the workspace structure:
           <button class="copy-btn" onclick="copyText(this,'/forge:effort')">Copy</button>
         </div>
       `
-    },
+      },
 
-    // ── STEP 3.1 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'3.1', parentId:'step-3',
-      title:'Effort Title', desc:'Answer Forge\'s first prompt',
-      content:`
+      // ── STEP 3.1 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '3.1', parentId: 'step-3',
+        title: 'Effort Title', desc: 'Answer Forge\'s first prompt',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will prompt:</p>
         <div class="cmd-block">
           <pre><span class="t-key">What is the effort title?</span></pre>
@@ -866,13 +1786,13 @@ Commit these files so your team gets the workspace structure:
           <button class="copy-btn" onclick="copyText(this,&quot;let's create dining experience on web for rakuten.com&quot;)">Copy</button>
         </div>
       `
-    },
+      },
 
-    // ── STEP 3.2 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'3.2', parentId:'step-3',
-      title:'Select Work Item Type', desc:'Choose the effort type',
-      content:`
+      // ── STEP 3.2 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '3.2', parentId: 'step-3',
+        title: 'Select Work Item Type', desc: 'Choose the effort type',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will prompt:</p>
         <div class="cmd-block">
           <pre><span class="t-key">What type of work item is this?</span>
@@ -888,13 +1808,13 @@ Commit these files so your team gets the workspace structure:
         </div>
         <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter <strong style="color:var(--dark);">epic</strong> — Forge automatically sets tier to full for epics — no tier prompt.</p>
       `
-    },
+      },
 
-    // ── STEP 3.3 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'3.3', parentId:'step-3',
-      title:'Select Risk Level', desc:'Choose the risk classification',
-      content:`
+      // ── STEP 3.3 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '3.3', parentId: 'step-3',
+        title: 'Select Risk Level', desc: 'Choose the risk classification',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will prompt:</p>
         <div class="cmd-block">
           <pre><span class="t-key">What is the risk level?</span>
@@ -908,13 +1828,13 @@ Commit these files so your team gets the workspace structure:
         </div>
         <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter <strong style="color:var(--dark);">R2</strong> — this is a core feature integrating with existing external Dining APIs.</p>
       `
-    },
+      },
 
-    // ── STEP 3.4 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'3.4', parentId:'step-3',
-      title:'Skip Jira Association', desc:'Decline the Atlassian plugin request',
-      content:`
+      // ── STEP 3.4 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '3.4', parentId: 'step-3',
+        title: 'Skip Jira Association', desc: 'Decline the Atlassian plugin request',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will attempt to check Atlassian authentication and prompt:</p>
         <div class="cmd-block">
           <pre><span class="t-key">Tool use</span>
@@ -929,13 +1849,13 @@ Commit these files so your team gets the workspace structure:
         </div>
         <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select <strong style="color:var(--dark);">3. No</strong> — skip Jira association for this workshop.</p>
       `
-    },
+      },
 
-    // ── STEP 3.5 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'3.5', parentId:'step-3',
-      title:'Allow Branch Creation', desc:'Approve the git checkout',
-      content:`
+      // ── STEP 3.5 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '3.5', parentId: 'step-3',
+        title: 'Allow Branch Creation', desc: 'Approve the git checkout',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge derives the branch name from the effort title and prompts:</p>
         <div class="cmd-block">
           <pre><span class="t-key">Bash command</span>
@@ -952,13 +1872,13 @@ This command requires approval
         </div>
         <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select <strong style="color:var(--dark);">1. Yes</strong> — allow Forge to create the working branch <code>feat/dining-experience-on-web</code>.</p>
       `
-    },
+      },
 
-    // ── STEP 3.6 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'3.6', parentId:'step-3',
-      title:'Allow Effort Scaffold Commit', desc:'Approve the git commit',
-      content:`
+      // ── STEP 3.6 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '3.6', parentId: 'step-3',
+        title: 'Allow Effort Scaffold Commit', desc: 'Approve the git commit',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge stages and commits the new effort directory atomically:</p>
         <div class="cmd-block">
           <pre><span class="t-key">Bash command</span>
@@ -974,13 +1894,13 @@ This command requires approval
         </div>
         <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select <strong style="color:var(--dark);">1. Yes</strong> — commit the effort scaffold to your local branch.</p>
       `
-    },
+      },
 
-    // ── STEP 3.7 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'3.7', parentId:'step-3', markComplete: true,
-      title:'Effort Creation Complete', desc:'Your work effort is ready',
-      content:`
+      // ── STEP 3.7 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '3.7', parentId: 'step-3', markComplete: true,
+        title: 'Effort Creation Complete', desc: 'Your work effort is ready',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will confirm the active effort and print a summary:</p>
         <div class="cmd-block">
           <pre><span class="t-key">Active effort: dining-experience-on-web</span>
@@ -1002,13 +1922,13 @@ Next steps:
         </div>
         <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">The effort is now scaffolded and ready. You are on branch <code>feat/dining-experience-on-web</code> and in the discovery phase.</p>
       `
-    },
+      },
 
-    // ── STEP 4 ───────────────────────────────────────────────────
-    {
-      type:'step', num:'4', id:'step-4',
-      title:'Elaborate Technical Requirements', desc:'Run /forge:elaborate',
-      content:`
+      // ── STEP 4 ───────────────────────────────────────────────────
+      {
+        type: 'step', num: '4', id: 'step-4',
+        title: 'Elaborate Technical Requirements', desc: 'Run /forge:elaborate',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Expands business requirements into technical requirements — deriving NFRs, integration constraints, security implications, and scalability targets. Writes <code>requirements/technical.md</code> from the BRs in <code>requirements/business.md</code>.</p>
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run:</p>
         <div class="cmd-block">
@@ -1016,26 +1936,26 @@ Next steps:
           <button class="copy-btn" onclick="copyText(this,'/forge:elaborate')">Copy</button>
         </div>
       `
-    },
+      },
 
-    // ── STEP 4.1 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'4.1', parentId:'step-4',
-      title:'Provide the PRD Document', desc:'Give Forge the PRD URL',
-      content:`
+      // ── STEP 4.1 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '4.1', parentId: 'step-4',
+        title: 'Provide the PRD Document', desc: 'Give Forge the PRD URL',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge starts cold with no existing artifacts and asks discovery questions. Provide the PRD URL so Forge can extract business requirements directly:</p>
         <div class="cmd-block">
           <pre><span class="t-str">Fetch PRD from this URL <a href="https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44432064526/PRD+Dining+Cash+Back+Web+Expansion+v3" target="_blank" style="color:#aaa;text-decoration:underline;text-underline-offset:3px;">https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44432064526/PRD+Dining+Cash+Back+Web+Expansion+v3</a></span></pre>
           <button class="copy-btn" onclick="copyText(this,'Fetch PRD from this URL https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44432064526/PRD+Dining+Cash+Back+Web+Expansion+v3')">Copy</button>
         </div>
       `
-    },
+      },
 
-    // ── STEP 4.2 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'4.2', parentId:'step-4', markComplete: true,
-      title:'Answer Follow-up Questions', desc:'Clarify gaps after PRD fetch',
-      content:`
+      // ── STEP 4.2 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '4.2', parentId: 'step-4', markComplete: true,
+        title: 'Answer Follow-up Questions', desc: 'Clarify gaps after PRD fetch',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">After fetching the PRD, Forge asks clarifying questions about gaps. Answer each one to help produce accurate requirements.</p>
 
         <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .4rem;">Question 1 — Restaurant data schema</p>
@@ -1139,13 +2059,13 @@ order (as-seeded in the JSON)?</pre></div>
         <p style="font-size:.95rem;color:var(--muted);margin:.6rem 0 .3rem;">Answer:</p>
         <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="ok"></span><span class="typing-cursor">▌</span></pre></div>
       `
-    },
+      },
 
-    // ── STEP 5 ───────────────────────────────────────────────────
-    {
-      type:'step', num:'5', id:'step-5',
-      title:'Classify Risk', desc:'Run /forge:classify',
-      content:`
+      // ── STEP 5 ───────────────────────────────────────────────────
+      {
+        type: 'step', num: '5', id: 'step-5',
+        title: 'Classify Risk', desc: 'Run /forge:classify',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Re-evaluates the effort's risk level against the full requirements now that discovery is complete.</p>
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run:</p>
         <div class="cmd-block">
@@ -1153,13 +2073,13 @@ order (as-seeded in the JSON)?</pre></div>
           <button class="copy-btn" onclick="copyText(this,'/forge:classify')">Copy</button>
         </div>
       `
-    },
+      },
 
-    // ── STEP 5.1 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'5.1', parentId:'step-5', markComplete: true,
-      title:'Review Classification Output', desc:'Accept the recommended risk level',
-      content:`
+      // ── STEP 5.1 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '5.1', parentId: 'step-5', markComplete: true,
+        title: 'Review Classification Output', desc: 'Accept the recommended risk level',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge evaluates all requirements and proposes a risk level. You will see output like this:</p>
         <div class="cmd-block">
           <pre>Current classification: <span class="t-str">R2</span> (set at effort creation)
@@ -1179,50 +2099,50 @@ Why not R2:
         </div>
         <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Accept the recommendation — enter <strong style="color:var(--dark);">R3</strong>.</p>
       `
-    },
+      },
 
-    // ── QUIZ 2 ───────────────────────────────────────────────────
-    {
-      type:'quiz', id:'q2',
-      title:'Checkpoint — Steps 3–5',
-      desc:'Check your understanding of effort creation and risk',
-      questions:[
-        {
-          q:'What work item type did we choose for the dining experience effort?',
-          opts:['story','task','epic','initiative'],
-          answer:2,
-          explain:'We chose epic — it automatically sets the tier to "full", giving us the complete discovery/planning/implementation workflow.'
-        },
-        {
-          q:'Why was the risk re-classified from R2 to R3 after forge:classify?',
-          opts:[
-            'The team decided it was too risky',
-            'No external integration, schema change, or cross-team dependency applies',
-            'Static JSON is always R3',
-            'Forge always downgrades risk after classify'
-          ],
-          answer:1,
-          explain:'R3 (Moderate) is correct because the feature is entirely client-side with no backend changes, no external APIs, and no cross-team dependencies.'
-        },
-        {
-          q:'What is the correct data schema for each restaurant in TR-2?',
-          opts:[
-            'id, name, price, rating, category',
-            'id, name, cuisineType, cashBackOffer, thumbnailUrl, address, lat, lng',
-            'restaurantId, title, cuisine, discount, imageUrl, coordinates',
-            'id, name, location, offers'
-          ],
-          answer:1,
-          explain:'TR-2 defines: id, name, cuisineType, cashBackOffer, thumbnailUrl, address, lat, lng — all needed for listing cards, detail pages, and geolocation sorting.'
-        }
-      ]
-    },
+      // ── QUIZ 2 ───────────────────────────────────────────────────
+      {
+        type: 'quiz', id: 'q2',
+        title: 'Checkpoint — Steps 3–5',
+        desc: 'Check your understanding of effort creation and risk',
+        questions: [
+          {
+            q: 'What work item type did we choose for the dining experience effort?',
+            opts: ['story', 'task', 'epic', 'initiative'],
+            answer: 2,
+            explain: 'We chose epic — it automatically sets the tier to "full", giving us the complete discovery/planning/implementation workflow.'
+          },
+          {
+            q: 'Why was the risk re-classified from R2 to R3 after forge:classify?',
+            opts: [
+              'The team decided it was too risky',
+              'No external integration, schema change, or cross-team dependency applies',
+              'Static JSON is always R3',
+              'Forge always downgrades risk after classify'
+            ],
+            answer: 1,
+            explain: 'R3 (Moderate) is correct because the feature is entirely client-side with no backend changes, no external APIs, and no cross-team dependencies.'
+          },
+          {
+            q: 'What is the correct data schema for each restaurant in TR-2?',
+            opts: [
+              'id, name, price, rating, category',
+              'id, name, cuisineType, cashBackOffer, thumbnailUrl, address, lat, lng',
+              'restaurantId, title, cuisine, discount, imageUrl, coordinates',
+              'id, name, location, offers'
+            ],
+            answer: 1,
+            explain: 'TR-2 defines: id, name, cuisineType, cashBackOffer, thumbnailUrl, address, lat, lng — all needed for listing cards, detail pages, and geolocation sorting.'
+          }
+        ]
+      },
 
-    // ── STEP 6 ───────────────────────────────────────────────────
-    {
-      type:'step', num:'6', id:'step-6',
-      title:'Design the UI', desc:'Run /forge:ui-design',
-      content:`
+      // ── STEP 6 ───────────────────────────────────────────────────
+      {
+        type: 'step', num: '6', id: 'step-6',
+        title: 'Design the UI', desc: 'Run /forge:ui-design',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Generates a UI spec from the business and technical requirements — defining page layouts, component structure, and interaction patterns.</p>
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run:</p>
         <div class="cmd-block">
@@ -1230,13 +2150,13 @@ Why not R2:
           <button class="copy-btn" onclick="copyText(this,'/forge:ui-design')">Copy</button>
         </div>
       `
-    },
+      },
 
-    // ── STEP 6.1 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'6.1', parentId:'step-6',
-      title:'Provide Context', desc:'Point Forge at your requirements',
-      content:`
+      // ── STEP 6.1 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '6.1', parentId: 'step-6',
+        title: 'Provide Context', desc: 'Point Forge at your requirements',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will ask what you are building and what is driving it:</p>
         <div class="cmd-block"><pre><span class="t-key">What are you building, and what's driving it?</span></pre></div>
         <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .75rem;">Point Forge at the existing requirements:</p>
@@ -1245,13 +2165,13 @@ Why not R2:
           <button class="copy-btn" onclick="copyText(this,'look at our BR and TR')">Copy</button>
         </div>
       `
-    },
+      },
 
-    // ── STEP 6.2 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'6.2', parentId:'step-6',
-      title:'Confirm Scope and Mode', desc:'Review what Forge inferred',
-      content:`
+      // ── STEP 6.2 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '6.2', parentId: 'step-6',
+        title: 'Confirm Scope and Mode', desc: 'Review what Forge inferred',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge reads the requirements and confirms scope before proceeding:</p>
         <div class="cmd-block"><pre>Read both — great context. Here's what I've inferred:
 
@@ -1284,26 +2204,26 @@ States — listing page. I've identified these from BRs:
 
 Are there any additional states I'm missing?</pre></div>
       `
-    },
+      },
 
-    // ── STEP 6.3 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'6.3', parentId:'step-6',
-      title:'Verify UIKit Compatibility', desc:'Confirm the tech stack',
-      content:`
+      // ── STEP 6.3 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '6.3', parentId: 'step-6',
+        title: 'Verify UIKit Compatibility', desc: 'Confirm the tech stack',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Before answering the states question, verify the tech stack is compatible with <code>@rakuten-rewards/uikit</code>:</p>
         <div class="cmd-block">
           <pre><span class="t-str typing-text" data-type-text="just to make sure our tech stack compatible with @rakuten-rewards/uikit"></span><span class="typing-cursor">▌</span></pre>
           <button class="copy-btn" onclick="copyText(this,'just to make sure our tech stack compatible with @rakuten-rewards/uikit')">Copy</button>
         </div>
       `
-    },
+      },
 
-    // ── STEP 6.4 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'6.4', parentId:'step-6',
-      title:'Confirm Page States and Accessibility', desc:'Approve the confirmed states list',
-      content:`
+      // ── STEP 6.4 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '6.4', parentId: 'step-6',
+        title: 'Confirm Page States and Accessibility', desc: 'Approve the confirmed states list',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">After confirming UIKit compatibility, Forge presents the full confirmed state list and asks about accessibility requirements:</p>
         <div class="cmd-block"><pre>Stack is confirmed compatible. Back to forge:ui-design.
 
@@ -1323,13 +2243,13 @@ or screen reader text for the cash back offer badge?</pre></div>
         <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .4rem;">Answer:</p>
         <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="NO"></span><span class="typing-cursor">▌</span></pre></div>
       `
-    },
+      },
 
-    // ── STEP 6.5 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'6.5', parentId:'step-6',
-      title:'Confirm Out of Scope', desc:'Approve the boundary list',
-      content:`
+      // ── STEP 6.5 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '6.5', parentId: 'step-6',
+        title: 'Confirm Out of Scope', desc: 'Approve the boundary list',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge confirms the out-of-scope boundary before writing the spec:</p>
         <div class="cmd-block"><pre>Noted — none beyond WCAG 2.1 AA baseline.
 
@@ -1348,13 +2268,13 @@ Does that list look right, or anything to add/remove?</pre></div>
         <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .4rem;">Answer:</p>
         <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="looks good"></span><span class="typing-cursor">▌</span></pre></div>
       `
-    },
+      },
 
-    // ── STEP 6.6 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'6.6', parentId:'step-6',
-      title:'Approve Final Summary', desc:'Confirm before spec is written',
-      content:`
+      // ── STEP 6.6 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '6.6', parentId: 'step-6',
+        title: 'Approve Final Summary', desc: 'Confirm before spec is written',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge presents a complete summary of everything it has gathered and asks for final approval before writing the spec:</p>
         <div class="cmd-block"><pre>Here's the summary before I write the spec:
 
@@ -1379,13 +2299,13 @@ Does this look right? Anything to change before I write the spec?</pre></div>
         <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .4rem;">Answer:</p>
         <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="all good"></span><span class="typing-cursor">▌</span></pre></div>
       `
-    },
+      },
 
-    // ── STEP 6.7 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'6.7', parentId:'step-6', markComplete: true,
-      title:'Spec Written — Choose Next Step', desc:'Trigger commit and plan',
-      content:`
+      // ── STEP 6.7 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '6.7', parentId: 'step-6', markComplete: true,
+        title: 'Spec Written — Choose Next Step', desc: 'Trigger commit and plan',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge writes the spec to <code>.forge/efforts/dining-experience-on-web/spec/ui-spec.md</code> and presents the next step options:</p>
         <div class="cmd-block"><pre>Spec written: .forge/efforts/dining-experience-on-web/spec/ui-spec.md
 
@@ -1403,13 +2323,13 @@ The shared understanding is written. What next?
           <button class="copy-btn" onclick="copyText(this,&quot;let's do 1 and 2 both&quot;)">Copy</button>
         </div>
       `
-    },
+      },
 
-    // ── STEP 7 ───────────────────────────────────────────────────
-    {
-      type:'step', num:'7', id:'step-7',
-      title:'Commit Discovery & Promote', desc:'Run /forge:commit',
-      content:`
+      // ── STEP 7 ───────────────────────────────────────────────────
+      {
+        type: 'step', num: '7', id: 'step-7',
+        title: 'Commit Discovery & Promote', desc: 'Run /forge:commit',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge needs to commit discovery work and promote the effort to the planning phase before running forge:plan. Forge automatically detects the phase and runs forge:promote first.</p>
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run:</p>
         <div class="cmd-block">
@@ -1417,13 +2337,13 @@ The shared understanding is written. What next?
           <button class="copy-btn" onclick="copyText(this,'/forge:commit')">Copy</button>
         </div>
       `
-    },
+      },
 
-    // ── STEP 7.1 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'7.1', parentId:'step-7',
-      title:'Forge Promotes to Planning First', desc:'Readiness check on discovery artifacts',
-      content:`
+      // ── STEP 7.1 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '7.1', parentId: 'step-7',
+        title: 'Forge Promotes to Planning First', desc: 'Readiness check on discovery artifacts',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge detects <code>currentPhase = "discovery"</code> and invokes forge:promote to advance before planning can begin. It runs a readiness check on all discovery artifacts:</p>
         <div class="cmd-block"><pre>currentPhase = "discovery" — need to promote to planning first. Invoking forge:promote.
 
@@ -1440,26 +2360,26 @@ discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
         <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .4rem;">Enter:</p>
         <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="yes"></span><span class="typing-cursor">▌</span></pre></div>
       `
-    },
+      },
 
-    // ── STEP 7.2 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'7.2', parentId:'step-7',
-      title:'Validation Result', desc:'Forge runs forge:validate',
-      content:`
+      // ── STEP 7.2 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '7.2', parentId: 'step-7',
+        title: 'Validation Result', desc: 'Forge runs forge:validate',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge runs forge:validate and reports the result:</p>
         <div class="cmd-block"><pre>Result: <span class="t-key">PASS WITH CONCERNS</span> — all BRs covered, TR-9 (test coverage spec) has
 no dedicated spec artifact (suggestion only, not a blocker).
 
 Forge records the result in .state.json and commits it automatically — no action needed.</pre></div>
       `
-    },
+      },
 
-    // ── STEP 7.3 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'7.3', parentId:'step-7', markComplete: true,
-      title:'Confirm Promotion to Planning', desc:'Advance to the planning phase',
-      content:`
+      // ── STEP 7.3 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '7.3', parentId: 'step-7', markComplete: true,
+        title: 'Confirm Promotion to Planning', desc: 'Advance to the planning phase',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge presents the final readiness summary and asks for confirmation to advance:</p>
         <div class="cmd-block"><pre>Advance discovery -> planning for dining-experience-on-web-for-rakutencom?
 
@@ -1473,13 +2393,13 @@ Proceed? <span class="t-key">(yes/no)</span></pre></div>
         <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .4rem;">Enter:</p>
         <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="yes"></span><span class="typing-cursor">▌</span></pre></div>
       `
-    },
+      },
 
-    // ── STEP 8 ───────────────────────────────────────────────────
-    {
-      type:'step', num:'8', id:'step-8',
-      title:'Plan the Implementation', desc:'Run /forge:plan',
-      content:`
+      // ── STEP 8 ───────────────────────────────────────────────────
+      {
+        type: 'step', num: '8', id: 'step-8',
+        title: 'Plan the Implementation', desc: 'Run /forge:plan',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Breaks the effort into concrete implementation tasks organized into sequenced waves.</p>
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run:</p>
         <div class="cmd-block">
@@ -1487,13 +2407,13 @@ Proceed? <span class="t-key">(yes/no)</span></pre></div>
           <button class="copy-btn" onclick="copyText(this,'/forge:plan')">Copy</button>
         </div>
       `
-    },
+      },
 
-    // ── STEP 8.1 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'8.1', parentId:'step-8', markComplete: true,
-      title:'Plan Complete', desc:'Tasks written, effort in implementation phase',
-      content:`
+      // ── STEP 8.1 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '8.1', parentId: 'step-8', markComplete: true,
+        title: 'Plan Complete', desc: 'Tasks written, effort in implementation phase',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge writes the task plan and promotes the effort to the implementation phase:</p>
         <div class="cmd-block"><pre>Promoted: <span class="t-key">dining-experience-on-web-for-rakutencom</span>
   planning -> approved (2026-04-27T05:32:27Z)
@@ -1507,13 +2427,13 @@ Waves:        wave:1 (4), wave:2 (1), wave:3 (2)
 Next: Begin implementation with forge:implement dining-experience-on-web-for-rakutencom TASK-001</pre></div>
         <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">The effort is now in the implementation phase with 7 tasks planned across 3 waves. Proceed to Step 9.</p>
       `
-    },
+      },
 
-    // ── STEP 9 ───────────────────────────────────────────────────
-    {
-      type:'step', num:'9', id:'step-9',
-      title:'Implement', desc:'Run each task in order — TDD mode active',
-      content:`
+      // ── STEP 9 ───────────────────────────────────────────────────
+      {
+        type: 'step', num: '9', id: 'step-9',
+        title: 'Implement', desc: 'Run each task in order — TDD mode active',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Executes the planned tasks wave by wave. forge:implement detects the effort's UI spec and delegates to forge:ui, which loads UIKit guides and applies TDD mode (write tests first, confirm red, then implement).</p>
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run each task in order:</p>
         <div class="cmd-block">
@@ -1521,13 +2441,13 @@ Next: Begin implementation with forge:implement dining-experience-on-web-for-rak
           <button class="copy-btn" onclick="copyText(this,'/forge:implement dining-experience-on-web-for-rakutencom TASK-001')">Copy</button>
         </div>
       `
-    },
+      },
 
-    // ── STEP 9.1 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'9.1', parentId:'step-9',
-      title:'TASK-001: Restaurant JSON Data and Page Scaffold', desc:'Wave 1',
-      content:`
+      // ── STEP 9.1 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '9.1', parentId: 'step-9',
+        title: 'TASK-001: Restaurant JSON Data and Page Scaffold', desc: 'Wave 1',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge detects no forge:implement skill and automatically loads forge:ui — the correct skill for frontend work. It loads UIKit implementation guides before writing any code.</p>
         <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin-bottom:.5rem;">What gets created:</p>
         <div class="cmd-block"><pre>src/data/restaurants.json   — 15 mock restaurants, all TR-2 fields present:
@@ -1536,13 +2456,13 @@ Next: Begin implementation with forge:implement dining-experience-on-web-for-rak
         <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .5rem;">Result:</p>
         <div class="success-box">Task marked complete: <strong>TASK-001</strong> — restaurant JSON data and dining page scaffold<br>SHA: 5828375</div>
       `
-    },
+      },
 
-    // ── STEP 9.2 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'9.2', parentId:'step-9',
-      title:'TASK-002, 003, 004: Wave 1 Utilities and Hook', desc:'Parallel, TDD',
-      content:`
+      // ── STEP 9.2 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '9.2', parentId: 'step-9',
+        title: 'TASK-002, 003, 004: Wave 1 Utilities and Hook', desc: 'Parallel, TDD',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Wave 1 tasks are independent — Forge implements all three in parallel after checking the test setup. TDD mode is active: tests are written first, confirmed to fail for the right reason, then the implementation is added.</p>
         <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin-bottom:.5rem;">What gets created:</p>
         <div class="cmd-block"><pre>src/utils/distance.ts           — Haversine distance calculation + formatDistance helper
@@ -1562,13 +2482,13 @@ src/hooks/useGeolocation.test.ts — 4 unit tests</pre></div>
         </div>
         <div class="success-box" style="margin-top:.75rem;">All 12 tests pass across all three suites.<br><span style="font-size:.8rem;color:#777;">Warnings are React deprecation notices from UIKit library internals — not test failures.</span></div>
       `
-    },
+      },
 
-    // ── STEP 9.3 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'9.3', parentId:'step-9',
-      title:'TASK-005: RestaurantCard Component', desc:'Wave 2',
-      content:`
+      // ── STEP 9.3 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '9.3', parentId: 'step-9',
+        title: 'TASK-005: RestaurantCard Component', desc: 'Wave 2',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Wave 2 has a single task: the shared card component used by the listing page.</p>
         <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin-bottom:.5rem;">What gets created:</p>
         <div class="cmd-block"><pre>src/components/dining/RestaurantCard.tsx      — UIKit card component
@@ -1577,13 +2497,13 @@ src/hooks/useGeolocation.test.ts — 4 unit tests</pre></div>
                                                Links to /dining/:id
 src/components/dining/RestaurantCard.test.tsx — component tests</pre></div>
       `
-    },
+      },
 
-    // ── STEP 9.4 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'9.4', parentId:'step-9',
-      title:'TASK-006 and TASK-007: Pages', desc:'Wave 3, Parallel',
-      content:`
+      // ── STEP 9.4 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '9.4', parentId: 'step-9',
+        title: 'TASK-006 and TASK-007: Pages', desc: 'Wave 3, Parallel',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Wave 3 pages are implemented in parallel with their test suites.</p>
         <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin-bottom:.5rem;">What gets created:</p>
         <div class="cmd-block"><pre>src/pages/dining/index.tsx       — Listing page
@@ -1604,13 +2524,13 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
         </div>
         <div class="success-box" style="margin-top:.75rem;">10/10 tests pass across both page test suites.<br><span style="font-size:.8rem;color:#777;">Warnings are React 18 deprecation notices from UIKit library internals — not test failures.</span></div>
       `
-    },
+      },
 
-    // ── STEP 9.5 ─────────────────────────────────────────────────
-    {
-      type:'substep', num:'9.5', parentId:'step-9', markComplete: true,
-      title:'All Tasks Complete', desc:'24/24 tests pass, 6 suites, 0 failures',
-      content:`
+      // ── STEP 9.5 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '9.5', parentId: 'step-9', markComplete: true,
+        title: 'All Tasks Complete', desc: '24/24 tests pass, 6 suites, 0 failures',
+        content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">All 7 tasks complete on branch <code>feat/dining-experience-on-web-for-rakutencom</code>.</p>
         <div class="result-grid">
           <div class="result-row"><span class="result-file">src/data/restaurants.json</span><span class="result-desc">15 mock restaurants, all TR-2 fields</span><span class="result-pass">PASS</span></div>
@@ -1623,149 +2543,149 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
         </div>
         <div class="success-box" style="margin-top:.75rem;"><strong>24/24 tests pass · 6 suites · 0 failures</strong></div>
       `
-    },
+      },
 
-    // ── QUIZ 3 ───────────────────────────────────────────────────
-    {
-      type:'quiz', id:'q3',
-      title:'Checkpoint — Steps 6–9',
-      desc:'Final check on UI design and implementation',
-      questions:[
-        {
-          q:'What development methodology does forge:ui apply during implementation?',
-          opts:['BDD — write scenarios first','TDD — write tests first, confirm red, then implement','Waterfall — full design before any code','No methodology — just implement'],
-          answer:1,
-          explain:'forge:ui uses TDD: tests are written first, confirmed to fail for the right reason, then the implementation is added to make them pass.'
-        },
-        {
-          q:'When a user clicks "Near Me" and location is denied, what should the UI show?',
-          opts:[
-            'A hard error modal blocking the page',
-            'Nothing — silently fail',
-            'Inline message "Location unavailable" and listing in default (alphabetical) order',
-            'Redirect to a location settings page'
-          ],
-          answer:2,
-          explain:'Per BR-4 and the UI spec: show a non-blocking inline message and fall back to alphabetical order. Never block the user.'
-        },
-        {
-          q:'Which wave does the RestaurantCard component belong to?',
-          opts:['Wave 1 — Foundation','Wave 2 — Components','Wave 3 — Pages','It has no wave'],
-          answer:1,
-          explain:'TASK-005 (RestaurantCard) is Wave 2. Wave 1 is data + utilities + hooks; Wave 3 is the pages that consume the card.'
+      // ── QUIZ 3 ───────────────────────────────────────────────────
+      {
+        type: 'quiz', id: 'q3',
+        title: 'Checkpoint — Steps 6–9',
+        desc: 'Final check on UI design and implementation',
+        questions: [
+          {
+            q: 'What development methodology does forge:ui apply during implementation?',
+            opts: ['BDD — write scenarios first', 'TDD — write tests first, confirm red, then implement', 'Waterfall — full design before any code', 'No methodology — just implement'],
+            answer: 1,
+            explain: 'forge:ui uses TDD: tests are written first, confirmed to fail for the right reason, then the implementation is added to make them pass.'
+          },
+          {
+            q: 'When a user clicks "Near Me" and location is denied, what should the UI show?',
+            opts: [
+              'A hard error modal blocking the page',
+              'Nothing — silently fail',
+              'Inline message "Location unavailable" and listing in default (alphabetical) order',
+              'Redirect to a location settings page'
+            ],
+            answer: 2,
+            explain: 'Per BR-4 and the UI spec: show a non-blocking inline message and fall back to alphabetical order. Never block the user.'
+          },
+          {
+            q: 'Which wave does the RestaurantCard component belong to?',
+            opts: ['Wave 1 — Foundation', 'Wave 2 — Components', 'Wave 3 — Pages', 'It has no wave'],
+            answer: 1,
+            explain: 'TASK-005 (RestaurantCard) is Wave 2. Wave 1 is data + utilities + hooks; Wave 3 is the pages that consume the card.'
+          }
+        ]
+      },
+
+      // ── COMPLETE ──────────────────────────────────────────────────
+      { type: 'complete', title: 'Complete' },
+    ];
+
+    // ═══════════════════════════════════════════════════════════════
+    // STATE
+    // ═══════════════════════════════════════════════════════════════
+    let current = 0;
+    let doneSet = new Set(JSON.parse(localStorage.getItem('lnl_done') || '[]'));
+    let quizAnswers = JSON.parse(localStorage.getItem('lnl_quiz') || '{}');
+    let maxReached = parseInt(localStorage.getItem('lnl_reached') || '0', 10);
+
+    function saveDone() { localStorage.setItem('lnl_done', JSON.stringify([...doneSet])); }
+    function saveQuiz() { localStorage.setItem('lnl_quiz', JSON.stringify(quizAnswers)); }
+    function saveReached() { localStorage.setItem('lnl_reached', maxReached); }
+
+    // ═══════════════════════════════════════════════════════════════
+    // BUILD
+    // ═══════════════════════════════════════════════════════════════
+    function build() {
+      const area = document.getElementById('slide-area');
+      const list = document.getElementById('sidebar-list');
+      document.getElementById('tot-slides').textContent = slides.length;
+
+      // Track which section we last emitted to avoid duplicate headers
+      const sectionBySlideId = {};
+      SECTIONS.forEach(sec => sec.slideIds.forEach(sid => sectionBySlideId[sid] = sec.label));
+      const emittedSections = new Set();
+
+      slides.forEach((s, i) => {
+        // ── Slide element ──
+        const el = document.createElement('div');
+        el.className = 'slide' + (i === 0 ? ' active' + (s.type === 'welcome' ? ' welcome-active' : '') : '');
+        el.id = 'slide-' + i;
+        el.innerHTML = renderSlide(s, i);
+        area.appendChild(el);
+
+        // ── Sidebar: inject section header if needed ──
+        if (s.id && sectionBySlideId[s.id] && !emittedSections.has(sectionBySlideId[s.id])) {
+          const secEl = document.createElement('div');
+          secEl.className = 'sb-section';
+          secEl.textContent = sectionBySlideId[s.id];
+          list.appendChild(secEl);
+          emittedSections.add(sectionBySlideId[s.id]);
         }
-      ]
-    },
 
-    // ── COMPLETE ──────────────────────────────────────────────────
-    { type:'complete', title:'Complete' },
-  ];
+        // ── Sidebar: main item ──
+        const li = document.createElement('div');
+        li.className = 'sb-item' + (i === 0 ? ' active' : '') + (doneSet.has(i) ? ' done' : '');
+        li.id = 'sb-' + i;
+        li.onclick = () => goTo(i);
 
-  // ═══════════════════════════════════════════════════════════════
-  // STATE
-  // ═══════════════════════════════════════════════════════════════
-  let current     = 0;
-  let doneSet     = new Set(JSON.parse(localStorage.getItem('lnl_done') || '[]'));
-  let quizAnswers = JSON.parse(localStorage.getItem('lnl_quiz') || '{}');
-  let maxReached  = parseInt(localStorage.getItem('lnl_reached') || '0', 10);
+        const hasChildren = s.type === 'step' && s.id && slides.some(x => x.type === 'substep' && x.parentId === s.id);
+        let dotContent, labelText, subText, isSubstep = false;
+        if (s.type === 'welcome') { dotContent = '★'; labelText = 'Welcome'; subText = 'Start here'; }
+        else if (s.type === 'complete') { dotContent = '✦'; labelText = 'All Done'; subText = 'Certificate'; }
+        else if (s.type === 'quiz') { dotContent = '?'; labelText = 'Checkpoint'; subText = s.title; }
+        else if (s.type === 'substep') { dotContent = s.num; labelText = s.num + ' — ' + s.title; subText = s.desc || ''; isSubstep = true; }
+        else { dotContent = s.num; labelText = 'Step ' + s.num; subText = s.title; }
 
-  function saveDone()    { localStorage.setItem('lnl_done', JSON.stringify([...doneSet])); }
-  function saveQuiz()    { localStorage.setItem('lnl_quiz', JSON.stringify(quizAnswers)); }
-  function saveReached() { localStorage.setItem('lnl_reached', maxReached); }
+        if (isSubstep) li.classList.add('substep');
 
-  // ═══════════════════════════════════════════════════════════════
-  // BUILD
-  // ═══════════════════════════════════════════════════════════════
-  function build() {
-    const area = document.getElementById('slide-area');
-    const list = document.getElementById('sidebar-list');
-    document.getElementById('tot-slides').textContent = slides.length;
-
-    // Track which section we last emitted to avoid duplicate headers
-    const sectionBySlideId = {};
-    SECTIONS.forEach(sec => sec.slideIds.forEach(sid => sectionBySlideId[sid] = sec.label));
-    const emittedSections = new Set();
-
-    slides.forEach((s, i) => {
-      // ── Slide element ──
-      const el = document.createElement('div');
-      el.className = 'slide' + (i === 0 ? ' active' + (s.type === 'welcome' ? ' welcome-active' : '') : '');
-      el.id = 'slide-' + i;
-      el.innerHTML = renderSlide(s, i);
-      area.appendChild(el);
-
-      // ── Sidebar: inject section header if needed ──
-      if (s.id && sectionBySlideId[s.id] && !emittedSections.has(sectionBySlideId[s.id])) {
-        const secEl = document.createElement('div');
-        secEl.className = 'sb-section';
-        secEl.textContent = sectionBySlideId[s.id];
-        list.appendChild(secEl);
-        emittedSections.add(sectionBySlideId[s.id]);
-      }
-
-      // ── Sidebar: main item ──
-      const li = document.createElement('div');
-      li.className = 'sb-item' + (i === 0 ? ' active' : '') + (doneSet.has(i) ? ' done' : '');
-      li.id = 'sb-' + i;
-      li.onclick = () => goTo(i);
-
-      const hasChildren = s.type === 'step' && s.id && slides.some(x => x.type === 'substep' && x.parentId === s.id);
-      let dotContent, labelText, subText, isSubstep = false;
-      if (s.type === 'welcome')      { dotContent='★'; labelText='Welcome';       subText='Start here'; }
-      else if (s.type === 'complete'){ dotContent='✦'; labelText='All Done';      subText='Certificate'; }
-      else if (s.type === 'quiz')    { dotContent='?'; labelText='Checkpoint';    subText=s.title; }
-      else if (s.type === 'substep') { dotContent=s.num; labelText=s.num+' — '+s.title; subText=s.desc||''; isSubstep=true; }
-      else                           { dotContent=s.num; labelText='Step '+s.num; subText=s.title; }
-
-      if (isSubstep) li.classList.add('substep');
-
-      li.innerHTML = `
+        li.innerHTML = `
         <div class="sb-dot"><span class="sb-num">${dotContent}</span></div>
         <div style="flex:1;min-width:0;">
           <div class="sb-label">${labelText}</div>
           ${subText ? `<div class="sb-sublabel">${subText}</div>` : ''}
         </div>
         ${hasChildren ? '<span class="sb-chevron">›</span>' : ''}`;
-      list.appendChild(li);
+        list.appendChild(li);
 
-      // ── Sidebar: decorative sub-step items for steps WITHOUT real substep slides ──
-      if (s.id && SUBSTEPS[s.id] && !slides.some(x => x.type === 'substep' && x.parentId === s.id)) {
-        SUBSTEPS[s.id].forEach(sub => {
-          const subLi = document.createElement('div');
-          subLi.className = 'sb-item substep';
-          subLi.innerHTML = `
+        // ── Sidebar: decorative sub-step items for steps WITHOUT real substep slides ──
+        if (s.id && SUBSTEPS[s.id] && !slides.some(x => x.type === 'substep' && x.parentId === s.id)) {
+          SUBSTEPS[s.id].forEach(sub => {
+            const subLi = document.createElement('div');
+            subLi.className = 'sb-item substep';
+            subLi.innerHTML = `
             <div class="sb-dot"><span class="sb-num">·</span></div>
             <div>
               <div class="sb-label">${sub.label}</div>
             </div>`;
-          list.appendChild(subLi);
-        });
-      }
-    });
+            list.appendChild(subLi);
+          });
+        }
+      });
 
-    updateNav();
-    updateProgress();
-    updateSidebarLocks();
-  }
+      updateNav();
+      updateProgress();
+      updateSidebarLocks();
+    }
 
-  // ═══════════════════════════════════════════════════════════════
-  // RENDER
-  // ═══════════════════════════════════════════════════════════════
-  function renderSlide(s, idx) {
-    if (s.type === 'welcome') {
-      // Build outline rows from slides (steps + quizzes + cert)
-      const stepSlides = slides.filter(x => x.type === 'step');
-      const quizSlides = slides.filter(x => x.type === 'quiz');
-      const totalMins = 45;
+    // ═══════════════════════════════════════════════════════════════
+    // RENDER
+    // ═══════════════════════════════════════════════════════════════
+    function renderSlide(s, idx) {
+      if (s.type === 'welcome') {
+        // Build outline rows from slides (steps + quizzes + cert)
+        const stepSlides = slides.filter(x => x.type === 'step');
+        const quizSlides = slides.filter(x => x.type === 'quiz');
+        const totalMins = 45;
 
-      const groups = [
-        { num:1, title:'Getting Started',            mins: 10, quiz:true },
-        { num:2, title:'Create a Forge Work Effort', mins: 10, quiz:false },
-        { num:3, title:'Elaborate Requirements',     mins: 10, quiz:true },
-        { num:4, title:'Promote & Implement',        mins: 15, quiz:true },
-      ];
+        const groups = [
+          { num: 1, title: 'Getting Started', mins: 10, quiz: true },
+          { num: 2, title: 'Create a Forge Work Effort', mins: 10, quiz: false },
+          { num: 3, title: 'Elaborate Requirements', mins: 10, quiz: true },
+          { num: 4, title: 'Promote & Implement', mins: 15, quiz: true },
+        ];
 
-      const outlineRows = groups.map((g,i) => `
+        const outlineRows = groups.map((g, i) => `
         <div class="outline-item" onclick="goToSection(${i})" style="cursor:pointer;">
           <div class="oi-num">${g.num}</div>
           <div class="oi-body">
@@ -1775,7 +2695,7 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
           <span class="oi-arrow">›</span>
         </div>`).join('');
 
-      return `<div class="welcome-slide">
+        return `<div class="welcome-slide">
         <div class="wl-left">
           <div class="wl-eyebrow">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
@@ -1815,12 +2735,12 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
           </div>
         </div>
       </div>`;
-    }
+      }
 
-    if (s.type === 'complete') {
-      const total  = slides.filter(x => x.type === 'step').length;
-      const quizzes = slides.filter(x => x.type === 'quiz').length;
-      return `<div class="complete-slide">
+      if (s.type === 'complete') {
+        const total = slides.filter(x => x.type === 'step').length;
+        const quizzes = slides.filter(x => x.type === 'quiz').length;
+        return `<div class="complete-slide">
         <div class="complete-emoji">🎉</div>
         <h1>All Done!</h1>
         <p>You've walked through the complete Forge workflow — from repo init to a fully tested dining feature.</p>
@@ -1840,20 +2760,20 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
         </div>
         <button class="btn-primary" onclick="goTo(0)" style="margin-top:.5rem;background:var(--pale);color:var(--dark);border:1px solid var(--border2);box-shadow:none;">↩ Start Over</button>
       </div>`;
-    }
+      }
 
-    if (s.type === 'quiz') {
-      return renderQuiz(s, idx);
-    }
+      if (s.type === 'quiz') {
+        return renderQuiz(s, idx);
+      }
 
-    if (s.type === 'substep') {
-      const isLast = s.markComplete === true;
-      const btnHTML = isLast
-        ? `<button class="btn-primary" onclick="markDone(${idx})" id="done-btn-${idx}">
+      if (s.type === 'substep') {
+        const isLast = s.markComplete === true;
+        const btnHTML = isLast
+          ? `<button class="btn-primary" onclick="markDone(${idx})" id="done-btn-${idx}">
             ${doneSet.has(idx) ? '<span style="color:#16a34a;font-size:1rem;">✓</span> Marked Complete' : 'Mark as Complete'}
            </button>`
-        : `<button class="btn-primary" onclick="nextSlide()">Next Lesson →</button>`;
-      return `<div class="step-slide">
+          : `<button class="btn-primary" onclick="nextSlide()">Next Lesson →</button>`;
+        return `<div class="step-slide">
         <div class="step-header">
           <div class="step-badge" style="font-size:.75rem;width:36px;height:36px;">${s.num}</div>
           <div class="step-title">
@@ -1864,17 +2784,17 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
         ${s.content}
         <div style="margin-top:1.5rem;text-align:right;">${btnHTML}</div>
       </div>`;
-    }
+      }
 
-    // For step slides that have substeps, show Next Lesson instead of Mark Complete
-    const hasSubsteps = s.id && slides.some(x => x.type === 'substep' && x.parentId === s.id);
-    const stepBtnHTML = hasSubsteps
-      ? `<button class="btn-primary" onclick="nextSlide()">Next Lesson →</button>`
-      : `<button class="btn-primary" onclick="markDone(${idx})" id="done-btn-${idx}">
+      // For step slides that have substeps, show Next Lesson instead of Mark Complete
+      const hasSubsteps = s.id && slides.some(x => x.type === 'substep' && x.parentId === s.id);
+      const stepBtnHTML = hasSubsteps
+        ? `<button class="btn-primary" onclick="nextSlide()">Next Lesson →</button>`
+        : `<button class="btn-primary" onclick="markDone(${idx})" id="done-btn-${idx}">
           ${doneSet.has(idx) ? '<span style="color:#16a34a;font-size:1rem;">✓</span> Marked Complete' : 'Mark Step Complete'}
         </button>`;
 
-    return `<div class="step-slide">
+      return `<div class="step-slide">
       <div class="step-header">
         <div class="step-badge">${s.num}</div>
         <div class="step-title">
@@ -1885,54 +2805,54 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
       ${s.content}
       <div style="margin-top:1.5rem;text-align:right;">${stepBtnHTML}</div>
     </div>`;
-  }
+    }
 
-  function renderQuiz(s, idx) {
-    const saved = quizAnswers[s.id] || {};
-    const submitted = saved.submitted;
-    let score = 0;
+    function renderQuiz(s, idx) {
+      const saved = quizAnswers[s.id] || {};
+      const submitted = saved.submitted;
+      let score = 0;
 
-    const qHTML = s.questions.map((q, qi) => {
-      const chosen = saved[qi];
-      const isSubmitted = submitted;
+      const qHTML = s.questions.map((q, qi) => {
+        const chosen = saved[qi];
+        const isSubmitted = submitted;
 
-      const optsHTML = q.opts.map((opt, oi) => {
-        let cls = 'quiz-opt';
-        if (isSubmitted) {
-          if (oi === q.answer) cls += ' correct';
-          else if (oi === chosen && oi !== q.answer) cls += ' wrong';
-          else if (oi === chosen) cls += ' selected';
-        } else {
-          if (oi === chosen) cls += ' selected';
-        }
-        const letter = String.fromCharCode(65 + oi);
-        return `<div class="${cls}" onclick="${isSubmitted ? '' : `pickOpt('${s.id}',${qi},${oi},${idx})`}">
+        const optsHTML = q.opts.map((opt, oi) => {
+          let cls = 'quiz-opt';
+          if (isSubmitted) {
+            if (oi === q.answer) cls += ' correct';
+            else if (oi === chosen && oi !== q.answer) cls += ' wrong';
+            else if (oi === chosen) cls += ' selected';
+          } else {
+            if (oi === chosen) cls += ' selected';
+          }
+          const letter = String.fromCharCode(65 + oi);
+          return `<div class="${cls}" onclick="${isSubmitted ? '' : `pickOpt('${s.id}',${qi},${oi},${idx})`}">
           <div class="opt-letter">${letter}</div>
           <span>${opt}</span>
         </div>`;
-      }).join('');
+        }).join('');
 
-      if (isSubmitted && chosen === q.answer) score++;
-      const fb = isSubmitted
-        ? `<div class="quiz-feedback ${chosen === q.answer ? 'ok' : 'err'} show">
+        if (isSubmitted && chosen === q.answer) score++;
+        const fb = isSubmitted
+          ? `<div class="quiz-feedback ${chosen === q.answer ? 'ok' : 'err'} show">
             ${chosen === q.answer ? '✓ Correct — ' : '✗ Incorrect — '}${q.explain}
            </div>` : '';
 
-      return `<div class="quiz-q" id="${s.id}-q${qi}">
-        <p>${qi+1}. ${q.q}</p>
+        return `<div class="quiz-q" id="${s.id}-q${qi}">
+        <p>${qi + 1}. ${q.q}</p>
         <div class="quiz-options">${optsHTML}</div>
         ${fb}
       </div>`;
-    }).join('');
+      }).join('');
 
-    const scoreHTML = submitted
-      ? `<div class="quiz-score show"><div class="score-num">${score}/${s.questions.length}</div><div class="score-label">Score</div></div>` : '';
+      const scoreHTML = submitted
+        ? `<div class="quiz-score show"><div class="score-num">${score}/${s.questions.length}</div><div class="score-label">Score</div></div>` : '';
 
-    const btnHTML = submitted
-      ? `<button class="quiz-submit" disabled>Submitted</button>`
-      : `<button class="quiz-submit" id="${s.id}-submit" onclick="submitQuiz('${s.id}',${idx})" ${Object.keys(saved).length < s.questions.length ? 'disabled' : ''}>Submit Answers</button>`;
+      const btnHTML = submitted
+        ? `<button class="quiz-submit" disabled>Submitted</button>`
+        : `<button class="quiz-submit" id="${s.id}-submit" onclick="submitQuiz('${s.id}',${idx})" ${Object.keys(saved).length < s.questions.length ? 'disabled' : ''}>Submit Answers</button>`;
 
-    return `<div class="quiz-slide">
+      return `<div class="quiz-slide">
       <div class="quiz-header">
         <div class="quiz-badge">❓</div>
         <div>
@@ -1944,464 +2864,464 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
       ${btnHTML}
       ${scoreHTML}
     </div>`;
-  }
-
-  // ═══════════════════════════════════════════════════════════════
-  // QUIZ LOGIC
-  // ═══════════════════════════════════════════════════════════════
-  function pickOpt(qid, qi, oi, slideIdx) {
-    if (!quizAnswers[qid]) quizAnswers[qid] = {};
-    quizAnswers[qid][qi] = oi;
-    saveQuiz();
-
-    // Update option visuals
-    const slide = slides[slideIdx];
-    const opts = document.querySelectorAll(`#${qid}-q${qi} .quiz-opt`);
-    opts.forEach((el, i) => {
-      el.classList.toggle('selected', i === oi);
-    });
-
-    // Enable submit if all answered
-    const allAnswered = slide.questions.every((_, i) => quizAnswers[qid][i] !== undefined);
-    const btn = document.getElementById(`${qid}-submit`);
-    if (btn) btn.disabled = !allAnswered;
-  }
-
-  function submitQuiz(qid, slideIdx) {
-    if (!quizAnswers[qid]) return;
-    quizAnswers[qid].submitted = true;
-    saveQuiz();
-
-    // Re-render quiz slide
-    const slide = slides[slideIdx];
-    const el = document.getElementById('slide-' + slideIdx);
-    el.innerHTML = renderQuiz(slide, slideIdx);
-
-    markDone(slideIdx);
-  }
-
-  // ═══════════════════════════════════════════════════════════════
-  // PROGRESS
-  // ═══════════════════════════════════════════════════════════════
-  function markDone(idx) {
-    doneSet.add(idx);
-    saveDone();
-
-    // Update sidebar item
-    const sb = document.getElementById('sb-' + idx);
-    if (sb) sb.classList.add('done');
-
-    // If this is a markComplete substep, also mark the parent step done in sidebar
-    const s = slides[idx];
-    if (s.type === 'substep' && s.markComplete && s.parentId) {
-      const parentIdx = slides.findIndex(x => x.id === s.parentId);
-      if (parentIdx !== -1) {
-        doneSet.add(parentIdx);
-        saveDone();
-        const parentSb = document.getElementById('sb-' + parentIdx);
-        if (parentSb) parentSb.classList.add('done');
-      }
     }
 
-    // Update button
-    const btn = document.getElementById('done-btn-' + idx);
-    if (btn) {
-      btn.innerHTML = '<span style="color:#16a34a;font-size:1rem;">✓</span> Marked Complete';
-      btn.style.cssText = '';
+    // ═══════════════════════════════════════════════════════════════
+    // QUIZ LOGIC
+    // ═══════════════════════════════════════════════════════════════
+    function pickOpt(qid, qi, oi, slideIdx) {
+      if (!quizAnswers[qid]) quizAnswers[qid] = {};
+      quizAnswers[qid][qi] = oi;
+      saveQuiz();
+
+      // Update option visuals
+      const slide = slides[slideIdx];
+      const opts = document.querySelectorAll(`#${qid}-q${qi} .quiz-opt`);
+      opts.forEach((el, i) => {
+        el.classList.toggle('selected', i === oi);
+      });
+
+      // Enable submit if all answered
+      const allAnswered = slide.questions.every((_, i) => quizAnswers[qid][i] !== undefined);
+      const btn = document.getElementById(`${qid}-submit`);
+      if (btn) btn.disabled = !allAnswered;
     }
 
-    updateProgress();
+    function submitQuiz(qid, slideIdx) {
+      if (!quizAnswers[qid]) return;
+      quizAnswers[qid].submitted = true;
+      saveQuiz();
 
-    // If completing a substep section, collapse substeps then jump to next non-quiz slide
-    if (s && s.type === 'substep' && s.markComplete) {
-      showToast('Section complete!');
-      setTimeout(() => {
-        let next = idx + 1;
-        while (next < slides.length && slides[next].type === 'quiz') next++;
-        if (next > maxReached) { maxReached = next; saveReached(); updateSidebarLocks(); }
-        if (next < slides.length) goTo(next); else nextSlide();
-      }, 600);
-    } else {
-      showToast('Step marked complete!');
-      setTimeout(() => nextSlide(), 600);
-    }
-  }
+      // Re-render quiz slide
+      const slide = slides[slideIdx];
+      const el = document.getElementById('slide-' + slideIdx);
+      el.innerHTML = renderQuiz(slide, slideIdx);
 
-  function updateProgress() {
-    const completable = slides.filter((s,i) => s.type === 'step' || s.type === 'quiz' || (s.type === 'substep' && s.markComplete)).length;
-    const done = slides.filter((s,i) => (s.type === 'step' || s.type === 'quiz' || (s.type === 'substep' && s.markComplete)) && doneSet.has(i)).length;
-    const pct = completable > 0 ? Math.round((done / completable) * 100) : 0;
-    document.getElementById('progress-pct').textContent = pct + '%';
-    document.getElementById('progress-fill').style.width = pct + '%';
-  }
-
-  // ═══════════════════════════════════════════════════════════════
-  // NAVIGATION
-  // ═══════════════════════════════════════════════════════════════
-  function goTo(idx) {
-    if (idx < 0 || idx >= slides.length) return;
-    if (idx > maxReached) { showToast('Complete the current step first'); return; }
-    const prevEl = document.getElementById('slide-' + current);
-    prevEl.classList.remove('active', 'welcome-active');
-    document.getElementById('sb-' + current)?.classList.remove('active');
-    current = idx;
-    const curEl = document.getElementById('slide-' + current);
-    curEl.classList.add('active');
-    if (slides[current].type === 'welcome') curEl.classList.add('welcome-active');
-    const sb = document.getElementById('sb-' + current);
-    sb?.classList.add('active');
-    sb?.scrollIntoView({ block:'nearest' });
-    updateSubstepExpansion();
-    updateNav();
-    startTypingAnimations();
-  }
-
-  function updateSidebarLocks() {
-    slides.forEach((s, i) => {
-      const el = document.getElementById('sb-' + i);
-      if (!el) return;
-      if (i > maxReached) {
-        el.classList.add('locked');
-      } else {
-        el.classList.remove('locked');
-      }
-    });
-  }
-
-  function updateSubstepExpansion() {
-    const cur = slides[current];
-    // Determine which parentId is currently "active"
-    const activeParentId = cur.type === 'substep' ? cur.parentId
-                         : cur.type === 'step' && slides.some(x => x.type === 'substep' && x.parentId === cur.id) ? cur.id
-                         : null;
-
-    slides.forEach((s, i) => {
-      if (s.type !== 'substep') return;
-      const sbEl = document.getElementById('sb-' + i);
-      if (!sbEl) return;
-      if (s.parentId === activeParentId) {
-        sbEl.classList.add('expanded');
-      } else {
-        sbEl.classList.remove('expanded');
-      }
-    });
-
-    // Update chevron on parent items
-    slides.forEach((s, i) => {
-      if (s.type !== 'step') return;
-      const sbEl = document.getElementById('sb-' + i);
-      if (!sbEl) return;
-      if (s.id === activeParentId) {
-        sbEl.classList.add('expanded-parent');
-      } else {
-        sbEl.classList.remove('expanded-parent');
-      }
-    });
-  }
-
-  function nextSlide() {
-    const next = current + 1;
-    if (next > maxReached) { maxReached = next; saveReached(); updateSidebarLocks(); }
-    goTo(next);
-  }
-  function prevSlide() { goTo(current - 1); }
-
-  function goToSection(sectionIndex) {
-    const sec = SECTIONS[sectionIndex];
-    if (!sec) { nextSlide(); return; }
-    // Find the first slide matching this section's first slideId
-    const firstId = sec.slideIds[0];
-    const idx = slides.findIndex(s => s.id === firstId);
-    if (idx === -1) { nextSlide(); return; }
-    if (idx > maxReached) {
-      showToast('Complete earlier sections first');
-      return;
-    }
-    goTo(idx);
-  }
-
-  function updateNav() {
-    const isWelcome = slides[current].type === 'welcome';
-    document.getElementById('cur-slide').textContent = current + 1;
-    document.querySelector('.header').style.display     = isWelcome ? 'none' : '';
-    document.getElementById('sidebar').style.display    = isWelcome ? 'none' : '';
-    document.getElementById('expand-btn').style.display = isWelcome ? 'none' : '';
-    document.getElementById('site-footer').style.display = isWelcome ? 'none' : '';
-    document.getElementById('support-widget').style.display = isWelcome ? 'none' : '';
-  }
-
-  // ═══════════════════════════════════════════════════════════════
-  // SIDEBAR
-  // ═══════════════════════════════════════════════════════════════
-  function toggleSidebar() {
-    const sb = document.getElementById('sidebar');
-    const eb = document.getElementById('expand-btn');
-    const c = sb.classList.toggle('collapsed');
-    eb.classList.toggle('visible', c);
-  }
-
-  // ═══════════════════════════════════════════════════════════════
-  // COPY
-  // ═══════════════════════════════════════════════════════════════
-  function copyText(btn, text) {
-    navigator.clipboard.writeText(text).then(() => {
-      btn.textContent = 'Copied!';
-      btn.classList.add('copied');
-      showToast('Copied to clipboard!');
-      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
-    });
-  }
-
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2200);
-  }
-
-  // ═══════════════════════════════════════════════════════════════
-  // CERTIFICATE DOWNLOAD
-  // ═══════════════════════════════════════════════════════════════
-  function downloadCert() {
-    const name = document.getElementById('cert-name')?.value.trim();
-    if (!name) { showToast('Please enter your name first'); return; }
-
-    const canvas = document.getElementById('cert-canvas');
-    const ctx = canvas.getContext('2d');
-    const W = 1200, H = 900;
-
-    // Background
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, W, H);
-
-    // Outer border
-    ctx.strokeStyle = '#000000';
-    ctx.lineWidth = 10;
-    ctx.strokeRect(28, 28, W - 56, H - 56);
-
-    // Inner border
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = '#555555';
-    ctx.strokeRect(48, 48, W - 96, H - 96);
-
-    // Header band
-    ctx.fillStyle = '#111111';
-    ctx.fillRect(28, 28, W - 56, 100);
-
-    // Rakuten R logo in header (left side)
-    ctx.save();
-    const logoSize = 60;
-    const logoX = 58;
-    const logoY = 48;
-    const scale = logoSize / 24;
-    ctx.translate(logoX, logoY);
-    ctx.scale(scale, scale);
-    ctx.fillStyle = '#ffffff';
-    const rPath = new Path2D('M23.277 21.3L3.939 24 .722 21.3h22.555zM7.6 19.276H3.939V0h6.052a6.653 6.653 0 0 1 6.65 6.646c0 2.234-1.108 4.204-2.799 5.418l5.418 7.211h-4.585l-4.486-5.979H7.6v5.98zm0-9.64h2.392a2.992 2.992 0 0 0 2.989-2.989 2.994 2.994 0 0 0-2.989-2.986H7.6v5.975z');
-    ctx.fill(rPath);
-    ctx.restore();
-
-    // Header text
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 28px -apple-system, Helvetica, Arial, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('RAKUTEN REWARDS · LUNCH & LEARN', W / 2, 90);
-
-    // Title
-    ctx.fillStyle = '#111111';
-    ctx.font = 'bold 58px -apple-system, Helvetica, Arial, sans-serif';
-    ctx.fillText('Certificate of Completion', W / 2, 235);
-
-    // Divider
-    ctx.strokeStyle = '#bbbbbb';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.moveTo(200, 265); ctx.lineTo(W - 200, 265); ctx.stroke();
-
-    // Body text
-    ctx.fillStyle = '#444444';
-    ctx.font = '26px -apple-system, Helvetica, Arial, sans-serif';
-    ctx.fillText('This is to certify that', W / 2, 330);
-
-    // Name
-    ctx.fillStyle = '#000000';
-    ctx.font = 'bold 56px -apple-system, Helvetica, Arial, sans-serif';
-    ctx.fillText(name, W / 2, 415);
-
-    // Underline name
-    const nameW = ctx.measureText(name).width;
-    ctx.strokeStyle = '#111111';
-    ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(W/2 - nameW/2, 428); ctx.lineTo(W/2 + nameW/2, 428); ctx.stroke();
-
-    // Body
-    ctx.fillStyle = '#444444';
-    ctx.font = '26px -apple-system, Helvetica, Arial, sans-serif';
-    ctx.fillText('has successfully completed the', W / 2, 490);
-
-    ctx.fillStyle = '#000000';
-    ctx.font = 'bold 32px -apple-system, Helvetica, Arial, sans-serif';
-    ctx.fillText('Dining Web Expansion — Forge Walkthrough', W / 2, 545);
-
-    ctx.fillStyle = '#444444';
-    ctx.font = '22px -apple-system, Helvetica, Arial, sans-serif';
-    ctx.fillText('covering Forge framework, work effort management,', W / 2, 590);
-    ctx.fillText('UI design, TDD implementation, and 9-step prompt guide', W / 2, 620);
-
-    // Date
-    ctx.fillStyle = '#777777';
-    ctx.font = '20px -apple-system, Helvetica, Arial, sans-serif';
-    ctx.fillText(new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' }), W / 2, 660);
-
-    // ── Signature section ──
-    const sigY = 715;
-    const sig1X = 280; // left signature center
-    const sig2X = 920; // right signature center
-    const sigLineW = 220;
-
-    function drawSignature(cx, name) {
-      ctx.save();
-      ctx.translate(cx, sigY - 18);
-      ctx.strokeStyle = '#222';
-      ctx.lineWidth = 1.8;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-
-      if (name === 'ralph') {
-        // R swoop + loop
-        ctx.beginPath();
-        ctx.moveTo(-48, 12); ctx.bezierCurveTo(-40,-20,-10,-28, 8,-10);
-        ctx.bezierCurveTo(22,4, 14,18,-2,12);
-        ctx.bezierCurveTo(-14,6,-6,-2, 12,14);
-        ctx.bezierCurveTo(28,28, 40,20, 52,8);
-        ctx.stroke();
-        // second stroke - a underline flick
-        ctx.beginPath();
-        ctx.moveTo(-52, 18); ctx.bezierCurveTo(-20,22, 20,20, 54,16);
-        ctx.stroke();
-      } else {
-        // B loop + V downstroke
-        ctx.beginPath();
-        ctx.moveTo(-50, 14); ctx.bezierCurveTo(-44,-18,-18,-22,-4,-6);
-        ctx.bezierCurveTo(10,8, 0,20,-10,14);
-        ctx.bezierCurveTo(-20,8,-4,-4, 14,10);
-        ctx.bezierCurveTo(30,22, 42,10, 50,-8);
-        ctx.stroke();
-        // tail flick
-        ctx.beginPath();
-        ctx.moveTo(50,-8); ctx.bezierCurveTo(56,-18, 60,-10, 58, 2);
-        ctx.stroke();
-      }
-      ctx.restore();
+      markDone(slideIdx);
     }
 
-    drawSignature(sig1X, 'ralph');
-    drawSignature(sig2X, 'benjamin');
+    // ═══════════════════════════════════════════════════════════════
+    // PROGRESS
+    // ═══════════════════════════════════════════════════════════════
+    function markDone(idx) {
+      doneSet.add(idx);
+      saveDone();
 
-    // Signature lines
-    ctx.strokeStyle = '#aaaaaa';
-    ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(sig1X - sigLineW/2, sigY + 4); ctx.lineTo(sig1X + sigLineW/2, sigY + 4); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(sig2X - sigLineW/2, sigY + 4); ctx.lineTo(sig2X + sigLineW/2, sigY + 4); ctx.stroke();
+      // Update sidebar item
+      const sb = document.getElementById('sb-' + idx);
+      if (sb) sb.classList.add('done');
 
-    // Signature names
-    ctx.fillStyle = '#111111';
-    ctx.font = 'bold 17px -apple-system, Helvetica, Arial, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Ralph a Manna', sig1X, sigY + 26);
-    ctx.fillText('Benjamin Vogan', sig2X, sigY + 26);
-
-    ctx.fillStyle = '#777777';
-    ctx.font = '14px -apple-system, Helvetica, Arial, sans-serif';
-    ctx.fillText('Sr. Director, Productivity Engineering', sig1X, sigY + 44);
-    ctx.fillText('Engineering Contractor', sig2X, sigY + 44);
-
-    // Footer band
-    ctx.fillStyle = '#f2f2f2';
-    ctx.fillRect(48, H - 82, W - 96, 54);
-    ctx.strokeStyle = '#e0e0e0';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(48, H - 82, W - 96, 54);
-
-    ctx.fillStyle = '#555555';
-    ctx.font = '15px -apple-system, Helvetica, Arial, sans-serif';
-    ctx.fillText('Rakuten Rewards · AI-Accelerated Engineering · Forge Framework v0.9.0', W / 2, H - 47);
-
-    // Download
-    const link = document.createElement('a');
-    link.download = `LunchLearn_Certificate_${name.replace(/\s+/g,'_')}.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-    showToast('Certificate downloaded!');
-  }
-
-  // ═══════════════════════════════════════════════════════════════
-  // KEYBOARD
-  // ═══════════════════════════════════════════════════════════════
-  document.addEventListener('keydown', e => {
-    if (e.target.tagName === 'INPUT') return;
-    if (e.key === 'ArrowRight') nextSlide();
-    if (e.key === 'ArrowLeft')  prevSlide();
-  });
-
-  // ═══════════════════════════════════════════════════════════════
-  // TYPING ANIMATION
-  // ═══════════════════════════════════════════════════════════════
-  function startTypingAnimations() {
-    const slide = document.getElementById('slide-' + current);
-    if (!slide) return;
-    const els = [...slide.querySelectorAll('.typing-text[data-type-text]')].filter(el => !el.dataset.typed);
-    let delay = 300;
-    els.forEach(el => {
-      el.dataset.typed = '1';
-      const text = el.dataset.typeText;
-      el.textContent = '';
-      const startAt = delay;
-      delay += text.length * 38 + 300;
-      setTimeout(() => {
-        let i = 0;
-        function type() {
-          if (i <= text.length) {
-            el.textContent = text.slice(0, i++);
-            setTimeout(type, 38);
-          }
+      // If this is a markComplete substep, also mark the parent step done in sidebar
+      const s = slides[idx];
+      if (s.type === 'substep' && s.markComplete && s.parentId) {
+        const parentIdx = slides.findIndex(x => x.id === s.parentId);
+        if (parentIdx !== -1) {
+          doneSet.add(parentIdx);
+          saveDone();
+          const parentSb = document.getElementById('sb-' + parentIdx);
+          if (parentSb) parentSb.classList.add('done');
         }
-        type();
-      }, startAt);
-    });
-  }
-
-  // ═══════════════════════════════════════════════════════════════
-  // SIDEBAR RESIZE
-  // ═══════════════════════════════════════════════════════════════
-  (function() {
-    const resizer = document.getElementById('sidebar-resizer');
-    const sidebar = document.getElementById('sidebar');
-    let startX, startW;
-
-    resizer.addEventListener('mousedown', e => {
-      startX = e.clientX;
-      startW = sidebar.offsetWidth;
-      resizer.classList.add('dragging');
-      document.body.style.cursor = 'col-resize';
-      document.body.style.userSelect = 'none';
-
-      function onMove(e) {
-        const w = Math.min(520, Math.max(180, startW + (e.clientX - startX)));
-        sidebar.style.width = w + 'px';
       }
-      function onUp() {
-        resizer.classList.remove('dragging');
-        document.body.style.cursor = '';
-        document.body.style.userSelect = '';
-        document.removeEventListener('mousemove', onMove);
-        document.removeEventListener('mouseup', onUp);
-      }
-      document.addEventListener('mousemove', onMove);
-      document.addEventListener('mouseup', onUp);
-    });
-  })();
 
-  build();
+      // Update button
+      const btn = document.getElementById('done-btn-' + idx);
+      if (btn) {
+        btn.innerHTML = '<span style="color:#16a34a;font-size:1rem;">✓</span> Marked Complete';
+        btn.style.cssText = '';
+      }
+
+      updateProgress();
+
+      // If completing a substep section, collapse substeps then jump to next non-quiz slide
+      if (s && s.type === 'substep' && s.markComplete) {
+        showToast('Section complete!');
+        setTimeout(() => {
+          let next = idx + 1;
+          while (next < slides.length && slides[next].type === 'quiz') next++;
+          if (next > maxReached) { maxReached = next; saveReached(); updateSidebarLocks(); }
+          if (next < slides.length) goTo(next); else nextSlide();
+        }, 600);
+      } else {
+        showToast('Step marked complete!');
+        setTimeout(() => nextSlide(), 600);
+      }
+    }
+
+    function updateProgress() {
+      const completable = slides.filter((s, i) => s.type === 'step' || s.type === 'quiz' || (s.type === 'substep' && s.markComplete)).length;
+      const done = slides.filter((s, i) => (s.type === 'step' || s.type === 'quiz' || (s.type === 'substep' && s.markComplete)) && doneSet.has(i)).length;
+      const pct = completable > 0 ? Math.round((done / completable) * 100) : 0;
+      document.getElementById('progress-pct').textContent = pct + '%';
+      document.getElementById('progress-fill').style.width = pct + '%';
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // NAVIGATION
+    // ═══════════════════════════════════════════════════════════════
+    function goTo(idx) {
+      if (idx < 0 || idx >= slides.length) return;
+      if (idx > maxReached) { showToast('Complete the current step first'); return; }
+      const prevEl = document.getElementById('slide-' + current);
+      prevEl.classList.remove('active', 'welcome-active');
+      document.getElementById('sb-' + current)?.classList.remove('active');
+      current = idx;
+      const curEl = document.getElementById('slide-' + current);
+      curEl.classList.add('active');
+      if (slides[current].type === 'welcome') curEl.classList.add('welcome-active');
+      const sb = document.getElementById('sb-' + current);
+      sb?.classList.add('active');
+      sb?.scrollIntoView({ block: 'nearest' });
+      updateSubstepExpansion();
+      updateNav();
+      startTypingAnimations();
+    }
+
+    function updateSidebarLocks() {
+      slides.forEach((s, i) => {
+        const el = document.getElementById('sb-' + i);
+        if (!el) return;
+        if (i > maxReached) {
+          el.classList.add('locked');
+        } else {
+          el.classList.remove('locked');
+        }
+      });
+    }
+
+    function updateSubstepExpansion() {
+      const cur = slides[current];
+      // Determine which parentId is currently "active"
+      const activeParentId = cur.type === 'substep' ? cur.parentId
+        : cur.type === 'step' && slides.some(x => x.type === 'substep' && x.parentId === cur.id) ? cur.id
+          : null;
+
+      slides.forEach((s, i) => {
+        if (s.type !== 'substep') return;
+        const sbEl = document.getElementById('sb-' + i);
+        if (!sbEl) return;
+        if (s.parentId === activeParentId) {
+          sbEl.classList.add('expanded');
+        } else {
+          sbEl.classList.remove('expanded');
+        }
+      });
+
+      // Update chevron on parent items
+      slides.forEach((s, i) => {
+        if (s.type !== 'step') return;
+        const sbEl = document.getElementById('sb-' + i);
+        if (!sbEl) return;
+        if (s.id === activeParentId) {
+          sbEl.classList.add('expanded-parent');
+        } else {
+          sbEl.classList.remove('expanded-parent');
+        }
+      });
+    }
+
+    function nextSlide() {
+      const next = current + 1;
+      if (next > maxReached) { maxReached = next; saveReached(); updateSidebarLocks(); }
+      goTo(next);
+    }
+    function prevSlide() { goTo(current - 1); }
+
+    function goToSection(sectionIndex) {
+      const sec = SECTIONS[sectionIndex];
+      if (!sec) { nextSlide(); return; }
+      // Find the first slide matching this section's first slideId
+      const firstId = sec.slideIds[0];
+      const idx = slides.findIndex(s => s.id === firstId);
+      if (idx === -1) { nextSlide(); return; }
+      if (idx > maxReached) {
+        showToast('Complete earlier sections first');
+        return;
+      }
+      goTo(idx);
+    }
+
+    function updateNav() {
+      const isWelcome = slides[current].type === 'welcome';
+      document.getElementById('cur-slide').textContent = current + 1;
+      document.querySelector('.header').style.display = isWelcome ? 'none' : '';
+      document.getElementById('sidebar').style.display = isWelcome ? 'none' : '';
+      document.getElementById('expand-btn').style.display = isWelcome ? 'none' : '';
+      document.getElementById('site-footer').style.display = isWelcome ? 'none' : '';
+      document.getElementById('support-widget').style.display = isWelcome ? 'none' : '';
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // SIDEBAR
+    // ═══════════════════════════════════════════════════════════════
+    function toggleSidebar() {
+      const sb = document.getElementById('sidebar');
+      const eb = document.getElementById('expand-btn');
+      const c = sb.classList.toggle('collapsed');
+      eb.classList.toggle('visible', c);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // COPY
+    // ═══════════════════════════════════════════════════════════════
+    function copyText(btn, text) {
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        showToast('Copied to clipboard!');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2200);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // CERTIFICATE DOWNLOAD
+    // ═══════════════════════════════════════════════════════════════
+    function downloadCert() {
+      const name = document.getElementById('cert-name')?.value.trim();
+      if (!name) { showToast('Please enter your name first'); return; }
+
+      const canvas = document.getElementById('cert-canvas');
+      const ctx = canvas.getContext('2d');
+      const W = 1200, H = 900;
+
+      // Background
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, W, H);
+
+      // Outer border
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 10;
+      ctx.strokeRect(28, 28, W - 56, H - 56);
+
+      // Inner border
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#555555';
+      ctx.strokeRect(48, 48, W - 96, H - 96);
+
+      // Header band
+      ctx.fillStyle = '#111111';
+      ctx.fillRect(28, 28, W - 56, 100);
+
+      // Rakuten R logo in header (left side)
+      ctx.save();
+      const logoSize = 60;
+      const logoX = 58;
+      const logoY = 48;
+      const scale = logoSize / 24;
+      ctx.translate(logoX, logoY);
+      ctx.scale(scale, scale);
+      ctx.fillStyle = '#ffffff';
+      const rPath = new Path2D('M23.277 21.3L3.939 24 .722 21.3h22.555zM7.6 19.276H3.939V0h6.052a6.653 6.653 0 0 1 6.65 6.646c0 2.234-1.108 4.204-2.799 5.418l5.418 7.211h-4.585l-4.486-5.979H7.6v5.98zm0-9.64h2.392a2.992 2.992 0 0 0 2.989-2.989 2.994 2.994 0 0 0-2.989-2.986H7.6v5.975z');
+      ctx.fill(rPath);
+      ctx.restore();
+
+      // Header text
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 28px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('RAKUTEN REWARDS · LUNCH & LEARN', W / 2, 90);
+
+      // Title
+      ctx.fillStyle = '#111111';
+      ctx.font = 'bold 58px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.fillText('Certificate of Completion', W / 2, 235);
+
+      // Divider
+      ctx.strokeStyle = '#bbbbbb';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(200, 265); ctx.lineTo(W - 200, 265); ctx.stroke();
+
+      // Body text
+      ctx.fillStyle = '#444444';
+      ctx.font = '26px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.fillText('This is to certify that', W / 2, 330);
+
+      // Name
+      ctx.fillStyle = '#000000';
+      ctx.font = 'bold 56px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.fillText(name, W / 2, 415);
+
+      // Underline name
+      const nameW = ctx.measureText(name).width;
+      ctx.strokeStyle = '#111111';
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(W / 2 - nameW / 2, 428); ctx.lineTo(W / 2 + nameW / 2, 428); ctx.stroke();
+
+      // Body
+      ctx.fillStyle = '#444444';
+      ctx.font = '26px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.fillText('has successfully completed the', W / 2, 490);
+
+      ctx.fillStyle = '#000000';
+      ctx.font = 'bold 32px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.fillText('Dining Web Expansion — Forge Walkthrough', W / 2, 545);
+
+      ctx.fillStyle = '#444444';
+      ctx.font = '22px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.fillText('covering Forge framework, work effort management,', W / 2, 590);
+      ctx.fillText('UI design, TDD implementation, and 9-step prompt guide', W / 2, 620);
+
+      // Date
+      ctx.fillStyle = '#777777';
+      ctx.font = '20px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.fillText(new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }), W / 2, 660);
+
+      // ── Signature section ──
+      const sigY = 715;
+      const sig1X = 280; // left signature center
+      const sig2X = 920; // right signature center
+      const sigLineW = 220;
+
+      function drawSignature(cx, name) {
+        ctx.save();
+        ctx.translate(cx, sigY - 18);
+        ctx.strokeStyle = '#222';
+        ctx.lineWidth = 1.8;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        if (name === 'ralph') {
+          // R swoop + loop
+          ctx.beginPath();
+          ctx.moveTo(-48, 12); ctx.bezierCurveTo(-40, -20, -10, -28, 8, -10);
+          ctx.bezierCurveTo(22, 4, 14, 18, -2, 12);
+          ctx.bezierCurveTo(-14, 6, -6, -2, 12, 14);
+          ctx.bezierCurveTo(28, 28, 40, 20, 52, 8);
+          ctx.stroke();
+          // second stroke - a underline flick
+          ctx.beginPath();
+          ctx.moveTo(-52, 18); ctx.bezierCurveTo(-20, 22, 20, 20, 54, 16);
+          ctx.stroke();
+        } else {
+          // B loop + V downstroke
+          ctx.beginPath();
+          ctx.moveTo(-50, 14); ctx.bezierCurveTo(-44, -18, -18, -22, -4, -6);
+          ctx.bezierCurveTo(10, 8, 0, 20, -10, 14);
+          ctx.bezierCurveTo(-20, 8, -4, -4, 14, 10);
+          ctx.bezierCurveTo(30, 22, 42, 10, 50, -8);
+          ctx.stroke();
+          // tail flick
+          ctx.beginPath();
+          ctx.moveTo(50, -8); ctx.bezierCurveTo(56, -18, 60, -10, 58, 2);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      drawSignature(sig1X, 'ralph');
+      drawSignature(sig2X, 'benjamin');
+
+      // Signature lines
+      ctx.strokeStyle = '#aaaaaa';
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(sig1X - sigLineW / 2, sigY + 4); ctx.lineTo(sig1X + sigLineW / 2, sigY + 4); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(sig2X - sigLineW / 2, sigY + 4); ctx.lineTo(sig2X + sigLineW / 2, sigY + 4); ctx.stroke();
+
+      // Signature names
+      ctx.fillStyle = '#111111';
+      ctx.font = 'bold 17px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Ralph a Manna', sig1X, sigY + 26);
+      ctx.fillText('Benjamin Vogan', sig2X, sigY + 26);
+
+      ctx.fillStyle = '#777777';
+      ctx.font = '14px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.fillText('Sr. Director, Productivity Engineering', sig1X, sigY + 44);
+      ctx.fillText('Engineering Contractor', sig2X, sigY + 44);
+
+      // Footer band
+      ctx.fillStyle = '#f2f2f2';
+      ctx.fillRect(48, H - 82, W - 96, 54);
+      ctx.strokeStyle = '#e0e0e0';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(48, H - 82, W - 96, 54);
+
+      ctx.fillStyle = '#555555';
+      ctx.font = '15px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.fillText('Rakuten Rewards · AI-Accelerated Engineering · Forge Framework v0.9.0', W / 2, H - 47);
+
+      // Download
+      const link = document.createElement('a');
+      link.download = `LunchLearn_Certificate_${name.replace(/\s+/g, '_')}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      showToast('Certificate downloaded!');
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // KEYBOARD
+    // ═══════════════════════════════════════════════════════════════
+    document.addEventListener('keydown', e => {
+      if (e.target.tagName === 'INPUT') return;
+      if (e.key === 'ArrowRight') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    // ═══════════════════════════════════════════════════════════════
+    // TYPING ANIMATION
+    // ═══════════════════════════════════════════════════════════════
+    function startTypingAnimations() {
+      const slide = document.getElementById('slide-' + current);
+      if (!slide) return;
+      const els = [...slide.querySelectorAll('.typing-text[data-type-text]')].filter(el => !el.dataset.typed);
+      let delay = 300;
+      els.forEach(el => {
+        el.dataset.typed = '1';
+        const text = el.dataset.typeText;
+        el.textContent = '';
+        const startAt = delay;
+        delay += text.length * 38 + 300;
+        setTimeout(() => {
+          let i = 0;
+          function type() {
+            if (i <= text.length) {
+              el.textContent = text.slice(0, i++);
+              setTimeout(type, 38);
+            }
+          }
+          type();
+        }, startAt);
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // SIDEBAR RESIZE
+    // ═══════════════════════════════════════════════════════════════
+    (function () {
+      const resizer = document.getElementById('sidebar-resizer');
+      const sidebar = document.getElementById('sidebar');
+      let startX, startW;
+
+      resizer.addEventListener('mousedown', e => {
+        startX = e.clientX;
+        startW = sidebar.offsetWidth;
+        resizer.classList.add('dragging');
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+
+        function onMove(e) {
+          const w = Math.min(520, Math.max(180, startW + (e.clientX - startX)));
+          sidebar.style.width = w + 'px';
+        }
+        function onUp() {
+          resizer.classList.remove('dragging');
+          document.body.style.cursor = '';
+          document.body.style.userSelect = '';
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onUp);
+        }
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+      });
+    })();
+
+    build();
   </script>
 
   <!-- ── Support / Slack widget ── -->
@@ -2427,18 +3347,20 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
       display: flex;
       align-items: center;
       gap: 10px;
-      box-shadow: 0 6px 24px rgba(0,0,0,.55);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, .55);
       opacity: 0;
       transform: translateY(8px) scale(0.95);
       pointer-events: none;
       transition: opacity 0.3s ease, transform 0.3s ease;
       white-space: nowrap;
     }
+
     #support-bubble.visible {
       opacity: 1;
       transform: translateY(0) scale(1);
       pointer-events: auto;
     }
+
     #support-bubble .bubble-close {
       cursor: pointer;
       color: #555;
@@ -2447,7 +3369,10 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
       padding: 0 2px;
       transition: color 0.15s;
     }
-    #support-bubble .bubble-close:hover { color: #aaa; }
+
+    #support-bubble .bubble-close:hover {
+      color: #aaa;
+    }
 
     #support-btn {
       width: 52px;
@@ -2455,7 +3380,7 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
       border-radius: 50%;
       background: #1a1a1a;
       border: 1.5px solid #444;
-      box-shadow: 0 4px 16px rgba(0,0,0,.5);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, .5);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -2463,13 +3388,22 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
       transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
       position: relative;
     }
+
     #support-btn:hover {
       transform: scale(1.08);
       background: #2a2a2a;
-      box-shadow: 0 6px 22px rgba(0,0,0,.65);
+      box-shadow: 0 6px 22px rgba(0, 0, 0, .65);
     }
-    #support-btn svg { width: 26px; height: 26px; fill: #aaa; }
-    #support-btn:hover svg { fill: #fff; }
+
+    #support-btn svg {
+      width: 26px;
+      height: 26px;
+      fill: #aaa;
+    }
+
+    #support-btn:hover svg {
+      fill: #fff;
+    }
 
     #support-btn .notif-dot {
       position: absolute;
@@ -2488,17 +3422,19 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
       <span>💬 Need help? Chat with us on Slack</span>
       <span class="bubble-close" id="bubble-close-btn" title="Dismiss">✕</span>
     </div>
-    <div id="support-btn" title="Get help on Slack" onclick="window.open('https://rakuten-international.enterprise.slack.com/archives/C0ASGG80SHL','_blank')">
+    <div id="support-btn" title="Get help on Slack"
+      onclick="window.open('https://rakuten-international.enterprise.slack.com/archives/C0ASGG80SHL','_blank')">
       <!-- Slack-style headset / support icon -->
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.52 3.66 1.42 5.18L2 22l4.82-1.42A9.945 9.945 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.94 7.94 0 0 1-4.05-1.11l-.29-.17-2.98.88.84-2.98-.18-.3A7.96 7.96 0 0 1 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8zm4.29-5.71c-.23-.12-1.38-.68-1.59-.76-.21-.08-.37-.12-.52.12-.16.23-.61.76-.75.92-.14.16-.28.18-.51.06-.24-.12-1-.37-1.91-1.18-.71-.63-1.18-1.4-1.32-1.64-.14-.23-.01-.36.1-.48.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.52-1.26-.72-1.72-.19-.45-.38-.39-.52-.4h-.45c-.16 0-.41.06-.62.3-.21.23-.82.8-.82 1.95s.84 2.26.96 2.42c.12.16 1.66 2.53 4.02 3.55.56.24 1 .39 1.34.5.56.18 1.07.15 1.48.09.45-.07 1.38-.56 1.58-1.11.19-.55.19-1.02.13-1.11-.06-.09-.21-.15-.45-.27z"/>
+        <path
+          d="M12 2C6.477 2 2 6.477 2 12c0 1.89.52 3.66 1.42 5.18L2 22l4.82-1.42A9.945 9.945 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.94 7.94 0 0 1-4.05-1.11l-.29-.17-2.98.88.84-2.98-.18-.3A7.96 7.96 0 0 1 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8zm4.29-5.71c-.23-.12-1.38-.68-1.59-.76-.21-.08-.37-.12-.52.12-.16.23-.61.76-.75.92-.14.16-.28.18-.51.06-.24-.12-1-.37-1.91-1.18-.71-.63-1.18-1.4-1.32-1.64-.14-.23-.01-.36.1-.48.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.52-1.26-.72-1.72-.19-.45-.38-.39-.52-.4h-.45c-.16 0-.41.06-.62.3-.21.23-.82.8-.82 1.95s.84 2.26.96 2.42c.12.16 1.66 2.53 4.02 3.55.56.24 1 .39 1.34.5.56.18 1.07.15 1.48.09.45-.07 1.38-.56 1.58-1.11.19-.55.19-1.02.13-1.11-.06-.09-.21-.15-.45-.27z" />
       </svg>
       <span class="notif-dot"></span>
     </div>
   </div>
 
   <script>
-    (function() {
+    (function () {
       const bubble = document.getElementById('support-bubble');
       const closeBtn = document.getElementById('bubble-close-btn');
       let shown = false;
@@ -2536,4 +3472,5 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
     })();
   </script>
 </body>
+
 </html>
