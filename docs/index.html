@@ -2651,27 +2651,26 @@ src/hooks/useGeolocation.test.ts — 4 unit tests</pre></div>
         desc: 'Final check on UI design and implementation',
         questions: [
           {
-            q: 'What development methodology does forge:ui apply during implementation?',
-            opts: ['BDD — write scenarios first', 'TDD — write tests first, confirm red, then implement', 'Waterfall — full design before any code', 'No methodology — just implement'],
-            answer: 1,
-            explain: '<code>forge:ui</code> uses TDD: tests are written first, confirmed to fail for the right reason, then the implementation is added to make them pass.'
+            q: 'What does forge:ui do?',
+            opts: [
+              'Generate standards-compliant UI code using the Rakuten Rewards design system',
+              'Create a Figma design file from requirements',
+              'Run unit tests on existing UI components',
+              'Scaffold a new Next.js project'
+            ],
+            answer: 0,
+            explain: '<code>forge:ui</code> generates standards-compliant UI code using the Rakuten Rewards design system, applying TDD mode and UIKit guides throughout implementation.'
           },
           {
-            q: 'When a user clicks "Near Me" and location is denied, what should the UI show?',
+            q: 'Which command conversationally authors a UI spec (ui-spec.md) by walking the engineer through goal, mode, scope, data, and mode-specific details?',
             opts: [
-              'A hard error modal blocking the page',
-              'Nothing — silently fail',
-              'Inline message "Location unavailable" and listing in default (alphabetical) order',
-              'Redirect to a location settings page'
+              '<code>forge:ui</code>',
+              '<code>forge:plan</code>',
+              '<code>forge:ui-design</code>',
+              '<code>forge:elaborate</code>'
             ],
             answer: 2,
-            explain: 'Per BR-4 and the UI spec: show a non-blocking inline message and fall back to alphabetical order. Never block the user.'
-          },
-          {
-            q: 'Which wave does the RestaurantCard component belong to?',
-            opts: ['Wave 1 — Foundation', 'Wave 2 — Components', 'Wave 3 — Pages', 'It has no wave'],
-            answer: 1,
-            explain: '<code>TASK-005</code> (RestaurantCard) is Wave 2. Wave 1 is data + utilities + hooks; Wave 3 is the pages that consume the card.'
+            explain: '<code>forge:ui-design</code> conversationally authors the UI spec by walking through goal, mode, scope, data, and mode-specific details — producing <code>spec/ui-spec.md</code>.'
           }
         ]
       },
