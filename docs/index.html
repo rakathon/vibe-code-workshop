@@ -585,7 +585,7 @@
   <div class="toast" id="toast"></div>
 
   <!-- Hidden canvas for certificate -->
-  <canvas id="cert-canvas" width="1200" height="850"></canvas>
+  <canvas id="cert-canvas" width="1200" height="900"></canvas>
 
   <script>
   // ═══════════════════════════════════════════════════════════════
@@ -2168,7 +2168,7 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
 
     const canvas = document.getElementById('cert-canvas');
     const ctx = canvas.getContext('2d');
-    const W = 1200, H = 850;
+    const W = 1200, H = 900;
 
     // Background
     ctx.fillStyle = '#ffffff';
@@ -2250,18 +2250,81 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
     // Date
     ctx.fillStyle = '#777777';
     ctx.font = '20px -apple-system, Helvetica, Arial, sans-serif';
-    ctx.fillText(new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' }), W / 2, 690);
+    ctx.fillText(new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' }), W / 2, 660);
+
+    // ── Signature section ──
+    const sigY = 715;
+    const sig1X = 280; // left signature center
+    const sig2X = 920; // right signature center
+    const sigLineW = 220;
+
+    function drawSignature(cx, name) {
+      ctx.save();
+      ctx.translate(cx, sigY - 18);
+      ctx.strokeStyle = '#222';
+      ctx.lineWidth = 1.8;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      if (name === 'ralph') {
+        // R swoop + loop
+        ctx.beginPath();
+        ctx.moveTo(-48, 12); ctx.bezierCurveTo(-40,-20,-10,-28, 8,-10);
+        ctx.bezierCurveTo(22,4, 14,18,-2,12);
+        ctx.bezierCurveTo(-14,6,-6,-2, 12,14);
+        ctx.bezierCurveTo(28,28, 40,20, 52,8);
+        ctx.stroke();
+        // second stroke - a underline flick
+        ctx.beginPath();
+        ctx.moveTo(-52, 18); ctx.bezierCurveTo(-20,22, 20,20, 54,16);
+        ctx.stroke();
+      } else {
+        // B loop + V downstroke
+        ctx.beginPath();
+        ctx.moveTo(-50, 14); ctx.bezierCurveTo(-44,-18,-18,-22,-4,-6);
+        ctx.bezierCurveTo(10,8, 0,20,-10,14);
+        ctx.bezierCurveTo(-20,8,-4,-4, 14,10);
+        ctx.bezierCurveTo(30,22, 42,10, 50,-8);
+        ctx.stroke();
+        // tail flick
+        ctx.beginPath();
+        ctx.moveTo(50,-8); ctx.bezierCurveTo(56,-18, 60,-10, 58, 2);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    drawSignature(sig1X, 'ralph');
+    drawSignature(sig2X, 'benjamin');
+
+    // Signature lines
+    ctx.strokeStyle = '#aaaaaa';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(sig1X - sigLineW/2, sigY + 4); ctx.lineTo(sig1X + sigLineW/2, sigY + 4); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(sig2X - sigLineW/2, sigY + 4); ctx.lineTo(sig2X + sigLineW/2, sigY + 4); ctx.stroke();
+
+    // Signature names
+    ctx.fillStyle = '#111111';
+    ctx.font = 'bold 17px -apple-system, Helvetica, Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Ralph a Manna', sig1X, sigY + 26);
+    ctx.fillText('Benjamin Vogan', sig2X, sigY + 26);
+
+    ctx.fillStyle = '#777777';
+    ctx.font = '14px -apple-system, Helvetica, Arial, sans-serif';
+    ctx.fillText('Sr. Director, Productivity Engineering', sig1X, sigY + 44);
+    ctx.fillText('Engineering Contractor', sig2X, sigY + 44);
 
     // Footer band
     ctx.fillStyle = '#f2f2f2';
-    ctx.fillRect(48, H - 130, W - 96, 82);
+    ctx.fillRect(48, H - 82, W - 96, 54);
     ctx.strokeStyle = '#e0e0e0';
     ctx.lineWidth = 1;
-    ctx.strokeRect(48, H - 130, W - 96, 82);
+    ctx.strokeRect(48, H - 82, W - 96, 54);
 
     ctx.fillStyle = '#555555';
-    ctx.font = '17px -apple-system, Helvetica, Arial, sans-serif';
-    ctx.fillText('Rakuten Rewards · AI-Accelerated Engineering · Forge Framework v0.9.0', W / 2, H - 80);
+    ctx.font = '15px -apple-system, Helvetica, Arial, sans-serif';
+    ctx.fillText('Rakuten Rewards · AI-Accelerated Engineering · Forge Framework v0.9.0', W / 2, H - 47);
 
     // Download
     const link = document.createElement('a');
