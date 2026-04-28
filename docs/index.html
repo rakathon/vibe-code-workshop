@@ -2866,7 +2866,10 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
         ? `<div class="quiz-score show"><div class="score-num">${score}/${s.questions.length}</div><div class="score-label">Score</div></div>` : '';
 
       const btnHTML = submitted
-        ? `<button class="quiz-submit" disabled>Submitted</button>`
+        ? `<div style="display:flex;flex-direction:column;align-items:center;gap:1rem;margin-top:1.5rem;">
+            ${scoreHTML}
+            <button class="btn-primary" onclick="nextSlide()">Next Lesson →</button>
+           </div>`
         : `<button class="quiz-submit" id="${s.id}-submit" onclick="submitQuiz('${s.id}',${idx})" ${Object.keys(saved).length < s.questions.length ? 'disabled' : ''}>Submit Answers</button>`;
 
       return `<div class="quiz-slide">
@@ -2879,7 +2882,6 @@ src/pages/dining/[id].test.tsx   — 3 tests</pre></div>
       </div>
       ${qHTML}
       ${btnHTML}
-      ${scoreHTML}
     </div>`;
     }
 
