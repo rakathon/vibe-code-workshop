@@ -792,7 +792,10 @@
       margin: .9rem 0;
       position: relative;
       box-shadow: 0 4px 14px rgba(0, 0, 0, .18);
-      overflow-x: auto;
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      overflow: hidden;
     }
 
     .cmd-block pre {
@@ -801,7 +804,9 @@
       font-size: .82rem;
       white-space: pre;
       line-height: 1.65;
+      flex: 1;
       min-width: 0;
+      overflow-x: auto;
     }
 
     /* ── Syntax highlight tokens inside cmd-block ── */
@@ -848,9 +853,11 @@
     }
 
     .copy-btn {
-      position: absolute;
-      top: .55rem;
+      position: sticky;
       right: .55rem;
+      top: .55rem;
+      align-self: flex-start;
+      flex-shrink: 0;
       background: rgba(255, 255, 255, .12);
       border: 1px solid rgba(255, 255, 255, .2);
       color: rgba(255, 255, 255, .8);
@@ -860,6 +867,7 @@
       font-weight: 600;
       cursor: pointer;
       transition: all .15s;
+      margin-left: .5rem;
     }
 
     .copy-btn:hover {
@@ -1962,135 +1970,35 @@ Next steps:
         type: 'step', num: '4', id: 'step-4',
         title: 'Elaborate Technical Requirements', desc: 'Run /forge:elaborate',
         content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Expands business requirements into technical requirements — deriving NFRs, integration constraints, security implications, and scalability targets. Writes <code>requirements/technical.md</code> from the BRs in <code>requirements/business.md</code>.</p>
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run:</p>
-        <div class="cmd-block">
-          <pre><span class="t-cmd">/forge:elaborate</span></pre>
-          <button class="copy-btn" onclick="copyText(this,'/forge:elaborate')">Copy</button>
-        </div>
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;"><code>/forge:elaborate</code> reads your PRD, extracts business requirements, and derives the matching technical requirements — NFRs, integration constraints, security implications, and scalability targets. It writes <code>requirements/business.md</code> and <code>requirements/technical.md</code> inside the effort folder.</p>
       `
       },
 
       // ── STEP 4.1 ─────────────────────────────────────────────────
       {
         type: 'substep', num: '4.1', parentId: 'step-4',
-        title: 'Provide the PRD Document', desc: 'Give Forge the PRD URL',
+        title: 'Start with Your PRD', desc: 'Give Forge the project name and PRD URL',
         content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge starts cold with no existing artifacts and asks discovery questions. Provide the PRD URL so Forge can extract business requirements directly:</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code, naming the project first and then attaching the PRD URL:</p>
         <div class="cmd-block">
-          <pre><span class="t-str">Fetch PRD from this URL <a href="https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44432064526/PRD+Dining+Cash+Back+Web+Expansion+v3" target="_blank" style="color:#aaa;text-decoration:underline;text-underline-offset:3px;">https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44432064526/PRD+Dining+Cash+Back+Web+Expansion+v3</a></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'Fetch PRD from this URL https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44432064526/PRD+Dining+Cash+Back+Web+Expansion+v3')">Copy</button>
+          <pre><span class="t-str typing-text" data-type-text="I want to work on the dining-web project. Here is the PRD:&#10;  https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44435308663/PRD+Dining+Cash+Back+Web+Expansion+v4"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'I want to work on the dining-web project. Here is the PRD:\n  https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44435308663/PRD+Dining+Cash+Back+Web+Expansion+v4')">Copy</button>
         </div>
+        <p style="font-size:.88rem;color:var(--muted);margin-top:.75rem;">Forge picks up the project name, fetches the PRD, extracts business requirements, and then begins asking clarifying questions about any gaps or design decisions.</p>
       `
       },
 
       // ── STEP 4.2 ─────────────────────────────────────────────────
       {
         type: 'substep', num: '4.2', parentId: 'step-4', markComplete: true,
-        title: 'Answer Follow-up Questions', desc: 'Clarify gaps after PRD fetch',
+        title: 'Workshop Shortcut: Auto-Accept All Questions', desc: 'Let Forge apply its own best recommendations',
         content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">After fetching the PRD, Forge asks clarifying questions about gaps. Answer each one to help produce accurate requirements.</p>
-
-        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .4rem;">Question 1 — Restaurant data schema</p>
-        <div class="cmd-block"><pre>Question 1 — Restaurant data schema
-
-The JSON file needs a defined structure. I'd recommend each restaurant object
-contains: id, name, cuisineType, cashBackOffer (e.g. "5% Cash Back"),
-thumbnailUrl, address, lat, lng. Does that cover everything needed for listing
-cards and detail pages, or are there additional fields (e.g. phone, hours,
-website, minimum spend for the offer)?</pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.6rem 0 .3rem;">Answer:</p>
-        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="OK"></span><span class="typing-cursor">▌</span></pre></div>
-
-        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .4rem;">Question 2 — User authentication context</p>
-        <div class="cmd-block"><pre>Question 2 — User authentication context
-
-The PRD mentions "click-through to card-linking page" as a success metric,
-implying users need to be logged in to actually earn cash back. I'd recommend
-the dining listing and detail pages are publicly accessible (no login required
-to browse), but the card-link CTA surfaces a prompt to log in if the user is
-unauthenticated. This maximises discovery while preserving the earning flow.
-Does that match the intended UX, or should the entire dining section require
-authentication?</pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.6rem 0 .3rem;">Answer:</p>
-        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="no auth required"></span><span class="typing-cursor">▌</span></pre></div>
-
-        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .4rem;">Question 3 — Entry point / navigation</p>
-        <div class="cmd-block"><pre>Question 3 — Entry point / navigation
-
-How do users get to the dining section? I'd recommend adding a "Dining" link
-to the existing top-level navigation (alongside Cash Back, Travel, etc.) so
-it's discoverable from any page. Is that the intended entry point, or should
-it be surfaced differently — e.g. a homepage banner, a new category in the
-store directory, or a dedicated marketing landing page that links in?</pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.6rem 0 .3rem;">Answer:</p>
-        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="when user open endpoint /dining"></span><span class="typing-cursor">▌</span></pre></div>
-
-        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .4rem;">Question 4 — Restaurant detail page URL</p>
-        <div class="cmd-block"><pre>Question 4 — Restaurant detail page URL
-
-For the restaurant detail page, I'd recommend the route be /dining/:id — e.g.
-/dining/123 — where id matches the restaurant's id field in the JSON. This
-keeps routing simple and makes deep-linking to a specific restaurant possible.
-Does that work, or should the URL use the restaurant name slug instead (e.g.
-/dining/nobu-los-angeles)?</pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.6rem 0 .3rem;">Answer:</p>
-        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="id is fine"></span><span class="typing-cursor">▌</span></pre></div>
-
-        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .4rem;">Question 5 — "Near me" geolocation behaviour</p>
-        <div class="cmd-block"><pre>Question 5 — "Near me" geolocation behaviour
-
-When the user clicks "near me", the browser will prompt for location
-permission. I'd recommend: if permission is granted, sort the listing by
-distance ascending and show distance on each card; if denied or unavailable,
-show a non-blocking inline message ("Location unavailable — enable location
-access to see distances") and display the listing in default order (no
-distance shown). Does that cover the expected behaviour, or should distance
-be hidden entirely until the user actively enables location?</pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.6rem 0 .3rem;">Answer:</p>
-        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="ok"></span><span class="typing-cursor">▌</span></pre></div>
-
-        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .4rem;">Question 6 — Cash back offer display format</p>
-        <div class="cmd-block"><pre>Question 6 — Cash back offer display format
-
-The PRD says "cash back offer" is displayed on cards and the detail page. I'd
-recommend showing it as a simple percentage string from the data (e.g. "5%
-Cash Back") with no calculation logic — the JSON field is the display value.
-Should the offer also show any minimum spend or expiry info, or is it just the
-offer string for this v1?</pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.6rem 0 .3rem;">Answer:</p>
-        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="sounds good"></span><span class="typing-cursor">▌</span></pre></div>
-
-        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .4rem;">Question 7 — Card-linking CTA on restaurant detail page</p>
-        <div class="cmd-block"><pre>Question 7 — Card-linking CTA on restaurant detail page
-
-The PRD lists "click-through to card-linking page" as a success metric. I'd
-recommend the detail page shows a CTA button — e.g. "Link a Card to Earn Cash
-Back" — that navigates to the existing card-linking page (whatever URL that
-lives at today). Does the card-linking page have a known URL, and should the
-CTA deep-link directly to it, or just link to a general "how it works" page?</pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.6rem 0 .3rem;">Answer:</p>
-        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="for now no need to do anything on this as it is out of scope"></span><span class="typing-cursor">▌</span></pre></div>
-
-        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .4rem;">Question 8 — Search behaviour</p>
-        <div class="cmd-block"><pre>Question 8 — Search behaviour
-
-Client-side name search: I'd recommend a live filter that narrows the listing
-as the user types (no submit button needed), case-insensitive, matching on
-name field only. Should it also match on cuisineType (e.g. typing "Italian"
-surfaces all Italian restaurants), or strictly name only as the PRD states?</pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.6rem 0 .3rem;">Answer:</p>
-        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="ok"></span><span class="typing-cursor">▌</span></pre></div>
-
-        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .4rem;">Question 9 — Default sort order on the listing</p>
-        <div class="cmd-block"><pre>Question 9 — Default sort order on the listing
-
-When "near me" is not active, the listing has no defined sort order yet. I'd
-recommend alphabetical by restaurant name as the default — it's predictable
-and easy to scan. Is alphabetical fine, or should it be a fixed editorial
-order (as-seeded in the JSON)?</pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.6rem 0 .3rem;">Answer:</p>
-        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="ok"></span><span class="typing-cursor">▌</span></pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">After fetching the PRD, Forge asks a series of clarifying questions. Use this follow-up prompt to tell Forge to take its own best recommendation for every question and document it automatically:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="We're in a workshop so let's keep moving — go through all the remaining questions, take your best recommendation for each one, and document them."></span></pre>
+          <button class="copy-btn" onclick="copyText(this,&quot;We're in a workshop so let's keep moving — go through all the remaining questions, take your best recommendation for each one, and document them.&quot;)">Copy</button>
+        </div>
+        <p style="font-size:.88rem;color:var(--muted);margin:.75rem 0 0;">Forge works through all open questions, applies its recommendations, and writes the complete requirements to <code>requirements/business.md</code> and <code>requirements/technical.md</code>.</p>
       `
       },
 
