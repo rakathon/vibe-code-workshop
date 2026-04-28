@@ -2269,13 +2269,14 @@ The shared understanding is written. What next?
       // ── STEP 7 ───────────────────────────────────────────────────
       {
         type: 'step', num: '7', id: 'step-7',
-        title: 'Commit Discovery & Promote', desc: 'Run /forge:commit',
+        title: 'Commit Discovery Artifacts and Promote to Planning', desc: 'Break into tasks and implement',
         content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge needs to commit discovery work and promote the effort to the planning phase before running forge:plan. Forge automatically detects the phase and runs forge:promote first.</p>
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.75rem;">Forge needs to commit discovery work and promote the effort to the planning phase before running forge:plan. Forge automatically detects the phase and runs forge:promote first.</p>
+        <p style="font-size:.88rem;color:var(--muted);margin-bottom:.75rem;">Promote phase sequence: <code>discovery → planning → implementation → verification → review → qa → deployment</code></p>
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run:</p>
         <div class="cmd-block">
-          <pre><span class="t-cmd">/forge:commit</span></pre>
-          <button class="copy-btn" onclick="copyText(this,'/forge:commit')">Copy</button>
+          <pre><span class="t-str typing-text" data-type-text="Let's break this into implementation tasks list and then implement and validate it task by task"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Let\'s break this into implementation tasks list and then implement and validate it task by task')">Copy</button>
         </div>
       `
       },
@@ -2298,8 +2299,11 @@ Step 3: Advisory Readiness Checks — discovery
 
 No validation report found. Run forge:validate before advancing out of
 discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .4rem;">Enter:</p>
+        <p style="font-size:.95rem;color:var(--muted);margin:.75rem 0 .3rem;">Enter <strong style="color:var(--dark);">yes</strong> — run validation before promoting.</p>
         <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="yes"></span><span class="typing-cursor">▌</span></pre></div>
+        <div class="success-box" style="margin-top:.75rem;font-size:.82rem;">
+          <strong>Tip</strong> — run validation explicitly at any time: If you want to validate discovery artifacts before this point, type <em>"I want you to validate the discovery artifacts"</em> in Claude Code. This is optional in the workshop but useful for a real project.
+        </div>
       `
       },
 
@@ -2309,10 +2313,29 @@ discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
         title: 'Validation Result', desc: 'Forge runs forge:validate',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge runs forge:validate and reports the result:</p>
-        <div class="cmd-block"><pre>Result: <span class="t-key">PASS WITH CONCERNS</span> — all BRs covered, TR-9 (test coverage spec) has
-no dedicated spec artifact (suggestion only, not a blocker).
+        <div class="cmd-block"><pre><span class="t-flag">Skill(forge:validate)</span>
+  <span class="t-str">⎿  Successfully loaded skill</span>
 
-Forge records the result in .state.json and commits it automatically — no action needed.</pre></div>
+<span class="t-key">⏺ Agent(forge:validate worker for dining-experience-for-web)</span>
+  <span class="t-str">⎿  Done (6 tool uses · 27.5k tokens · 57s)</span>
+  <span class="t-cmt">(ctrl+o to expand)</span></pre></div>
+        <p style="font-size:.88rem;color:var(--muted);margin:.75rem 0 .5rem;">Forge records the result report at <code>.forge/efforts/dining-experience-for-web/validation/report.md</code> and commits it automatically — no action needed. When you press <kbd style="background:#222;border:1px solid #555;border-radius:3px;padding:1px 5px;font-size:.78rem;">ctrl+o</kbd> it will show you the validation agent results.</p>
+        <div class="cmd-block" style="margin-top:.5rem;"><pre>       Validation complete. Here is a summary:
+
+       Validation result: <span class="t-key">PASS</span>
+
+       All 12 BRs and 13 TRs are fully covered by the single spec artifact spec/ui-spec.md:
+
+       - Every business requirement (empty prompt state, autocomplete, card grid, search,
+         filter, sort, Near Me, modal, Link Offer, Get Directions, error states, contextual
+         heading) has explicit coverage in the UI spec's page layout, states, and component sections.
+       - Every technical requirement (stack/component library, proxy endpoint, geocoding route,
+         all-the-cities, Haversine distance, image constraints, runtime sort, session-scoped
+         state, link security, geolocation API check, client-side filter, error messages,
+         page route) is addressed in the UI spec.
+       - No API, storage, or messaging specs are present — targeted standards compliance
+         checks were not applicable.
+       - No ADRs are present — ADR quality check was not applicable.</pre></div>
       `
       },
 
@@ -2322,16 +2345,21 @@ Forge records the result in .state.json and commits it automatically — no acti
         title: 'Confirm Promotion to Planning', desc: 'Advance to the planning phase',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge presents the final readiness summary and asks for confirmation to advance:</p>
-        <div class="cmd-block"><pre>Advance discovery -> planning for dining-experience-on-web-for-rakutencom?
+        <div class="success-box" style="margin-bottom:.75rem;font-size:.82rem;">If Claude stops after the validation results, type <strong>continue</strong> to resume.</div>
+        <div class="cmd-block"><pre>Validation complete. Result: <span class="t-key">PASS</span>
 
-  discovery:  <span class="t-str">+</span> requirements/business.md present
-              <span class="t-str">+</span> requirements/technical.md present
-              <span class="t-str">+</span> spec/ui-spec.md present
-              <span class="t-str">+</span> validation/report.md present (PASS WITH CONCERNS)
-  planning:   <span class="t-cmt">-</span> plan/tasks.md absent (will be created by forge:plan)
+  Now resuming forge:promote — confirming promotion from discovery → planning:
 
-Proceed? <span class="t-key">(yes/no)</span></pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .4rem;">Enter:</p>
+  Advance discovery → planning for dining-experience-for-web?
+
+  Advisory:
+    <span class="t-str">✓</span> requirements/business.md — present
+    <span class="t-str">✓</span> requirements/technical.md — present
+    <span class="t-str">✓</span> spec/ui-spec.md — present
+    <span class="t-str">✓</span> validation/report.md — PASS
+
+    Proceed? <span class="t-key">(yes/no)</span></pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .4rem;">Enter <strong style="color:var(--dark);">yes</strong> — advance to the planning phase.</p>
         <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="yes"></span><span class="typing-cursor">▌</span></pre></div>
       `
       },
