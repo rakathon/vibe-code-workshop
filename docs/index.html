@@ -2010,8 +2010,8 @@ Next steps:
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Re-evaluates the effort's risk level against the full requirements now that discovery is complete.</p>
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run:</p>
         <div class="cmd-block">
-          <pre><span class="t-cmd">/forge:classify</span></pre>
-          <button class="copy-btn" onclick="copyText(this,'/forge:classify')">Copy</button>
+          <pre><span class="t-str typing-text" data-type-text="Now that we have the full requirements, what risk level is this effort?"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Now that we have the full requirements, what risk level is this effort?')">Copy</button>
         </div>
       `
       },
@@ -2025,20 +2025,33 @@ Next steps:
         <div class="cmd-block">
           <pre>Current classification: <span class="t-str">R2</span> (set at effort creation)
 
-Recommended: <span class="t-key">R3</span>
+  Applying the rubric against the requirements:
 
-Why R3:
-  <span class="t-str">+</span> New UI pages with no backend data model changes (all data is a static JSON file)
-  <span class="t-str">+</span> No external service integration — all logic is client-side
-  <span class="t-str">+</span> No cross-team dependencies — entirely self-contained in this repo
-  <span class="t-str">+</span> Changes limited to a single team's scope
+  ---
+  Recommended: <span class="t-key">R2</span>
 
-Why not R2:
-  <span class="t-cmt">-</span> "New user-facing capability with significant adoption expected" — R2 fires here,
-    but no indicator from the external integration, cross-team dependency, or schema
-    change categories applies.</pre>
+  Why R2:
+    <span class="t-str">✓</span> New user-facing capability with significant adoption expected
+      — brand-new Dining Cash Back page on web; does not exist today
+    <span class="t-str">✓</span> Integration with external services/third-party APIs
+      — feedapi (Rakuten feedapi at api.engager.ecbsn.com) + OpenStreetMap Nominatim for geocoding
+
+  Why not R1:
+    <span class="t-cmt">✗</span> No authentication or session management changes
+    <span class="t-cmt">✗</span> No payment processing or financial data handling
+    <span class="t-cmt">✗</span> No PII collection, storage, or transmission
+    <span class="t-cmt">✗</span> No access control or permission changes
+
+  Why not lower (R3):
+    — R3 would apply if this were a feature addition to an existing capability with
+      no external integrations; but this introduces two new external API dependencies
+      (feedapi + Nominatim), which fires the R2 cross-team/external-integration indicator
+
+  The existing R2 classification is correct. The prior classification and this recommendation agree.
+
+  Confirm R2, or would you like to override?</pre>
         </div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Accept the recommendation — enter <strong style="color:var(--dark);">R3</strong>.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Accept the recommendation or enter <strong style="color:var(--dark);">R2</strong>.</p>
       `
       },
 
