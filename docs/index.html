@@ -1820,22 +1820,15 @@ Commit these files so your team gets the workspace structure:
         desc: 'Quick check before moving on',
         questions: [
           {
-            q: 'Which option do you enter when Forge asks "What best describes this repository?"',
-            opts: ['<code>1</code> — Source code repository', '<code>2</code> — Product repository', '<code>3</code> — Coordination repository', '<code>Skip</code> — not required'],
+            q: 'What does forge:init do?',
+            opts: [
+              'Initializes a repository for the Forge AI-accelerated development framework',
+              'Creates a new GitHub repository',
+              'Installs Claude Code dependencies',
+              'Generates a CLAUDE.md file only'
+            ],
             answer: 0,
-            explain: 'Option 1 (Source code repository) is correct — this is an active Next.js codebase that engineers build and ship.'
-          },
-          {
-            q: 'When Forge detects existing source code and offers brownfield analysis, what should you enter?',
-            opts: ['<code>y</code> — analyze now', '<code>n</code> — skip for now', '<code>skip</code> — run later via forge:discover', 'It does not ask this question'],
-            answer: 1,
-            explain: 'Enter <code>n</code> to skip brownfield analysis for now. You can run it later with <code>forge:discover</code>.'
-          },
-          {
-            q: 'After forge:init completes, what do you commit?',
-            opts: ['Only <code>CLAUDE.md</code>', 'Only <code>.forge/</code> directory', 'Both <code>.forge/</code> and <code>CLAUDE.md</code>', 'Nothing — auto-committed'],
-            answer: 2,
-            explain: 'You commit both: <code>git add .forge/ CLAUDE.md && git commit -m "chore: initialize forge v0.9.0"</code>'
+            explain: '<code>forge:init</code> initializes a repository for the Forge AI-accelerated development framework — setting up the <code>.forge/</code> workspace and <code>CLAUDE.md</code>.'
           }
         ]
       },
