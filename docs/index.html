@@ -1663,8 +1663,8 @@
         <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>/forge:effort</code> registers a new work item inside the <code>.forge/</code> workspace. Each feature, bug fix, or investigation in Forge is tracked as an effort with a title, type (epic, story, task, etc.), risk level, and its own folder for requirements, specs, and plans. This command creates that folder, assigns a unique ID based on the title, creates a dedicated git branch, and commits the scaffold atomically, so the effort is tracked in version control immediately. Run it <strong>once per feature</strong> at the start of work.</p>
         <p style="font-size:.93rem;color:var(--muted);margin-bottom:.6rem;">Type this in Claude Code:</p>
         <div class="cmd-block">
-          <pre><span class="t-str typing-text" data-type-text="we want to start planning a new project called dining experience for web"></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'we want to start planning a new project called dining experience for web')">Copy</button>
+          <pre><span class="t-str typing-text" data-type-text="let's work on a new project called &quot;dining experience for web&quot;"></span></pre>
+          <button class="copy-btn" data-copy="let's work on a new project called &quot;dining experience for web&quot;" onclick="copyText(this, this.dataset.copy)">Copy</button>
         </div>
         <p style="font-size:.88rem;color:var(--muted);margin:.75rem 0 .5rem;">Forge picks up the project name from your message and skips asking for a title — it will ask all other questions as usual.</p>
         <p style="font-size:.88rem;color:var(--muted);margin:.75rem 0 .4rem;">Claude will respond with something like:</p>
@@ -1699,9 +1699,10 @@
         </div>
         <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter</p>
         <div class="cmd-block" style="margin-top:.4rem;">
-          <pre><span class="t-str typing-text" data-type-text="epic — Forge automatically sets tier to full for epics — no tier prompt"></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'epic — Forge automatically sets tier to full for epics — no tier prompt')">Copy</button>
+          <pre><span class="t-str typing-text" data-type-text="story"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'story')">Copy</button>
         </div>
+        <p style="font-size:.88rem;color:var(--muted);margin-top:.6rem;">Forge automatically sets tier to full for epics — no tier prompt.</p>
       `
       },
 
@@ -1723,9 +1724,10 @@
         </div>
         <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter</p>
         <div class="cmd-block" style="margin-top:.4rem;">
-          <pre><span class="t-str typing-text" data-type-text="R2 — this is a core feature integrating with existing external Dining APIs"></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'R2 — this is a core feature integrating with existing external Dining APIs')">Copy</button>
+          <pre><span class="t-str typing-text" data-type-text="R2"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'R2')">Copy</button>
         </div>
+        <p style="font-size:.88rem;color:var(--muted);margin-top:.6rem;">this is a core feature integrating with existing external Dining APIs.</p>
       `
       },
 
@@ -1790,9 +1792,10 @@ This command requires approval
         </div>
         <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select</p>
         <div class="cmd-block" style="margin-top:.4rem;">
-          <pre><span class="t-str typing-text" data-type-text="1. Yes — allow Forge to create the working branch feat/dining-experience-on-web"></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'1. Yes — allow Forge to create the working branch feat/dining-experience-on-web')">Copy</button>
+          <pre><span class="t-str typing-text" data-type-text="Yes"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Yes')">Copy</button>
         </div>
+        <p style="font-size:.88rem;color:var(--muted);margin-top:.6rem;">allow Forge to create the working branch <code>feat/dining-experience-on-web</code>.</p>
       `
       },
 
@@ -1816,9 +1819,10 @@ This command requires approval
         </div>
         <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select</p>
         <div class="cmd-block" style="margin-top:.4rem;">
-          <pre><span class="t-str typing-text" data-type-text="1. Yes — commit the effort scaffold to your local branch"></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'1. Yes — commit the effort scaffold to your local branch')">Copy</button>
+          <pre><span class="t-str typing-text" data-type-text="Yes"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Yes')">Copy</button>
         </div>
+        <p style="font-size:.88rem;color:var(--muted);margin-top:.6rem;">commit the effort scaffold to your local branch.</p>
       `
       },
 
