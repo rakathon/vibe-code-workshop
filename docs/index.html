@@ -1770,7 +1770,7 @@
 
       // ── STEP 3.4 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '2.3', parentId: 'step-2',
+        type: 'substep', num: '2.3', parentId: 'step-2', markComplete: true,
         title: 'Jira Association', desc: 'Link or skip a Jira ticket',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will attempt to check Atlassian authentication and prompt:</p>
@@ -1808,64 +1808,9 @@
       `
       },
 
-      // ── STEP 3.5 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '2.4', parentId: 'step-2',
-        title: 'Allow Branch Creation', desc: 'Approve the git checkout',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge derives the branch name from the effort title and prompts:</p>
-        <div class="cmd-block">
-          <pre><span class="t-key">Bash command</span>
-
-  git checkout -b feat/dining-experience-on-web
-  <span class="t-cmt">Create working branch for the effort</span>
-
-This command requires approval
-
-<span class="t-key">Do you want to proceed?</span>
-  <span class="t-str">1.</span> Yes
-  <span class="t-str">2.</span> Yes, and don't ask again for: git checkout *
-  <span class="t-str">3.</span> No</pre>
-        </div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select</p>
-        <div class="cmd-block" style="margin-top:.4rem;">
-          <pre><span class="t-str typing-text" data-type-text="Yes"></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'Yes')">Copy</button>
-        </div>
-        <p style="font-size:.88rem;color:var(--muted);margin-top:.6rem;">allow Forge to create the working branch <code>feat/dining-experience-on-web</code>.</p>
-      `
-      },
-
-      // ── STEP 3.6 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '2.5', parentId: 'step-2',
-        title: 'Allow Effort Scaffold Commit', desc: 'Approve the git commit',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge stages and commits the new effort directory atomically:</p>
-        <div class="cmd-block">
-          <pre><span class="t-key">Bash command</span>
-
-  git add .forge/efforts/dining-experience-on-web/ .forge/efforts/README.md \
-    &amp;&amp; git commit -m "chore(dining-experience-on-web): scaffold dining experience on web effort"
-  <span class="t-cmt">Stage and commit effort scaffold</span>
-
-<span class="t-key">Do you want to proceed?</span>
-  <span class="t-str">1.</span> Yes
-  <span class="t-str">2.</span> Yes, and don't ask again for git add and git commit commands in this project
-  <span class="t-str">3.</span> No</pre>
-        </div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select</p>
-        <div class="cmd-block" style="margin-top:.4rem;">
-          <pre><span class="t-str typing-text" data-type-text="Yes"></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'Yes')">Copy</button>
-        </div>
-        <p style="font-size:.88rem;color:var(--muted);margin-top:.6rem;">commit the effort scaffold to your local branch.</p>
-      `
-      },
-
       // ── STEP 3.7 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '2.6', parentId: 'step-2', markComplete: true,
+        type: 'substep', num: '2.4', parentId: 'step-2',
         title: 'Effort Creation Complete', desc: 'Your work effort is ready',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will confirm the active effort and print a summary:</p>
