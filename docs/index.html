@@ -135,6 +135,18 @@
       min-width: 120px;
     }
 
+    .h-pill.reset-btn {
+      cursor: pointer;
+      background: rgba(239, 68, 68, .18);
+      border-color: rgba(239, 68, 68, .4);
+      color: #fca5a5;
+      transition: background .2s, border-color .2s;
+    }
+    .h-pill.reset-btn:hover {
+      background: rgba(239, 68, 68, .32);
+      border-color: rgba(239, 68, 68, .65);
+    }
+
     .progress-bar-wrap {
       position: absolute;
       bottom: 0;
@@ -1522,6 +1534,7 @@
     <div class="header-right">
       <div class="h-pill">Step <span id="cur-slide">1</span> / <span id="tot-slides">—</span></div>
       <div class="h-pill progress-pill">Progress: <span id="progress-pct">0%</span></div>
+      <div class="h-pill reset-btn" onclick="resetProgress()">↺ Reset</div>
     </div>
     <div class="progress-bar-wrap">
       <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
@@ -2217,6 +2230,21 @@ Next steps:
     function saveDone() { localStorage.setItem('lnl_done', JSON.stringify([...doneSet])); }
     function saveQuiz() { localStorage.setItem('lnl_quiz', JSON.stringify(quizAnswers)); }
     function saveReached() { localStorage.setItem('lnl_reached', maxReached); }
+
+    function resetProgress() {
+      if (!confirm('Reset all progress? This cannot be undone.')) return;
+      localStorage.removeItem('lnl_done');
+      localStorage.removeItem('lnl_quiz');
+      localStorage.removeItem('lnl_reached');
+      doneSet = new Set();
+      quizAnswers = {};
+      maxReached = 0;
+      slides.forEach((_, i) => {
+        document.getElementById('sb-' + i)?.classList.remove('done');
+      });
+      updateSidebarLocks();
+      goTo(0);
+    }
 
     // ═══════════════════════════════════════════════════════════════
     // BUILD
