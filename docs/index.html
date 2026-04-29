@@ -388,6 +388,14 @@
       border-radius: 2px;
     }
 
+    .sb-item.knowledge .sb-dot {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fcd34d;
+      font-size: .95rem;
+    }
+    .sb-item.knowledge .sb-label { color: #92400e; }
+
     /* Locked sidebar items */
     .sb-item.locked {
       opacity: .3;
@@ -743,6 +751,11 @@
       font-weight: 800;
       color: #fff;
       box-shadow: 0 4px 12px rgba(0, 0, 0, .2);
+    }
+    .kb-badge {
+      background: #fef3c7;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, .25);
+      font-size: 1.3rem;
     }
 
     .step-title h2 {
@@ -1655,6 +1668,30 @@
       `
       },
 
+      // ── KNOWLEDGE: forge:init ─────────────────────────────────────
+      {
+        type: 'knowledge', id: 'kb-forge-init',
+        title: 'Knowledge Base — Initialize Forge',
+        desc: 'What forge:init does and when to use it',
+        content: `
+        <p style="font-size:.95rem;color:var(--muted);line-height:1.8;margin-bottom:1rem;"><code>forge:init</code> sets up the <code>.forge/</code> workspace in a repository. This folder holds everything related to the feature lifecycle — requirements, architecture decisions, UI specs, and task plans — so the whole team and the AI are working from the same shared context. It also creates a <code>CLAUDE.md</code> file so Claude Code understands the repository structure from the start. You run it <strong>once per repository</strong>, not once per feature.</p>
+        <p style="font-size:.9rem;font-weight:700;color:var(--dark);margin-bottom:.5rem;">When you need it:</p>
+        <ul style="padding-left:1.2rem;margin-bottom:1rem;">
+          <li style="font-size:.88rem;color:var(--muted);line-height:1.8;"><strong style="color:var(--dark);">Greenfield repo</strong> — a brand new repository with no <code>.forge/</code> folder yet</li>
+          <li style="font-size:.88rem;color:var(--muted);line-height:1.8;"><strong style="color:var(--dark);">Brownfield repo</strong> — an existing codebase you want to bring under Forge for the first time</li>
+        </ul>
+        <p style="font-size:.9rem;font-weight:700;color:var(--dark);margin-bottom:.5rem;">When you don't need it:</p>
+        <ul style="padding-left:1.2rem;margin-bottom:1.25rem;">
+          <li style="font-size:.88rem;color:var(--muted);line-height:1.8;">The repository already has a <code>.forge/</code> folder — Forge is already initialized <em>(this workshop repo falls into this category)</em></li>
+        </ul>
+        <p style="font-size:.9rem;font-weight:700;color:var(--dark);margin-bottom:.5rem;">Open Claude Code in the repo root and run:</p>
+        <div class="cmd-block">
+          <pre><span class="t-cmd typing-text" data-type-text="/forge:init"></span><span class="typing-cursor">▌</span></pre>
+          <button class="copy-btn" onclick="copyText(this,'/forge:init')">Copy</button>
+        </div>
+        `
+      },
+
       // ── STEP 2 ───────────────────────────────────────────────────
       {
         type: 'step', num: '2', id: 'step-2',
@@ -2179,10 +2216,12 @@ Next steps:
         if (s.type === 'welcome') { dotContent = '★'; labelText = 'Welcome'; subText = 'Start here'; }
         else if (s.type === 'complete') { dotContent = '✦'; labelText = 'All Done'; subText = 'Certificate'; }
         else if (s.type === 'quiz') { dotContent = '?'; labelText = 'Checkpoint'; subText = s.title; }
+        else if (s.type === 'knowledge') { dotContent = '💡'; labelText = s.title; subText = s.desc || ''; }
         else if (s.type === 'substep') { dotContent = s.num; labelText = s.num + ' — ' + s.title; subText = s.desc || ''; isSubstep = true; }
         else { dotContent = s.num; labelText = 'Step ' + s.num + (s.optional ? ' <span style="font-size:.6rem;opacity:.55;font-weight:400;letter-spacing:.04em;">[optional]</span>' : ''); subText = s.title; }
 
         if (isSubstep) li.classList.add('substep');
+        if (s.type === 'knowledge') li.classList.add('knowledge');
 
         li.innerHTML = `
         <div class="sb-dot"><span class="sb-num">${dotContent}</span></div>
@@ -2309,6 +2348,22 @@ Next steps:
 
       if (s.type === 'quiz') {
         return renderQuiz(s, idx);
+      }
+
+      if (s.type === 'knowledge') {
+        return `<div class="step-slide">
+        <div class="step-header">
+          <div class="step-badge kb-badge">💡</div>
+          <div class="step-title">
+            <h2>${s.title}</h2>
+            <p>${s.desc || ''}</p>
+          </div>
+        </div>
+        ${s.content}
+        <div style="margin-top:1.5rem;text-align:right;">
+          <button class="btn-primary" onclick="nextSlide()">Continue →</button>
+        </div>
+      </div>`;
       }
 
       if (s.type === 'substep') {
