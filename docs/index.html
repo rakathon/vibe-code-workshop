@@ -1997,98 +1997,51 @@ Next steps:
         <p style="font-size:.88rem;color:var(--muted);margin-bottom:.75rem;">Promote phase sequence: <code>discovery → planning → implementation → verification → review → qa → deployment</code></p>
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run:</p>
         <div class="cmd-block">
-          <pre><span class="t-str typing-text" data-type-text="Let's break this into implementation tasks list and then implement and validate it task by task"></span></pre>
-          <button class="copy-btn" data-copy="Let's break this into implementation tasks list and then implement and validate it task by task" onclick="copyText(this, this.dataset.copy)">Copy</button>
+          <pre><span class="t-str typing-text" data-type-text="Generate a plan for this effort — break it into implementation tasks ready for wave-by-wave execution. Implement each task from the plan using subagents in parallel — one task per subagent where tasks are independent. Resolve any dependency issues autonomously without asking."></span><span class="typing-cursor">▌</span>
+<span class="t-muted">  Constraints:</span>
+<span class="t-muted">  - Skip unit, integration — write minimum required e2e tests only</span>
+<span class="t-muted">  - Open Page when it is ready to display without waiting for all test cases to be passed.</span>
+<span class="t-muted">  - Use Rakuten UI kit design tokens and standards only</span>
+<span class="t-muted">  - Open webpage it in browser as it get ready</span></pre>
+          <button class="copy-btn" data-copy="Generate a plan for this effort — break it into implementation tasks ready for wave-by-wave execution. Implement each task from the plan using subagents in parallel — one task per subagent where tasks are independent. Resolve any dependency issues autonomously without asking.&#10;  Constraints:&#10;  - Skip unit, integration — write minimum required e2e tests only&#10;  - Open Page when it is ready to display without waiting for all test cases to be passed.&#10;  - Use Rakuten UI kit design tokens and standards only&#10;  - Open webpage it in browser as it get ready" onclick="copyText(this, this.dataset.copy)">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Note:</strong> This step will load <code>forge:plan</code> skill. If it doesn't, add <code>/forge:plan</code> as a prefix in your prompt.
         </div>
       `
       },
 
       // ── STEP 7.1 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '5.1', parentId: 'step-5',
-        title: 'Forge Promotes to Planning First', desc: 'Readiness check on discovery artifacts',
+        type: 'substep', num: '5.1', parentId: 'step-5', markComplete: true,
+        title: 'Forge Generates Plan', desc: 'Tasks written, effort promoted to implementation phase',
         content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge detects <code>currentPhase = "discovery"</code> and invokes forge:promote to advance before planning can begin. It runs a readiness check on all discovery artifacts:</p>
-        <div class="cmd-block"><pre>currentPhase = "discovery" — need to promote to planning first. Invoking forge:promote.
+        <div class="cmd-block"><pre><span class="t-bullet">⏺</span> <span class="t-tool">Skill(forge:plan)</span>
+  <span class="t-muted">⎿  Successfully loaded skill</span>
 
-Step 3: Advisory Readiness Checks — discovery
+<span class="t-bullet">⏺</span> Reading all artifacts in parallel to build the plan.
+  <span class="t-muted">···</span>
 
-  <span class="t-str">-</span> requirements/business.md  — present (BR-1 through BR-5)
-  <span class="t-str">-</span> requirements/technical.md — present (TR-1 through TR-10)
-  <span class="t-str">-</span> spec/ui-spec.md           — present
-  <span class="t-cmt">-</span> spec/api/, spec/storage/, spec/messaging/ — absent (expected — no backend)
-  <span class="t-cmt">-</span> validation/report.md      — absent
+<span class="t-muted">···</span>
 
-No validation report found. Run forge:validate before advancing out of
-discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.75rem 0 .3rem;">Enter</p>
-        <div class="cmd-block" style="margin-top:.4rem;">
-          <pre><span class="t-str typing-text" data-type-text="yes"></span><span class="typing-cursor">▌</span></pre>
-          <button class="copy-btn" onclick="copyText(this,'yes')">Copy</button>
-        </div>
-        <div class="success-box" style="margin-top:.75rem;font-size:.82rem;">
-          <strong>Tip</strong> — run validation explicitly at any time: If you want to validate discovery artifacts before this point, type <em>"I want you to validate the discovery artifacts"</em> in Claude Code. This is optional in the workshop but useful for a real project.
-        </div>
-      `
-      },
+  Plan written: .forge/efforts/dining-experience-for-web/plan/tasks.md
+  Tasks:        <span class="t-key">17 tasks across 6 waves</span>
 
-      // ── STEP 7.2 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '5.2', parentId: 'step-5',
-        title: 'Validation Result', desc: 'Forge runs forge:validate',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge runs forge:validate and reports the result:</p>
-        <div class="cmd-block"><pre><span class="t-flag">Skill(forge:validate)</span>
-  <span class="t-str">⎿  Successfully loaded skill</span>
+  Wave summary:
 
-<span class="t-key">⏺ Agent(forge:validate worker for dining-experience-for-web)</span>
-  <span class="t-str">⎿  Done (6 tool uses · 27.5k tokens · 57s)</span>
-  <span class="t-cmt">(ctrl+o to expand)</span></pre></div>
-        <p style="font-size:.88rem;color:var(--muted);margin:.75rem 0 .5rem;">Forge records the result report at <code>.forge/efforts/dining-experience-for-web/validation/report.md</code> and commits it automatically — no action needed. When you press <kbd style="background:#222;border:1px solid #555;border-radius:3px;padding:1px 5px;font-size:.78rem;">ctrl+o</kbd> it will show you the validation agent results.</p>
-        <div class="cmd-block" style="margin-top:.5rem;"><pre>       Validation complete. Here is a summary:
+  ┌──────┬──────────────┬────────────────────────────────────────────────────────────────────────────┐
+  │ Wave │    Tasks     │                              What gets built                               │
+  ├──────┼──────────────┼────────────────────────────────────────────────────────────────────────────┤
+  │ 1    │ TASK-001–003 │ Dependencies, types, utility functions (Haversine, ctaId parser)           │
+  ├──────┼──────────────┼────────────────────────────────────────────────────────────────────────────┤
+  │      │     ···      │                                   ···                                      │
+  ├──────┼──────────────┼────────────────────────────────────────────────────────────────────────────┤
+  │ 6    │ TASK-017     │ Playwright E2E integration tests                                           │
+  └──────┴──────────────┴────────────────────────────────────────────────────────────────────────────┘
 
-       Validation result: <span class="t-key">PASS</span>
+  Wave 1–2 tasks can start immediately. TASK-008 (feedapi inspection) is the only checkpoint.
 
-       All 12 BRs and 13 TRs are fully covered by the single spec artifact spec/ui-spec.md:
-
-       - Every business requirement (empty prompt state, autocomplete, card grid, search,
-         filter, sort, Near Me, modal, Link Offer, Get Directions, error states, contextual
-         heading) has explicit coverage in the UI spec's page layout, states, and component sections.
-       - Every technical requirement (stack/component library, proxy endpoint, geocoding route,
-         all-the-cities, Haversine distance, image constraints, runtime sort, session-scoped
-         state, link security, geolocation API check, client-side filter, error messages,
-         page route) is addressed in the UI spec.
-       - No API, storage, or messaging specs are present — targeted standards compliance
-         checks were not applicable.
-       - No ADRs are present — ADR quality check was not applicable.</pre></div>
-      `
-      },
-
-      // ── STEP 7.3 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '5.3', parentId: 'step-5', markComplete: true,
-        title: 'Confirm Promotion to Planning', desc: 'Advance to the planning phase',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge presents the final readiness summary and asks for confirmation to advance:</p>
-        <div class="success-box" style="margin-bottom:.75rem;font-size:.82rem;">If Claude stops after the validation results, type <strong>continue</strong> to resume.</div>
-        <div class="cmd-block"><pre>Validation complete. Result: <span class="t-key">PASS</span>
-
-  Now resuming forge:promote — confirming promotion from discovery → planning:
-
-  Advance discovery → planning for dining-experience-for-web?
-
-  Advisory:
-    <span class="t-str">✓</span> requirements/business.md — present
-    <span class="t-str">✓</span> requirements/technical.md — present
-    <span class="t-str">✓</span> spec/ui-spec.md — present
-    <span class="t-str">✓</span> validation/report.md — PASS
-
-    Proceed? <span class="t-key">(yes/no)</span></pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .4rem;">Enter</p>
-        <div class="cmd-block" style="margin-top:.4rem;">
-          <pre><span class="t-str typing-text" data-type-text="yes"></span><span class="typing-cursor">▌</span></pre>
-          <button class="copy-btn" onclick="copyText(this,'yes')">Copy</button>
-        </div>
+  Begin with: forge:implement dining-experience-for-web TASK-001</pre></div>
       `
       },
 
