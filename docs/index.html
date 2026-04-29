@@ -1541,8 +1541,8 @@
     const SECTIONS = [
       { label: 'Section 1: Getting Started', slideIds: ['step-1'] },
       { label: 'Section 2: Create a Forge Work Effort', slideIds: ['step-2'] },
-      { label: 'Section 3: Elaborate Requirements', slideIds: ['step-3', 'step-4'] },
-      { label: 'Section 4: Promote & Implement', slideIds: ['step-5', 'step-6', 'step-7', 'step-8'] },
+      { label: 'Section 3: Elaborate Requirements', slideIds: ['step-3'] },
+      { label: 'Section 4: Promote & Implement', slideIds: ['step-4', 'step-5', 'step-6', 'step-7'] },
     ];
 
     // Sub-steps that live under a parent step (displayed indented + grayed in sidebar)
@@ -1878,10 +1878,13 @@ Next steps:
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code, naming the project first and then attaching the PRD URL:</p>
         <div class="cmd-block">
-          <pre><span class="t-str typing-text" data-type-text="I want to work on the dining-web project. Here is the PRD:&#10;  https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44435308663/PRD+Dining+Cash+Back+Web+Expansion+v4"></span></pre>
-          <button class="copy-btn" data-copy="I want to work on the dining-web project. Here is the PRD:&#10;  https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44435308663/PRD+Dining+Cash+Back+Web+Expansion+v4" onclick="copyText(this, this.dataset.copy)">Copy</button>
+          <pre><span class="t-str typing-text" data-type-text="Let's understand this project for the dining-web effort. Here is the PRD to use as context:&#10;  https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44435308663/PRD+Dining+Cash+Back+Web+Expansion+v5"></span></pre>
+          <button class="copy-btn" data-copy="Let's understand this project for the dining-web effort. Here is the PRD to use as context:&#10;  https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44435308663/PRD+Dining+Cash+Back+Web+Expansion+v5" onclick="copyText(this, this.dataset.copy)">Copy</button>
         </div>
         <p style="font-size:.88rem;color:var(--muted);margin-top:.75rem;">Forge picks up the project name, fetches the PRD, extracts business requirements, and then begins asking clarifying questions about any gaps or design decisions.</p>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Note:</strong> This step will load the <code>forge:elaborate</code> skill. If it doesn't, add <code>/forge:elaborate</code> as a prefix to your prompt.
+        </div>
       `
       },
 
@@ -1892,73 +1895,16 @@ Next steps:
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">After fetching the PRD, Forge asks a series of clarifying questions. Use this follow-up prompt to tell Forge to take its own best recommendation for every question and document it automatically:</p>
         <div class="cmd-block">
-          <pre><span class="t-str typing-text" data-type-text="We're in a workshop so let's keep moving — go through all the remaining questions, take your best recommendation for each one, and document them."></span></pre>
-          <button class="copy-btn" onclick="copyText(this,&quot;We're in a workshop so let's keep moving — go through all the remaining questions, take your best recommendation for each one, and document them.&quot;)">Copy</button>
+          <pre><span class="t-str typing-text" data-type-text="We're on tight timeline so let's keep moving — go through all the remaining questions, take your best recommendation for each one, and document them."></span></pre>
+          <button class="copy-btn" data-copy="We're on tight timeline so let's keep moving — go through all the remaining questions, take your best recommendation for each one, and document them." onclick="copyText(this, this.dataset.copy)">Copy</button>
         </div>
         <p style="font-size:.88rem;color:var(--muted);margin:.75rem 0 0;">Forge works through all open questions, applies its recommendations, and writes the complete requirements to <code>requirements/business.md</code> and <code>requirements/technical.md</code>.</p>
       `
       },
 
-      // ── STEP 5 ───────────────────────────────────────────────────
-      {
-        type: 'step', num: '4', id: 'step-4',
-        title: 'Classify Risk', desc: 'Run /forge:classify',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Re-evaluates the effort's risk level against the full requirements now that discovery is complete.</p>
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run:</p>
-        <div class="cmd-block">
-          <pre><span class="t-str typing-text" data-type-text="Now that we have the full requirements, what risk level is this effort?"></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'Now that we have the full requirements, what risk level is this effort?')">Copy</button>
-        </div>
-      `
-      },
-
-      // ── STEP 5.1 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '4.1', parentId: 'step-4', markComplete: true,
-        title: 'Review Classification Output', desc: 'Accept the recommended risk level',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge evaluates all requirements and proposes a risk level. You will see output like this:</p>
-        <div class="cmd-block">
-          <pre>Current classification: <span class="t-str">R2</span> (set at effort creation)
-
-  Applying the rubric against the requirements:
-
-  ---
-  Recommended: <span class="t-key">R2</span>
-
-  Why R2:
-    <span class="t-str">✓</span> New user-facing capability with significant adoption expected
-      — brand-new Dining Cash Back page on web; does not exist today
-    <span class="t-str">✓</span> Integration with external services/third-party APIs
-      — feedapi (Rakuten feedapi at api.engager.ecbsn.com) + OpenStreetMap Nominatim for geocoding
-
-  Why not R1:
-    <span class="t-cmt">✗</span> No authentication or session management changes
-    <span class="t-cmt">✗</span> No payment processing or financial data handling
-    <span class="t-cmt">✗</span> No PII collection, storage, or transmission
-    <span class="t-cmt">✗</span> No access control or permission changes
-
-  Why not lower (R3):
-    — R3 would apply if this were a feature addition to an existing capability with
-      no external integrations; but this introduces two new external API dependencies
-      (feedapi + Nominatim), which fires the R2 cross-team/external-integration indicator
-
-  The existing R2 classification is correct. The prior classification and this recommendation agree.
-
-  Confirm R2, or would you like to override?</pre>
-        </div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter</p>
-        <div class="cmd-block" style="margin-top:.4rem;">
-          <pre><span class="t-str typing-text" data-type-text="R2"></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'R2')">Copy</button>
-        </div>
-      `
-      },
-
       // ── STEP 6 ───────────────────────────────────────────────────
       {
-        type: 'step', num: '5', id: 'step-5',
+        type: 'step', num: '4', id: 'step-4',
         title: 'Design the UI', desc: 'Run /forge:ui-design',
         content: `
         <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>/forge:ui-design</code> generates a UI spec from the business and technical requirements — defining page layouts, component structure, and interaction patterns. You may also be able to bring your Figma design layout if you have a Figma account and MCP configured.</p>
@@ -1972,7 +1918,7 @@ Next steps:
 
       // ── STEP 6.1 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '5.1', parentId: 'step-5',
+        type: 'substep', num: '4.1', parentId: 'step-4',
         title: 'Provide Context', desc: 'Point Forge at your requirements',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will ask what you are building and what is driving it:</p>
@@ -1987,7 +1933,7 @@ Next steps:
 
       // ── STEP 6.2 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '5.2', parentId: 'step-5',
+        type: 'substep', num: '4.2', parentId: 'step-4',
         title: 'Confirm Scope and Mode', desc: 'Review what Forge inferred',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge reads the requirements and confirms scope before proceeding:</p>
@@ -2026,7 +1972,7 @@ Are there any additional states I'm missing?</pre></div>
 
       // ── STEP 6.3 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '5.3', parentId: 'step-5',
+        type: 'substep', num: '4.3', parentId: 'step-4',
         title: 'Confirm Page States and Accessibility', desc: 'Approve the confirmed states list',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">After confirming UIKit compatibility, Forge presents the full confirmed state list and asks about accessibility requirements:</p>
@@ -2052,7 +1998,7 @@ or screen reader text for the cash back offer badge?</pre></div>
 
       // ── STEP 6.4 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '5.4', parentId: 'step-5',
+        type: 'substep', num: '4.4', parentId: 'step-4',
         title: 'Confirm Out of Scope', desc: 'Approve the boundary list',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge confirms the out-of-scope boundary before writing the spec:</p>
@@ -2077,7 +2023,7 @@ Does that list look right, or anything to add/remove?</pre></div>
 
       // ── STEP 6.5 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '5.5', parentId: 'step-5',
+        type: 'substep', num: '4.5', parentId: 'step-4',
         title: 'Approve Final Summary Before Spec Is Written', desc: 'Confirm before spec is written',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge presents a complete summary of everything it has gathered and asks for final approval before writing the spec:</p>
@@ -2108,7 +2054,7 @@ Does this look right? Anything to change before I write the spec?</pre></div>
 
       // ── STEP 6.6 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '5.6', parentId: 'step-5', markComplete: true,
+        type: 'substep', num: '4.6', parentId: 'step-4', markComplete: true,
         title: 'Spec Written — Choose Next Step', desc: 'Trigger commit and plan',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge writes the spec to <code>.forge/efforts/dining-experience-on-web/spec/ui-spec.md</code> and presents the next step options:</p>
@@ -2132,7 +2078,7 @@ The shared understanding is written. What next?
 
       // ── STEP 7 ───────────────────────────────────────────────────
       {
-        type: 'step', num: '6', id: 'step-6',
+        type: 'step', num: '5', id: 'step-5',
         title: 'Commit Discovery Artifacts and Promote to Planning', desc: 'Break into tasks and implement',
         content: `
         <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.75rem;">Forge needs to commit discovery work and promote the effort to the planning phase before running forge:plan. Forge automatically detects the phase and runs forge:promote first.</p>
@@ -2147,7 +2093,7 @@ The shared understanding is written. What next?
 
       // ── STEP 7.1 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '6.1', parentId: 'step-6',
+        type: 'substep', num: '5.1', parentId: 'step-5',
         title: 'Forge Promotes to Planning First', desc: 'Readiness check on discovery artifacts',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge detects <code>currentPhase = "discovery"</code> and invokes forge:promote to advance before planning can begin. It runs a readiness check on all discovery artifacts:</p>
@@ -2176,7 +2122,7 @@ discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
 
       // ── STEP 7.2 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '6.2', parentId: 'step-6',
+        type: 'substep', num: '5.2', parentId: 'step-5',
         title: 'Validation Result', desc: 'Forge runs forge:validate',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge runs forge:validate and reports the result:</p>
@@ -2208,7 +2154,7 @@ discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
 
       // ── STEP 7.3 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '6.3', parentId: 'step-6', markComplete: true,
+        type: 'substep', num: '5.3', parentId: 'step-5', markComplete: true,
         title: 'Confirm Promotion to Planning', desc: 'Advance to the planning phase',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge presents the final readiness summary and asks for confirmation to advance:</p>
@@ -2236,7 +2182,7 @@ discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
 
       // ── STEP 8 ───────────────────────────────────────────────────
       {
-        type: 'step', num: '7', id: 'step-7',
+        type: 'step', num: '6', id: 'step-6',
         title: 'Actual Plan Implementation', desc: 'Tasks broken into sequenced waves',
         content: `
         <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.75rem;">Breaks the effort into concrete implementation tasks organized into sequenced waves.</p>
@@ -2289,7 +2235,7 @@ discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
 
       // ── STEP 8.1 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '7.1', parentId: 'step-7', markComplete: true,
+        type: 'substep', num: '6.1', parentId: 'step-6', markComplete: true,
         title: 'Plan Complete', desc: 'Tasks written, effort in implementation phase',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge writes the task plan and promotes the effort to the implementation phase:</p>
@@ -2329,7 +2275,7 @@ discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
 
       // ── STEP 9 ───────────────────────────────────────────────────
       {
-        type: 'step', num: '8', id: 'step-8',
+        type: 'step', num: '7', id: 'step-7',
         title: 'Implement', desc: 'forge:plan → forge:ui → TDD mode, task by task',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Executes the planned tasks wave by wave. forge:plan detects the effort's UI spec and delegates to forge:ui, which loads UIKit guides and applies TDD mode (write tests first, confirm red, then implement).</p>
@@ -2372,7 +2318,7 @@ discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
 
       // ── STEP 9.1 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '8.1', parentId: 'step-8',
+        type: 'substep', num: '7.1', parentId: 'step-7',
         title: 'TASK-001: Restaurant JSON Data and Page Scaffold', desc: 'Wave 1',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge detects no forge:implement skill and automatically loads forge:ui — the correct skill for frontend work. It loads UIKit implementation guides before writing any code.</p>
@@ -2387,7 +2333,7 @@ discovery? <span class="t-key">(yes/no/skip)</span></pre></div>
 
       // ── STEP 9.2 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '8.2', parentId: 'step-8',
+        type: 'substep', num: '7.2', parentId: 'step-7',
         title: 'TASK-002, 003, 004: Wave 1 Utilities and Hook', desc: 'Parallel, TDD',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Wave 1 tasks are independent — Forge implements all three in parallel after checking the test setup. TDD mode is active: tests are written first, confirmed to fail for the right reason, then the implementation is added.</p>
@@ -2413,7 +2359,7 @@ src/hooks/useGeolocation.test.ts — 4 unit tests</pre></div>
 
       // ── STEP 9.3 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '8.3', parentId: 'step-8',
+        type: 'substep', num: '7.3', parentId: 'step-7',
         title: 'All Tasks Complete', desc: '24/24 tests pass · 6 suites · 0 failures',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">All tasks complete on branch <code>feat/dining-experience-on-web-for-rakutencom</code>.</p>
@@ -2439,7 +2385,7 @@ src/hooks/useGeolocation.test.ts — 4 unit tests</pre></div>
 
       // ── STEP 9.4 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '8.4', parentId: 'step-8', markComplete: true,
+        type: 'substep', num: '7.4', parentId: 'step-7', markComplete: true,
         title: 'Validate Layout', desc: 'Design tokens, rendering, UX review',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Final validation pass — ask Claude to review the full implementation against Rakuten design standards.</p>
@@ -2453,7 +2399,7 @@ src/hooks/useGeolocation.test.ts — 4 unit tests</pre></div>
       // ── QUIZ 3 ───────────────────────────────────────────────────
       {
         type: 'quiz', id: 'q1',
-        title: 'Checkpoint — Steps 5–8',
+        title: 'Checkpoint — Steps 4–7',
         desc: 'Final check on UI design and implementation',
         questions: [
           {
