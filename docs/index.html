@@ -1542,7 +1542,7 @@
       { label: 'Section 1: Getting Started', slideIds: ['step-1'] },
       { label: 'Section 2: Create a Forge Work Effort', slideIds: ['step-2'] },
       { label: 'Section 3: Elaborate Requirements', slideIds: ['step-3'] },
-      { label: 'Section 4: Promote & Implement', slideIds: ['step-4', 'step-5', 'step-6', 'step-7'] },
+      { label: 'Section 4: Promote & Implement', slideIds: ['step-4', 'step-5', 'step-6'] },
     ];
 
     // Sub-steps that live under a parent step (displayed indented + grayed in sidebar)
@@ -2047,112 +2047,25 @@ Next steps:
 
       // ── STEP 8 ───────────────────────────────────────────────────
       {
-        type: 'step', num: '6', id: 'step-6',
-        title: 'Actual Plan Implementation', desc: 'Tasks broken into sequenced waves',
+        type: 'step', num: '6', id: 'step-6', markComplete: true,
+        title: 'Implement and Parallel Task Execution', desc: 'Executes planned tasks wave by wave using forge:plan',
         content: `
-        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.75rem;">Breaks the effort into concrete implementation tasks organized into sequenced waves.</p>
-        <div class="cmd-block"><pre><span class="t-key">&gt; Promoted.</span>
-
-  Promoted: <span class="t-str">dining-experience-for-web</span>
-    discovery → approved  (2026-04-28T04:45:20Z)
-  Now in:   <span class="t-key">planning</span>
-
-  Note: approved artifacts remain editable — promotion does not lock them.
-
-  Now resuming forge:plan — phase is planning, effort type is epic. Proceeding to generate the task list.
-
-  I have everything I need. Now generating the full task breakdown.
-
-  Task analysis (internal):
-
-  From the BRs, TRs, and UI spec, the implementation breaks into these logical groups:
-
-  1. Foundation — install deps, set up API routes (proxy + geocode), page scaffold
-  ...
-  ...
-  7. Polish + testing — loading/error states, edge cases, component tests
-
-  Dependency graph → waves:
-  - Wave 1: deps + scaffolding (no dependencies)
-  ...
-  ...
-  - Wave 6: tests + polish (depends on wave 5)
-.
-.
-.
-  <span class="t-flag">Skill(forge:promote)</span>
-  <span class="t-str">⎿  Successfully loaded skill</span>
-
-<span class="t-key">⏺ Bash</span>(grep -c "^### TASK-" .forge/efforts/dining-experience-for-web/plan/tasks.md &amp;&amp; git branch --show-current)
-  <span class="t-str">⎿  15
-     feat/dining-experience-for-web</span>
-
-<span class="t-key">⏺ Gap: [planning] → target: implementation.</span>
-
-  Advisory — planning:
-  - plan/tasks.md — <span class="t-str">✓</span> present (15 tasks)
-
-  Ready to mark planning as approved and advance to implementation? (yes/no)
-
-  <span class="t-key">&gt; yes</span></pre></div>
-      `
-      },
-
-      // ── STEP 8.1 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '6.1', parentId: 'step-6', markComplete: true,
-        title: 'Plan Complete', desc: 'Tasks written, effort in implementation phase',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge writes the task plan and promotes the effort to the implementation phase:</p>
-        <div class="cmd-block"><pre>Promoted: <span class="t-str">dining-experience-for-web</span>
-    planning → approved  (2026-04-28T04:51:01Z)
-  Now in:   <span class="t-key">implementation</span>
-
-  Note: approved artifacts remain editable — promotion does not lock them.
-
-  ---
-  Plan written: .forge/efforts/dining-experience-for-web/plan/tasks.md
-  Tasks:        <span class="t-key">15 tasks across 6 waves</span>
-  Waves:        wave:1 (3), wave:2 (2), wave:3 (4), wave:4 (3), wave:5 (1), wave:6 (2)
-
-  Next:         Begin implementation with forge:implement dining-experience-for-web TASK-001
-
-  The effort is ready for implementation. Here's a summary of what was produced today:
-
-  ┌─────────────────────────────────┬──────────────────────────────────────────────────────────────────────────┐
-  │            Artifact             │                              Location                                    │
-  ├─────────────────────────────────┼──────────────────────────────────────────────────────────────────────────┤
-  │ Business requirements (12 BRs)  │ .forge/efforts/dining-experience-for-web/requirements/business.md        │
-  ├─────────────────────────────────┼──────────────────────────────────────────────────────────────────────────┤
-  │ Technical requirements (13 TRs) │ .forge/efforts/dining-experience-for-web/requirements/technical.md       │
-  ├─────────────────────────────────┼──────────────────────────────────────────────────────────────────────────┤
-  │ User stories                    │ .forge/efforts/dining-experience-for-web/requirements/user-stories.md    │
-  ├─────────────────────────────────┼──────────────────────────────────────────────────────────────────────────┤
-  │ UI spec                         │ .forge/efforts/dining-experience-for-web/spec/ui-spec.md                 │
-  ├─────────────────────────────────┼──────────────────────────────────────────────────────────────────────────┤
-  │ Validation report (PASS)        │ .forge/efforts/dining-experience-for-web/validation/report.md            │
-  ├─────────────────────────────────┼──────────────────────────────────────────────────────────────────────────┤
-  │ Implementation plan (15 tasks)  │ .forge/efforts/dining-experience-for-web/plan/tasks.md                   │
-  └─────────────────────────────────┴──────────────────────────────────────────────────────────────────────────┘</pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">The effort is now in the implementation phase with 15 tasks planned across 6 waves. Proceed to Step 9.</p>
-      `
-      },
-
-      // ── STEP 9 ───────────────────────────────────────────────────
-      {
-        type: 'step', num: '7', id: 'step-7',
-        title: 'Implement', desc: 'forge:plan → forge:ui → TDD mode, task by task',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Executes the planned tasks wave by wave. forge:plan detects the effort's UI spec and delegates to forge:ui, which loads UIKit guides and applies TDD mode (write tests first, confirm red, then implement).</p>
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.75rem;">Executes the planned tasks wave by wave. forge:plan detects the effort's UI spec and delegates to forge:ui.</p>
         <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin-bottom:.5rem;">Run task if it was paused:</p>
         <div class="cmd-block">
-          <pre><span class="t-str typing-text" data-type-text="Continue Implementation for each task by task using forge and Verify and Validate when it is ready give me URL to access"></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'Continue Implementation for each task by task using forge and Verify and Validate when it is ready give me URL to access')">Copy</button>
+          <pre><span class="t-str typing-text" data-type-text="Implement each task from the plan using subagents in parallel — Resolve any dependency issues autonomously or errors without asking further questions."></span><span class="typing-cursor">▌</span>
+<span class="t-muted">  Constraints:</span>
+<span class="t-muted">  - Skip unit, integration and e2e tests</span>
+<span class="t-muted">  - Use Rakuten UI kit design tokens and standards only</span>
+<span class="t-muted">  - Open webpage it in browser as it get ready</span></pre>
+          <button class="copy-btn" data-copy="Implement each task from the plan using subagents in parallel — Resolve any dependency issues autonomously or errors without asking further questions.&#10;  Constraints:&#10;  - Skip unit, integration and e2e tests&#10;  - Use Rakuten UI kit design tokens and standards only&#10;  - Open webpage it in browser as it get ready" onclick="copyText(this, this.dataset.copy)">Copy</button>
         </div>
         <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .5rem;">Progress on:</p>
-        <div class="cmd-block"><pre><span class="t-skill">❯ continue</span>
-
-<span class="t-bullet">⏺</span> The effort is in implementation. Wave 1 tasks are ready to start — and since this is a UI-first effort with a complete
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="continue"></span><span class="typing-cursor">▌</span></pre>
+          <button class="copy-btn" onclick="copyText(this,'continue')">Copy</button>
+        </div>
+        <div class="cmd-block" style="margin-top:.75rem;"><pre><span class="t-bullet">⏺</span> The effort is in implementation. Wave 1 tasks are ready to start — and since this is a UI-first effort with a complete
   ui-spec.md, let me kick off forge:ui to generate the implementation:
 
 <span class="t-bullet">⏺</span> <span class="t-tool">Skill(forge:ui)</span>
@@ -2161,110 +2074,16 @@ Next steps:
   <span class="t-muted">Searched for 1 pattern (ctrl+o to expand)</span>
 
 <span class="t-bullet">⏺</span> Web platform detected. Loading standards and guides now.
+  <span class="t-muted">···</span>
 
-  <span class="t-muted">Read 4 files (ctrl+o to expand)</span>
-
-<span class="t-bullet">⏺</span> Now loading the relevant UI design system guides for a full-page production implementation:
-
-  <span class="t-muted">Read 4 files (ctrl+o to expand)</span>
-
-<span class="t-bullet">⏺</span> Standards loaded. UI spec is already in context. Now let me check the existing codebase structure before generating:
-
-  <span class="t-muted">Searched for 1 pattern, listed 2 directories (ctrl+o to expand)</span>
-
-<span class="t-bullet">⏺</span> Good — src/ based structure with src/pages/ and src/components/. Let me check an existing page for patterns:
-
-  <span class="t-muted">Read 2 files (ctrl+o to expand)</span>
-
-<span class="t-bullet">⏺</span> Good. Source tree: src/pages/, src/components/. Uses @rakuten-rewards/next/app, UIKit imports confirmed. Path alias ~ for
-  src/.</pre></div>
-      `
-      },
-
-      // ── STEP 9.1 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '7.1', parentId: 'step-7',
-        title: 'TASK-001: Restaurant JSON Data and Page Scaffold', desc: 'Wave 1',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge detects no forge:implement skill and automatically loads forge:ui — the correct skill for frontend work. It loads UIKit implementation guides before writing any code.</p>
-        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin-bottom:.5rem;">What gets created:</p>
-        <div class="cmd-block"><pre>src/data/restaurants.json   — 15 mock restaurants, all TR-2 fields present:
-                              id, name, cuisineType, cashBackOffer,
-                              thumbnailUrl, address, lat, lng</pre></div>
-        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .5rem;">Result:</p>
-        <div class="success-box">Task marked complete: <strong>TASK-001</strong> — restaurant JSON data and dining page scaffold<br>SHA: 5828375</div>
-      `
-      },
-
-      // ── STEP 9.2 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '7.2', parentId: 'step-7',
-        title: 'TASK-002, 003, 004: Wave 1 Utilities and Hook', desc: 'Parallel, TDD',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Wave 1 tasks are independent — Forge implements all three in parallel after checking the test setup. TDD mode is active: tests are written first, confirmed to fail for the right reason, then the implementation is added.</p>
-        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin-bottom:.5rem;">What gets created:</p>
-        <div class="cmd-block"><pre>src/utils/distance.ts           — Haversine distance calculation + formatDistance helper
-src/utils/distance.test.ts      — 4 unit tests
-
-src/utils/searchFilter.ts       — Case-insensitive restaurant name filter
-src/utils/searchFilter.test.ts  — 5 unit tests
-
-src/hooks/useGeolocation.ts     — Browser Geolocation API hook
-                                  States: idle / loading / granted / denied / unavailable
-src/hooks/useGeolocation.test.ts — 4 unit tests</pre></div>
-        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .5rem;">Test results — all wave:1 suites:</p>
-        <div class="result-grid">
-          <div class="result-row"><span class="result-file">distance.test.ts</span><span class="result-desc">Haversine + formatDistance</span><span class="result-pass">4/4 PASS</span></div>
-          <div class="result-row"><span class="result-file">searchFilter.test.ts</span><span class="result-desc">Case-insensitive name filter</span><span class="result-pass">5/5 PASS</span></div>
-          <div class="result-row"><span class="result-file">useGeolocation.test.ts</span><span class="result-desc">idle/loading/granted/denied/unavailable</span><span class="result-pass">4/4 PASS</span></div>
-        </div>
-        <div class="success-box" style="margin-top:.75rem;">TASK-002, TASK-003, and TASK-004 are committed atomically.<br><span style="font-size:.8rem;color:#777;">Warnings are React deprecation notices from UIKit library internals — not test failures.</span></div>
-      `
-      },
-
-      // ── STEP 9.3 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '7.3', parentId: 'step-7',
-        title: 'All Tasks Complete', desc: '24/24 tests pass · 6 suites · 0 failures',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">All tasks complete on branch <code>feat/dining-experience-on-web-for-rakutencom</code>.</p>
-        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin-bottom:.5rem;">Wave 1</p>
-        <div class="result-grid">
-          <div class="result-row"><span class="result-file">src/data/restaurants.json</span><span class="result-desc">15 mock restaurants, all TR-2 fields</span><span class="result-pass">PASS</span></div>
-          <div class="result-row"><span class="result-file">src/utils/distance.ts</span><span class="result-desc">Haversine + formatDistance (4 tests)</span><span class="result-pass">4/4 PASS</span></div>
-          <div class="result-row"><span class="result-file">src/utils/searchFilter.ts</span><span class="result-desc">case-insensitive name filter (5 tests)</span><span class="result-pass">5/5 PASS</span></div>
-          <div class="result-row"><span class="result-file">src/hooks/useGeolocation.ts</span><span class="result-desc">idle/loading/granted/denied/unavailable (4 tests)</span><span class="result-pass">4/4 PASS</span></div>
-        </div>
-        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .5rem;">Wave 2</p>
-        <div class="result-grid">
-          <div class="result-row"><span class="result-file">src/components/dining/RestaurantCard.tsx</span><span class="result-desc">UIKit card, TagInLineCashBack, distance prop, links to /dining/:id</span><span class="result-pass">PASS</span></div>
-        </div>
-        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .5rem;">Wave 3</p>
-        <div class="result-grid">
-          <div class="result-row"><span class="result-file">src/pages/dining/index.tsx</span><span class="result-desc">listing page: search, near-me, sort, empty state (7 tests)</span><span class="result-pass">7/7 PASS</span></div>
-          <div class="result-row"><span class="result-file">src/pages/dining/[id].tsx</span><span class="result-desc">detail page: not-found handling, back link (3 tests)</span><span class="result-pass">3/3 PASS</span></div>
-        </div>
-        <div class="success-box" style="margin-top:.75rem;"><strong>24/24 tests pass · 6 suites · 0 failures</strong><br><span style="font-size:.8rem;color:#777;">Branch: feat/dining-experience-on-web-for-rakutencom</span></div>
-      `
-      },
-
-      // ── STEP 9.4 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '7.4', parentId: 'step-7', markComplete: true,
-        title: 'Validate Layout', desc: 'Design tokens, rendering, UX review',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Final validation pass — ask Claude to review the full implementation against Rakuten design standards.</p>
-        <div class="cmd-block">
-          <pre><span class="t-str typing-text" data-type-text="Please validate layout, Rendering, User Experience and everything else it should be looking modern and strictly first preference to rakuten design tokens only."></span></pre>
-          <button class="copy-btn" onclick="copyText(this,'Please validate layout, Rendering, User Experience and everything else it should be looking modern and strictly first preference to rakuten design tokens only.')">Copy</button>
-        </div>
+<span class="t-muted">···</span></pre></div>
       `
       },
 
       // ── QUIZ 3 ───────────────────────────────────────────────────
       {
         type: 'quiz', id: 'q1',
-        title: 'Checkpoint — Steps 4–7',
+        title: 'Checkpoint — Steps 4–6',
         desc: 'Final check on UI design and implementation',
         questions: [
           {
@@ -3187,10 +3006,6 @@ src/hooks/useGeolocation.test.ts — 4 unit tests</pre></div>
   </style>
 
   <div id="support-widget" style="display:none">
-    <div id="support-bubble">
-      <span>💬 Need help? Chat with us on Slack</span>
-      <span class="bubble-close" id="bubble-close-btn" title="Dismiss">✕</span>
-    </div>
     <div id="support-btn" title="Get help on Slack"
       onclick="window.open('https://rakuten-international.enterprise.slack.com/archives/C0ASGG80SHL','_blank')">
       <!-- Slack logo icon -->
@@ -3201,44 +3016,6 @@ src/hooks/useGeolocation.test.ts — 4 unit tests</pre></div>
     </div>
   </div>
 
-  <script>
-    (function () {
-      const bubble = document.getElementById('support-bubble');
-      const closeBtn = document.getElementById('bubble-close-btn');
-      let shown = false;
-      let dismissed = false;
-
-      function showBubble() {
-        if (dismissed) return;
-        bubble.classList.add('visible');
-        shown = true;
-        // auto-hide after 8s
-        setTimeout(() => {
-          if (!dismissed) bubble.classList.remove('visible');
-        }, 8000);
-      }
-
-      // Show after 20s on page
-      setTimeout(showBubble, 20000);
-
-      // Re-show if user has been idle on same slide for 90s (once more)
-      let reShown = false;
-      setTimeout(() => {
-        if (!dismissed && !reShown) { reShown = true; showBubble(); }
-      }, 90000);
-
-      closeBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        dismissed = true;
-        bubble.classList.remove('visible');
-      });
-
-      // Clicking the button also hides bubble
-      document.getElementById('support-btn').addEventListener('click', () => {
-        bubble.classList.remove('visible');
-      });
-    })();
-  </script>
 </body>
 
 </html>
