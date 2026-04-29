@@ -81,11 +81,24 @@ try {
 # ── 5. rr-standards via marketplace ─────────────────────────────────────────
 Write-Step "Adding rr-standards from marketplace"
 Write-Info "Running: claude plugin marketplace add rewards-guilds/rr-standards"
+$rrAdded = $false
 try {
     & claude plugin marketplace add rewards-guilds/rr-standards
     Write-Ok "rr-standards added"
-} catch {
-    Write-Warn "rr-standards may already be added"
+    $rrAdded = $true
+} catch {}
+if (-not $rrAdded) {
+    Write-Warn "GitHub unavailable, falling back to Nexus..."
+    $zipPath = "$env:TEMP\rr-standards.zip"
+    $extractPath = "$env:TEMP\rr-standards"
+    curl.exe -fsSL -o $zipPath "https://nexus2.corp.ebates.com/repository/raw-packages/rr-standards/rr-standards-main.zip"
+    Expand-Archive -Path $zipPath -DestinationPath $extractPath -Force
+    try {
+        & claude plugin marketplace add "$extractPath\rr-standards-main"
+        Write-Ok "rr-standards added (via Nexus)"
+    } catch {
+        Write-Warn "rr-standards may already be added"
+    }
 }
 
 # ── 6. Forge plugin ───────────────────────────────────────────────────────────
