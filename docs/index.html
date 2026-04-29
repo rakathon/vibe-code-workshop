@@ -1907,171 +1907,83 @@ Next steps:
         type: 'step', num: '4', id: 'step-4',
         title: 'Design the UI', desc: 'Run /forge:ui-design',
         content: `
-        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>/forge:ui-design</code> generates a UI spec from the business and technical requirements — defining page layouts, component structure, and interaction patterns. You may also be able to bring your Figma design layout if you have a Figma account and MCP configured.</p>
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>/forge:ui-design</code> or <code>forge:spec-ui</code> (Skill Renamed) generates a UI spec from the business and technical requirements — defining page layouts, component structure, and interaction patterns. You may also be able to bring your Figma design layout if you have a Figma account and MCP configured.</p>
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code:</p>
         <div class="cmd-block">
-          <pre><span class="t-str typing-text" data-type-text="I want to design the UI for this let's strictly use rakuten UI kit design tokens and standards only for implementation"></span></pre>
-          <button class="copy-btn" data-copy="I want to design the UI for this let's strictly use rakuten UI kit design tokens and standards only for implementation" onclick="copyText(this, this.dataset.copy)">Copy</button>
+          <pre><span class="t-str typing-text" data-type-text="Let's write a UI spec for this before we build it. we can use subagents to speed this up.&#10;  Constraint: use Rakuten UI kit design tokens and standards only — no custom tokens or external&#10;  component libraries. let's not jump into implementation yet"></span></pre>
+          <button class="copy-btn" data-copy="Let's write a UI spec for this before we build it. we can use subagents to speed this up.&#10;  Constraint: use Rakuten UI kit design tokens and standards only — no custom tokens or external&#10;  component libraries. let's not jump into implementation yet" onclick="copyText(this, this.dataset.copy)">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Note:</strong> This step will load the <code>forge:spec-ui</code> skill. If it doesn't, add <code>/forge:spec-ui</code> as a prefix to your prompt.
         </div>
       `
       },
 
-      // ── STEP 6.1 ─────────────────────────────────────────────────
+      // ── STEP 4.1 ─────────────────────────────────────────────────
       {
         type: 'substep', num: '4.1', parentId: 'step-4',
-        title: 'Provide Context', desc: 'Point Forge at your requirements',
+        title: 'Design UI Components (forge:ui)', desc: 'Spec is written, forge:ui generates implementation',
         content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will ask what you are building and what is driving it:</p>
-        <div class="cmd-block"><pre><span class="t-key">What are you building, and what's driving it?</span></pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .75rem;">Point Forge at the existing requirements:</p>
+        <div class="cmd-block"><pre><span class="t-bullet">⏺</span> Next step: run forge:ui to generate the implementation from this spec.
+    <span class="t-cmd">/forge:ui</span>
+
+  The spec covers:
+  <span class="t-str">-</span> 9 page-level states + 4 modal states — every edge case from the PRD
+  <span class="t-muted">···</span>
+
+  Ready to run forge:ui whenever you are.</pre></div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .5rem;">Type this in Claude Code (<code>forge:spec-ui</code> and <code>forge:ui</code>):</p>
         <div class="cmd-block">
-          <pre><span class="t-str typing-text" data-type-text="look at our BR and TR"></span><span class="typing-cursor">▌</span></pre>
-          <button class="copy-btn" onclick="copyText(this,'look at our BR and TR')">Copy</button>
+          <pre><span class="t-str typing-text" data-type-text="let's do it"></span><span class="typing-cursor">▌</span></pre>
+          <button class="copy-btn" data-copy="let's do it" onclick="copyText(this, this.dataset.copy)">Copy</button>
         </div>
+        <div class="cmd-block" style="margin-top:.75rem;"><pre><span class="t-bullet">⏺</span> <span class="t-tool">Skill(forge:ui)</span>
+  <span class="t-muted">⎿  Successfully loaded skill</span>
+
+  <span class="t-muted">Searched for 4 patterns (ctrl+o to expand)</span>
+
+<span class="t-bullet">⏺</span> Loading all required standards in parallel — this is a full-page production spec so I need all four guides.
+  <span class="t-muted">···</span>
+
+<span class="t-bullet">⏺</span> <span class="t-muted">2 agents finished (ctrl+o to expand)</span>
+   <span class="t-muted">├─ Generate dining page and API routes · 7 tool uses · 34.1k tokens</span>
+   <span class="t-muted">│  ⎿  Done</span>
+   <span class="t-muted">└─ Generate dining UI components · 5 tool uses · 34.2k tokens</span></pre></div>
       `
       },
 
-      // ── STEP 6.2 ─────────────────────────────────────────────────
+      // ── STEP 4.2 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '4.2', parentId: 'step-4',
-        title: 'Confirm Scope and Mode', desc: 'Review what Forge inferred',
+        type: 'substep', num: '4.2', parentId: 'step-4', markComplete: true,
+        title: 'Design API Specs', desc: 'forge:spec-api generates the API contract',
         content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge reads the requirements and confirms scope before proceeding:</p>
-        <div class="cmd-block"><pre>Read both — great context. Here's what I've inferred:
-
-Goal: Build a Dining Cash Back experience on rakuten.com — restaurant listing
-at /dining and detail at /dining/:id, client-side only, static JSON data,
-@rakuten-rewards/uikit.
-
-Mode: <span class="t-key">production</span> — well-defined requirements, specific tech stack, real
-shipping target. Does that fit?
-
----
-
-Scope is clear from TR-7: two new Next.js pages at
-src/pages/dining/index.tsx and src/pages/dining/[id].tsx.
-
-Data shape is defined in TR-2: id, name, cuisineType, cashBackOffer,
-thumbnailUrl, address, lat, lng.
-
-Interactions are defined: live name search (BR-5) + "near me" geolocation
-sort (BR-4).
-
-Let me ask the production-mode questions that aren't yet answered:
-
-States — listing page. I've identified these from BRs:
-  <span class="t-str">1.</span> Default — alphabetical list, no location
-  <span class="t-str">2.</span> Near-me active — sorted by distance, distance shown on cards
-  <span class="t-str">3.</span> Location denied — inline message, alphabetical order
-  <span class="t-str">4.</span> Search active — filtered list
-  <span class="t-str">5.</span> Empty search results — empty state message
-
-Are there any additional states I'm missing?</pre></div>
-      `
-      },
-
-      // ── STEP 6.3 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '4.3', parentId: 'step-4',
-        title: 'Confirm Page States and Accessibility', desc: 'Approve the confirmed states list',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">After confirming UIKit compatibility, Forge presents the full confirmed state list and asks about accessibility requirements:</p>
-        <div class="cmd-block"><pre>Stack is confirmed compatible. Back to forge:ui-design.
-
----
-States — confirmed from BRs + TRs:
-
-  <span class="t-str">1.</span> Default — alphabetical list, no distance shown
-  <span class="t-str">2.</span> Near-me active, location granted — sorted by distance, distance on each card
-  <span class="t-str">3.</span> Location denied/unavailable — inline message, alphabetical order
-  <span class="t-str">4.</span> Search active — filtered list
-  <span class="t-str">5.</span> Empty search results — empty state message
-  <span class="t-str">6.</span> Detail page — restaurant not found (invalid id) — inline error with back link
-
-Accessibility question: Any requirements beyond the standard WCAG 2.1 AA
-baseline — specific ARIA labelling, focus management for the search input,
-or screen reader text for the cash back offer badge?</pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .4rem;">Answer:</p>
-        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="NO"></span><span class="typing-cursor">▌</span></pre></div>
-      `
-      },
-
-      // ── STEP 6.4 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '4.4', parentId: 'step-4',
-        title: 'Confirm Out of Scope', desc: 'Approve the boundary list',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge confirms the out-of-scope boundary before writing the spec:</p>
-        <div class="cmd-block"><pre>Noted — none beyond WCAG 2.1 AA baseline.
-
-Out of scope — confirming from the PRD and our elaboration:
-  <span class="t-cmt">-</span> Authentication / login walls
-  <span class="t-cmt">-</span> Card-linking UX
-  <span class="t-cmt">-</span> Pagination
-  <span class="t-cmt">-</span> Filters (cuisine, distance radius, category)
-  <span class="t-cmt">-</span> Map-based discovery
-  <span class="t-cmt">-</span> City/zip geocoding
-  <span class="t-cmt">-</span> Reviews, ratings, photos
-  <span class="t-cmt">-</span> SSR / SEO
-  <span class="t-cmt">-</span> External APIs or backend
-
-Does that list look right, or anything to add/remove?</pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .4rem;">Answer:</p>
-        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="looks good"></span><span class="typing-cursor">▌</span></pre></div>
-      `
-      },
-
-      // ── STEP 6.5 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '4.5', parentId: 'step-4',
-        title: 'Approve Final Summary Before Spec Is Written', desc: 'Confirm before spec is written',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge presents a complete summary of everything it has gathered and asks for final approval before writing the spec:</p>
-        <div class="cmd-block"><pre>Here's the summary before I write the spec:
-
-<span class="t-key">Goal:</span>     Dining Cash Back experience on rakuten.com — browse/search
-          restaurants, view offers, "near me" distance sort
-<span class="t-key">Mode:</span>     production
-<span class="t-key">Scope:</span>    Two new Next.js pages — src/pages/dining/index.tsx (listing),
-          src/pages/dining/[id].tsx (detail)
-<span class="t-key">Data:</span>     Static JSON at src/data/restaurants.json — id, name, cuisineType,
-          cashBackOffer, thumbnailUrl, address, lat, lng
-<span class="t-key">Interactions:</span>
-          - Live name search (client-side filter, keystroke)
-          - "Near me" button (Geolocation API -> Haversine distance sort)
-<span class="t-key">States:</span>   Default list · Near-me active · Location denied · Search active ·
-          Empty search · Detail not found
-<span class="t-key">Stack:</span>    React 18 · Next.js 13 (pages router) · @rakuten-rewards/uikit v5.3.1
-<span class="t-key">A11y:</span>     WCAG 2.1 AA baseline only
-<span class="t-key">Out of scope:</span> auth, card-linking, pagination, filters, maps, geocoding,
-          reviews, SSR, external APIs
-
-Does this look right? Anything to change before I write the spec?</pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .4rem;">Answer:</p>
-        <div class="cmd-block"><pre><span class="t-str typing-text" data-type-text="LGTM"></span><span class="typing-cursor">▌</span></pre></div>
-      `
-      },
-
-      // ── STEP 6.6 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '4.6', parentId: 'step-4', markComplete: true,
-        title: 'Spec Written — Choose Next Step', desc: 'Trigger commit and plan',
-        content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge writes the spec to <code>.forge/efforts/dining-experience-on-web/spec/ui-spec.md</code> and presents the next step options:</p>
-        <div class="cmd-block"><pre>Spec written: .forge/efforts/dining-experience-on-web/spec/ui-spec.md
-
----
-The shared understanding is written. What next?
-
-  <span class="t-str">1.</span> Commit this work — I'll run forge:commit to create a checkpoint
-  <span class="t-str">2.</span> Move to planning — I'll run forge:plan to break this into implementation tasks
-  <span class="t-str">3.</span> Something else — tell me what you'd like to do
-
-<span class="t-key">Enter:</span></pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .4rem;">Enter:</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code:</p>
         <div class="cmd-block">
-          <pre><span class="t-str typing-text" data-type-text="let's do 1 and then 2"></span><span class="typing-cursor">▌</span></pre>
-          <button class="copy-btn" onclick="copyText(this,&quot;let's do 1 and then 2&quot;)">Copy</button>
+          <pre><span class="t-str typing-text" data-type-text="Let's design API Specs"></span><span class="typing-cursor">▌</span></pre>
+          <button class="copy-btn" data-copy="Let's design API Specs" onclick="copyText(this, this.dataset.copy)">Copy</button>
+        </div>
+        <div class="cmd-block" style="margin-top:.75rem;"><pre><span class="t-bullet">⏺</span> <span class="t-tool">Skill(forge:spec-api)</span>
+  <span class="t-muted">⎿  Successfully loaded skill</span>
+
+<span class="t-bullet">⏺</span> Loading the REST standards and checking existing artifacts in parallel.
+  <span class="t-muted">···</span>
+
+<span class="t-bullet">⏺</span> Standards loaded. From the BRs and TRs, I can identify four operations the API must expose.
+
+  Based on the requirements, I propose:
+
+    <span class="t-str">-</span> restaurants        : List available restaurants by location (proxies feedapi)
+    <span class="t-muted">···</span>
+
+    <span class="t-key">forge:spec-api complete</span>
+  Written to: .forge/efforts/dining-experience-for-web/spec/api/dining.yaml
+  Committed:  750cefc
+
+  Contract covers 4 resources:
+  <span class="t-str">-</span> GET /dining/v1/restaurants — restaurant list, hard-capped at 50, optional lat/lng</pre></div>
+        <div class="success-box" style="margin-top:.75rem;">
+          Next it may orchestrate or ask you to choose. Choose skills in this sequence:<br>
+          <code>forge:spec-ui</code> → <code>forge:ui</code> → <code>forge:spec-api</code> → <code>forge:plan</code>
         </div>
       `
       },
