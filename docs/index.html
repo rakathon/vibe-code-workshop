@@ -822,6 +822,16 @@
       overflow-x: auto;
     }
 
+    .cmd-block.scrollable pre {
+      max-height: calc(30 * 1.353rem);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #444 #111;
+    }
+    .cmd-block.scrollable pre::-webkit-scrollbar { width: 6px; }
+    .cmd-block.scrollable pre::-webkit-scrollbar-track { background: #111; }
+    .cmd-block.scrollable pre::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+
     /* ── Syntax highlight tokens inside cmd-block ── */
     .t-cmd {
       color: #fff;
@@ -2060,7 +2070,7 @@ Next steps:
           <pre><span class="t-str typing-text" data-type-text="continue"></span><span class="typing-cursor">▌</span></pre>
           <button class="copy-btn" onclick="copyText(this,'continue')">Copy</button>
         </div>
-        <div class="cmd-block" style="margin-top:.75rem;"><pre><span class="t-bullet">⏺</span> The effort is in implementation. Wave 1 tasks are ready to start — and since this is a UI-first effort with a complete
+        <div class="cmd-block scrollable" style="margin-top:.75rem;"><pre><span class="t-bullet">⏺</span> The effort is in implementation. Wave 1 tasks are ready to start — and since this is a UI-first effort with a complete
   ui-spec.md, let me kick off forge:ui to generate the implementation:
 
 <span class="t-bullet">⏺</span> <span class="t-tool">Skill(forge:ui)</span>
@@ -2069,10 +2079,85 @@ Next steps:
   <span class="t-muted">Searched for 1 pattern (ctrl+o to expand)</span>
 
 <span class="t-bullet">⏺</span> Web platform detected. Loading standards and guides now.
-  <span class="t-muted">···</span>
 
-<span class="t-muted">···</span></pre></div>
+<span class="t-bullet">⏺</span> Good. Source tree: src/pages/, src/components/. Uses @rakuten-rewards/next/app, UIKit imports confirmed. Path alias ~ for src/.
+
+  <span class="t-tool">Bash(/Users/paras.patel/.nvm/versions/node/v22.22.0/bin/yarn add node-geocoder all-the-cities 2&gt;&amp;1 | tail -8)</span>
+  <span class="t-muted">⎿  ➤ YN0007: │ protobufjs@npm:7.5.4 must be built because it never has been before or the last one failed
+     ➤ YN0007: │ @datadog/native-appsec@npm:8.1.1 must be built because it never has been before or the last one failed
+     ➤ YN0007: │ @datadog/native-iast-taint-tracking@npm:3.1.0 must be built because it never has been before or the last one failed
+     … +5 lines (ctrl+o to expand)</span>
+  <span class="t-muted">⎿  (timeout 2m)</span>
+
+<span class="t-bullet">⏺</span> Packages installed. TASK-001's code is done — next.config.js updated, both packages added. Now I'll launch TASK-002 and TASK-003 in parallel as
+  subagents while I commit TASK-001.
+
+  <span class="t-tool">Bash(git add next.config.js package.json yarn.lock &amp;&amp; FORGE_COMMIT_IN_PROGRESS=1 git commit -m "chore(dining-experience-for-web): add node-geocoder and all-the-cities…")</span>
+  <span class="t-muted">⎿  [feat/dining-experience-for-web 7a4fdbf] chore(dining-experience-for-web): add node-geocoder and all-the-cities, exclude from client bundle (TASK-001)
+      3 files changed, 80 insertions(+), 22 deletions(-)</span>
+
+<span class="t-bullet">⏺</span> <span class="t-muted">2 agents finished (ctrl+o to expand)
+   ├─ TASK-002: TypeScript types for dining · 1 tool use · 17.4k tokens
+   │  ⎿  Done
+   └─ TASK-003: Haversine + ctaId utilities · 6 tool uses · 23.5k tokens
+      ⎿  Done</span>
+
+<span class="t-bullet">⏺</span> Wave 1 complete. Committing TASK-002 and TASK-003, then launching all 4 wave-2 API routes in parallel.
+
+  <span class="t-tool">Bash(git add src/types/dining.ts src/utils/dining.ts src/__tests__/utils/dining.test.ts &amp;&amp; FORGE_COMMIT_IN_PROGRESS=1 git commit -m "feat(dining-experience-for-web):…")</span>
+  <span class="t-muted">⎿  [feat/dining-experience-for-web c4fe453] feat(dining-experience-for-web): add shared types, Haversine distance, and ctaId utilities (TASK-002, TASK-003)
+      3 files changed, 125 insertions(+)
+     … +3 lines (ctrl+o to expand)</span>
+
+<span class="t-bullet">⏺</span> Now launching all 4 wave-2 API routes in parallel.
+
+<span class="t-bullet">⏺</span> <span class="t-muted">4 agents finished (ctrl+o to expand)
+   ├─ TASK-004: /api/dining/restaurants proxy · 17 tool uses · 32.1k tokens
+   │  ⎿  Done
+   ├─ TASK-005: /api/dining/[id] detail proxy · 29 tool uses · 40.1k tokens
+   │  ⎿  Done
+   ├─ TASK-006: /api/geocode route · 16 tool uses · 30.9k tokens
+   │  ⎿  Done
+   └─ TASK-007: /api/dining/suggest route · 23 tool uses · 30.4k tokens
+      ⎿  Done</span>
+
+<span class="t-bullet">⏺</span> All 4 wave-2 routes complete. All tests pass. Committing and launching wave-3 components in parallel.
+
+  <span class="t-tool">Bash(git add src/pages/api/dining/ src/pages/api/geocode.ts src/__tests__/api/ &amp;&amp; FORGE_COMMIT_IN_PROGRESS=1 git commit -m "feat(dining-experience-for-web): implement…")</span>
+  <span class="t-muted">⎿  [feat/dining-experience-for-web 1e4776e] feat(dining-experience-for-web): implement API routes — restaurants, detail, geocode, suggest (TASK-004 to TASK-007)
+      8 files changed, 837 insertions(+)
+     … +8 lines (ctrl+o to expand)</span>
+
+<span class="t-bullet">⏺</span> <span class="t-muted">Running 3 agents… (ctrl+o to expand)
+   ├─ TASK-009: RestaurantCard component · 0 tool uses
+   │  ⎿  Initializing…
+   ├─ TASK-010: SearchBar component · 14 tool uses · 27.8k tokens
+   │  ⎿  Bash: Find jest config files
+   └─ TASK-011: RestaurantModal component · 0 tool uses
+      ⎿  Initializing…
+     (ctrl+b to run in background)</span></pre></div>
       `
+      },
+
+      // ── STEP 6.1 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '6.1', parentId: 'step-6', markComplete: true,
+        title: 'Expected UI Output', desc: 'What the finished Dining Cash Back page looks like',
+        content: `
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:1rem;">Once all waves complete, the page should look like this — restaurant list with distance filtering, and a detail modal on click.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:.5rem;">
+          <div>
+            <p style="font-size:.78rem;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.07em;">Restaurant List</p>
+            <img src="images/dining-ui-list.png" alt="Dining Cash Back — restaurant list view"
+              style="width:100%;border-radius:10px;border:1px solid var(--surface-border);box-shadow:0 4px 16px rgba(0,0,0,.35);" />
+          </div>
+          <div>
+            <p style="font-size:.78rem;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.07em;">Restaurant Detail Modal</p>
+            <img src="images/dining-ui-modal.png" alt="Dining Cash Back — restaurant detail modal"
+              style="width:100%;border-radius:10px;border:1px solid var(--surface-border);box-shadow:0 4px 16px rgba(0,0,0,.35);" />
+          </div>
+        </div>
+        `
       },
 
       // ── QUIZ 3 ───────────────────────────────────────────────────
@@ -2218,13 +2303,13 @@ Next steps:
         // Build outline rows from slides (steps + quizzes + cert)
         const stepSlides = slides.filter(x => x.type === 'step');
         const quizSlides = slides.filter(x => x.type === 'quiz');
-        const totalMins = 45;
+        const totalMins = 60;
 
         const groups = [
           { num: 1, title: 'Getting Started', mins: 10, quiz: true },
           { num: 2, title: 'Create a Forge Work Effort', mins: 10, quiz: false },
           { num: 3, title: 'Elaborate Requirements', mins: 10, quiz: true },
-          { num: 4, title: 'Promote & Implement', mins: 15, quiz: true },
+          { num: 4, title: 'Promote & Implement', mins: 30, quiz: true },
         ];
 
         const outlineRows = groups.map((g, i) => `
