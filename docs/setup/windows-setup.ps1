@@ -4,7 +4,7 @@
 $ErrorActionPreference = "Stop"
 
 $step = 0
-$total = 6
+$total = 7
 
 function Write-Step($msg) {
     $script:step++
@@ -58,17 +58,27 @@ $claudeCmd = Get-Command claude -ErrorAction SilentlyContinue
 if ($claudeCmd) {
     $ver = & claude --version 2>$null | Select-Object -First 1
     Write-Ok "Claude Code already installed ($ver)"
-    Write-Info "Checking for updates..."
-    npm update -g "@anthropic-ai/claude-code" 2>&1 | Out-Null
+    Write-Info "Updating Claude Code..."
+    Invoke-Expression (Invoke-WebRequest -Uri "https://claude.ai/install.ps1" -UseBasicParsing).Content
     Write-Ok "Claude Code is up to date"
 } else {
-    Write-Info "Installing Claude Code CLI via npm..."
-    npm install -g "@anthropic-ai/claude-code"
+    Write-Info "Installing Claude Code CLI..."
+    Invoke-Expression (Invoke-WebRequest -Uri "https://claude.ai/install.ps1" -UseBasicParsing).Content
     $ver = & claude --version 2>$null | Select-Object -First 1
     Write-Ok "Claude Code installed ($ver)"
 }
 
-# ── 4. rr-standards via marketplace ──────────────────────────────────────────
+# ── 4. Playwright MCP ────────────────────────────────────────────────────────
+Write-Step "Installing Playwright MCP"
+Write-Info "Running: npm install -g @playwright/mcp"
+try {
+    npm install -g "@playwright/mcp"
+    Write-Ok "Playwright MCP installed"
+} catch {
+    Write-Warn "Playwright MCP install failed"
+}
+
+# ── 5. rr-standards via marketplace ─────────────────────────────────────────
 Write-Step "Adding rr-standards from marketplace"
 Write-Info "Running: claude plugin marketplace add rewards-guilds/rr-standards"
 try {
@@ -78,7 +88,7 @@ try {
     Write-Warn "rr-standards may already be added"
 }
 
-# ── 5. Forge plugin ───────────────────────────────────────────────────────────
+# ── 6. Forge plugin ───────────────────────────────────────────────────────────
 Write-Step "Installing Forge plugin"
 Write-Info "Running: claude plugin install forge"
 try {
@@ -88,7 +98,7 @@ try {
     Write-Warn "Forge install issue — may already be installed or require auth first"
 }
 
-# ── 6. MCP integrations ───────────────────────────────────────────────────────
+# ── 7. MCP integrations ───────────────────────────────────────────────────────
 Write-Step "Configuring MCP integrations"
 
 Write-Info "Adding Atlassian MCP (HTTP transport)..."
