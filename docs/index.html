@@ -1608,7 +1608,20 @@
 
       // ── STEP 1.1 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '1.1', parentId: 'step-1', id: 'step-1-1',
+        type: 'substep', num: '1.1', parentId: 'step-1',
+        title: 'Install Playwright MCP', desc: 'Enable browser automation for Claude Code',
+        content: `
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Install the Playwright MCP server globally so Claude Code can open and interact with browsers during implementation.</p>
+        <div class="cmd-block">
+          <pre><span class="t-cmd typing-text" data-type-text="npm install -g @playwright/mcp"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'npm install -g @playwright/mcp')">Copy</button>
+        </div>
+        `
+      },
+
+      // ── STEP 1.2 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '1.2', parentId: 'step-1', id: 'step-1-1',
         title: 'Set Up the Forge Status Line', desc: 'Keep effort context visible in Claude Code',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.9rem;">The Forge status line shows your active effort, current phase, cost of session, model, current directory and risk level directly in the Claude Code interface. This keeps both you and the AI oriented throughout the session — you always know which effort is active and which phase you are in without having to ask.</p>
@@ -1631,9 +1644,9 @@
       `
       },
 
-      // ── STEP 1.2 ─────────────────────────────────────────────────
+      // ── STEP 1.3 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '1.2', parentId: 'step-1', markComplete: true,
+        type: 'substep', num: '1.3', parentId: 'step-1', markComplete: true,
         title: 'Select Model — Sonnet 1M Context', desc: 'Switch to the long-context model for this session',
         content: `
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run the model picker to switch to Sonnet with 1M context — this keeps the full effort context in memory throughout the workshop session.</p>
