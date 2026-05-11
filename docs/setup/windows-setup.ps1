@@ -4,7 +4,7 @@
 $ErrorActionPreference = "Stop"
 
 $step = 0
-$total = 7
+$total = 9
 
 function Write-Step($msg) {
     $script:step++
@@ -68,7 +68,31 @@ if ($claudeCmd) {
     Write-Ok "Claude Code installed ($ver)"
 }
 
-# ── 4. Playwright MCP ────────────────────────────────────────────────────────
+# ── 4. VS Code ────────────────────────────────────────────────────────────────
+Write-Step "Checking Visual Studio Code"
+$codeCmd = Get-Command code -ErrorAction SilentlyContinue
+if ($codeCmd) {
+    $ver = & code --version 2>$null | Select-Object -First 1
+    Write-Ok "VS Code already installed ($ver)"
+} else {
+    Write-Info "VS Code not found. Installing via winget..."
+    winget install --id Microsoft.VisualStudioCode -e --source winget --silent
+    $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+    Write-Ok "VS Code installed"
+}
+
+# ── 5. Claude VS Code extension ───────────────────────────────────────────────
+Write-Step "Installing Claude Code VS Code extension"
+$extensions = & code --list-extensions 2>$null
+if ($extensions -match "anthropic.claude-code") {
+    Write-Ok "Claude Code extension already installed"
+} else {
+    Write-Info "Installing extension: anthropic.claude-code..."
+    & code --install-extension anthropic.claude-code
+    Write-Ok "Claude Code extension installed"
+}
+
+# ── 6. Playwright MCP ────────────────────────────────────────────────────────
 Write-Step "Installing Playwright MCP"
 Write-Info "Running: npm install -g @playwright/mcp"
 try {
@@ -78,7 +102,7 @@ try {
     Write-Warn "Playwright MCP install failed"
 }
 
-# ── 5. rr-standards via marketplace ─────────────────────────────────────────
+# ── 7. rr-standards via marketplace ─────────────────────────────────────────
 Write-Step "Adding rr-standards from marketplace"
 Write-Info "Running: claude plugin marketplace add rewards-guilds/rr-standards"
 $rrAdded = $false
@@ -101,7 +125,7 @@ if (-not $rrAdded) {
     }
 }
 
-# ── 6. Forge plugin ───────────────────────────────────────────────────────────
+# ── 8. Forge plugin ───────────────────────────────────────────────────────────
 Write-Step "Installing Forge plugin"
 Write-Info "Running: claude plugin install forge"
 try {
@@ -111,7 +135,7 @@ try {
     Write-Warn "Forge install issue — may already be installed or require auth first"
 }
 
-# ── 7. MCP integrations ───────────────────────────────────────────────────────
+# ── 9. MCP integrations ───────────────────────────────────────────────────────
 Write-Step "Configuring MCP integrations"
 
 Write-Info "Adding Atlassian MCP (HTTP transport)..."
