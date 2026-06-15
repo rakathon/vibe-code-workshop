@@ -1578,7 +1578,10 @@
       { label: 'Section 1: Getting Started', slideIds: ['step-1'] },
       { label: 'Section 2: Create a Forge Work Effort', slideIds: ['step-2'] },
       { label: 'Section 3: Elaborate Requirements', slideIds: ['step-3'] },
-      { label: 'Section 4: Promote & Implement', slideIds: ['step-4', 'step-5', 'step-6'] },
+      { label: 'Section 4: Design & Spec', slideIds: ['step-4', 'step-5', 'step-6', 'step-7'] },
+      { label: 'Section 5: Implement', slideIds: ['step-8'] },
+      { label: 'Section 6: Validate & Promote', slideIds: ['step-9-validate', 'step-10-verify', 'step-11-promote'] },
+      { label: 'Section 7: Plan & Build', slideIds: ['step-5-impl', 'step-6-impl'] },
     ];
 
     // Sub-steps that live under a parent step (displayed indented + grayed in sidebar)
@@ -1920,95 +1923,112 @@ Next steps:
       `
       },
 
-      // ── STEP 6 ───────────────────────────────────────────────────
+
+      // ── STEP 4: forge:ux-design ──────────────────────────────────
       {
         type: 'step', num: '4', id: 'step-4',
-        title: 'Design the UI', desc: 'Run /forge:ui-design',
+        title: 'Design the UX', desc: 'Wireframes and hi-fi mockup — run right after elaborate',
         content: `
-        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>/forge:ui-design</code> or <code>forge:spec-ui</code> (Skill Renamed) generates a UI spec from the business and technical requirements — defining page layouts, component structure, and interaction patterns. You may also be able to bring your Figma design layout if you have a Figma account and MCP configured.</p>
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:ux-design</code> generates personas, wireframes, and hi-fi visual mockups from your requirements. Run this right after <code>forge:elaborate</code> to visualise the product before writing specs.</p>
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code:</p>
         <div class="cmd-block">
-          <pre><span class="t-str typing-text" data-type-text="Let's write a UI spec for this before we build it. we can use subagents to speed this up.&#10;  Constraint: use Rakuten UI kit design tokens and standards only — no custom tokens or external&#10;  component libraries. let's not jump into implementation yet"></span></pre>
-          <button class="copy-btn" data-copy="Let's write a UI spec for this before we build it. we can use subagents to speed this up.&#10;  Constraint: use Rakuten UI kit design tokens and standards only — no custom tokens or external&#10;  component libraries. let's not jump into implementation yet" onclick="copyText(this, this.dataset.copy)">Copy</button>
+          <pre><span class="t-str typing-text" data-type-text="Let's design the UX for this effort. Use the requirements as input."></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Let\'s design the UX for this effort. Use the requirements as input.')">Copy</button>
         </div>
         <div class="success-box" style="margin-top:.75rem;">
-          <strong>Note:</strong> This step will load the <code>forge:spec-ui</code> skill. If it doesn't, add <code>/forge:spec-ui</code> as a prefix to your prompt.
+          <strong>Note:</strong> If forge:ux-design doesn't trigger, add <code>/forge:ux-design</code> as a prefix.
         </div>
-      `
+        `
       },
 
-      // ── STEP 4.1 ─────────────────────────────────────────────────
+      // ── STEP 5: forge:spec-ui ─────────────────────────────────────
       {
-        type: 'substep', num: '4.1', parentId: 'step-4',
-        title: 'Design UI Components (forge:ui)', desc: 'Spec is written, forge:ui generates implementation',
+        type: 'step', num: '5', id: 'step-5',
+        title: 'Write the UI Spec', desc: 'Author the UI spec before building',
         content: `
-        <div class="cmd-block"><pre><span class="t-bullet">⏺</span> Next step: run forge:ui to generate the implementation from this spec.
-    <span class="t-cmd">/forge:ui</span>
-
-  The spec covers:
-  <span class="t-str">-</span> 9 page-level states + 4 modal states — every edge case from the PRD
-  <span class="t-muted">···</span>
-
-  Ready to run forge:ui whenever you are.</pre></div>
-        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .5rem;">Type this in Claude Code (<code>forge:spec-ui</code> and <code>forge:ui</code>):</p>
-        <div class="cmd-block">
-          <pre><span class="t-str typing-text" data-type-text="let's do it"></span><span class="typing-cursor">▌</span></pre>
-          <button class="copy-btn" data-copy="let's do it" onclick="copyText(this, this.dataset.copy)">Copy</button>
-        </div>
-        <div class="cmd-block" style="margin-top:.75rem;"><pre><span class="t-bullet">⏺</span> <span class="t-tool">Skill(forge:ui)</span>
-  <span class="t-muted">⎿  Successfully loaded skill</span>
-
-  <span class="t-muted">Searched for 4 patterns (ctrl+o to expand)</span>
-
-<span class="t-bullet">⏺</span> Loading all required standards in parallel — this is a full-page production spec so I need all four guides.
-  <span class="t-muted">···</span>
-
-<span class="t-bullet">⏺</span> <span class="t-muted">2 agents finished (ctrl+o to expand)</span>
-   <span class="t-muted">├─ Generate dining page and API routes · 7 tool uses · 34.1k tokens</span>
-   <span class="t-muted">│  ⎿  Done</span>
-   <span class="t-muted">└─ Generate dining UI components · 5 tool uses · 34.2k tokens</span></pre></div>
-      `
-      },
-
-      // ── STEP 4.2 ─────────────────────────────────────────────────
-      {
-        type: 'substep', num: '4.2', parentId: 'step-4', markComplete: true,
-        title: 'Design API Specs', desc: 'forge:spec-api generates the API contract',
-        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:spec-ui</code> walks you through goal, mode, scope, data, and mode-specific details to produce a <code>spec/ui-spec.md</code> file ready for implementation.</p>
         <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code:</p>
         <div class="cmd-block">
-          <pre><span class="t-str typing-text" data-type-text="Let's design API Specs"></span><span class="typing-cursor">▌</span></pre>
-          <button class="copy-btn" data-copy="Let's design API Specs" onclick="copyText(this, this.dataset.copy)">Copy</button>
+          <pre><span class="t-str typing-text" data-type-text="Let's write the UI spec for this effort before we build it."></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Let\'s write the UI spec for this effort before we build it.')">Copy</button>
         </div>
-        <div class="cmd-block" style="margin-top:.75rem;"><pre><span class="t-bullet">⏺</span> <span class="t-tool">Skill(forge:spec-api)</span>
-  <span class="t-muted">⎿  Successfully loaded skill</span>
-
-<span class="t-bullet">⏺</span> Loading the REST standards and checking existing artifacts in parallel.
-  <span class="t-muted">···</span>
-
-<span class="t-bullet">⏺</span> Standards loaded. From the BRs and TRs, I can identify four operations the API must expose.
-
-  Based on the requirements, I propose:
-
-    <span class="t-str">-</span> restaurants        : List available restaurants by location (proxies feedapi)
-    <span class="t-muted">···</span>
-
-    <span class="t-key">forge:spec-api complete</span>
-  Written to: .forge/efforts/dining-experience-for-web/spec/api/dining.yaml
-  Committed:  750cefc
-
-  Contract covers 4 resources:
-  <span class="t-str">-</span> GET /dining/v1/restaurants — restaurant list, hard-capped at 50, optional lat/lng</pre></div>
         <div class="success-box" style="margin-top:.75rem;">
-          Next it may orchestrate or ask you to choose. Choose skills in this sequence:<br>
-          <code>forge:spec-ui</code> → <code>forge:ui</code> → <code>forge:spec-api</code> → <code>forge:plan</code>
+          <strong>Output:</strong> <code>spec/ui-spec.md</code> written to your effort directory.
         </div>
-      `
+        `
+      },
+
+      // ── STEP 6: forge:spec-api ────────────────────────────────────
+      {
+        type: 'step', num: '6', id: 'step-6',
+        title: 'Design the API', desc: 'Author the API contract',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:spec-api</code> drafts REST API contracts from your requirements — endpoints, request/response schemas, and authentication.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Let's design API Specs"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Let\'s design API Specs')">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Output:</strong> OpenAPI contract written to <code>spec/api/*.yaml</code>
+        </div>
+        `
+      },
+
+      // ── STEP 7: forge:spec-storage ────────────────────────────────
+      {
+        type: 'step', num: '7', id: 'step-7',
+        title: 'Design the Storage Schema', desc: 'Model the data before building',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:spec-storage</code> walks through logical schema, query patterns, and physical schema — tables, collections, caches, and search indexes.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Design the storage schema for this effort."></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Design the storage schema for this effort.')">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Output:</strong> Schema files written to <code>spec/storage/</code>
+        </div>
+        `
+      },
+
+      // ── STEP 8: forge:ui (implementation) ────────────────────────
+      {
+        type: 'step', num: '5', id: 'step-9-validate',
+        title: 'Validate Discovery Artifacts', desc: 'Cross-reference all artifacts before promoting',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:validate</code> cross-checks all discovery artifacts — BRs, TRs, storage, API spec, UI spec — for completeness and consistency. It produces a gate artifact that <code>forge:promote</code> reads before advancing the phase.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Validate all discovery artifacts for this effort."></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Validate all discovery artifacts for this effort.')">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Output:</strong> <code>validation/report.md</code> — PASS or PASS WITH WARNINGS required to promote.
+        </div>
+        `
+      },
+
+      // ── STEP 10: forge:verify ─────────────────────────────────────
+      {
+        type: 'step', num: '6', id: 'step-11-promote',
+        title: 'Promote to Planning', desc: 'Advance the effort from discovery to planning phase',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:promote</code> checks the validation gate and advances the effort phase from discovery → planning. Run this after <code>forge:validate</code> passes.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Discovery is complete and validated. Promote this effort to planning phase."></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Discovery is complete and validated. Promote this effort to planning phase.')">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Output:</strong> Effort phase advanced from <code>discovery</code> → <code>planning</code> in <code>.state.json</code>.
+        </div>
+        `
       },
 
       // ── STEP 7 ───────────────────────────────────────────────────
       {
-        type: 'step', num: '5', id: 'step-5',
+        type: 'step', num: '7', id: 'step-5',
         title: 'Commit Discovery Artifacts and Promote to Planning', desc: 'Break into tasks and implement',
         content: `
         <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.75rem;">Forge needs to commit discovery work and promote the effort to the planning phase before running forge:plan. Forge automatically detects the phase and runs forge:promote first.</p>
@@ -2065,7 +2085,25 @@ Next steps:
 
       // ── STEP 8 ───────────────────────────────────────────────────
       {
-        type: 'step', num: '6', id: 'step-6', markComplete: true,
+        type: 'step', num: '9', id: 'step-8',
+        title: 'Build the UI', desc: 'forge:ui generates implementation — run after all specs',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:ui</code> generates standards-compliant UI code using the Rakuten Rewards design system. This is an <strong>implementation skill</strong> — run it only after all spec files are written.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Build the UI components for this effort using the design system"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Build the UI components for this effort using the design system')">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Note:</strong> This step generates the actual UI code. Make sure specs are complete first.
+        </div>
+        `
+      },
+
+
+      // ── STEP 9: forge:validate ────────────────────────────────────
+      {
+        type: 'step', num: '9', id: 'step-6', markComplete: true,
         title: 'Implement and Parallel Task Execution', desc: 'Executes planned tasks wave by wave using forge:plan',
         content: `
         <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.75rem;">Executes the planned tasks wave by wave. forge:plan detects the effort's UI spec and delegates to forge:ui.</p>
@@ -2154,65 +2192,90 @@ Next steps:
 
       // ── STEP 6.1 ─────────────────────────────────────────────────
       {
-        type: 'substep', num: '6.1', parentId: 'step-6', markComplete: true,
-        title: 'Expected UI Output', desc: 'What the finished Dining Cash Back page looks like',
+        type: 'step', num: '11', id: 'step-10-verify',
+        title: 'Verify Implementation', desc: 'Confirm implementation matches requirements',
         content: `
-        <p style="font-size:.95rem;color:var(--muted);margin-bottom:1rem;">Once all waves complete, the page should look like this — restaurant list with distance filtering, and a detail modal on click.</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:.5rem;">
-          <div>
-            <p style="font-size:.78rem;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.07em;">Restaurant List</p>
-            <img src="images/dining-ui-list.png" alt="Dining Cash Back — restaurant list view"
-              style="width:100%;border-radius:10px;border:1px solid var(--surface-border);box-shadow:0 4px 16px rgba(0,0,0,.35);" />
-          </div>
-          <div>
-            <p style="font-size:.78rem;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.07em;">Restaurant Detail Modal</p>
-            <img src="images/dining-ui-modal.png" alt="Dining Cash Back — restaurant detail modal"
-              style="width:100%;border-radius:10px;border:1px solid var(--surface-border);box-shadow:0 4px 16px rgba(0,0,0,.35);" />
-          </div>
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:verify</code> reads discovery artifacts and implementation code, confirms each BR and TR has implementation evidence, and produces a PASS/FAIL report per requirement.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Verify that the implementation delivers the stated requirements."></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Verify that the implementation delivers the stated requirements.')">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Output:</strong> <code>verification/report.md</code> with PASS/FAIL per requirement.
         </div>
         `
       },
 
-      // ── QUIZ 3 ───────────────────────────────────────────────────
+
+      // ── STEP 11: forge:promote ───────────────────────────────────
       {
-        type: 'quiz', id: 'q1',
-        title: 'Checkpoint — Steps 4–6',
-        desc: 'Final check on UI design and implementation',
-        questions: [
-          {
-            q: 'What does forge:ui do?',
-            opts: [
-              'Generate standards-compliant UI code using the Rakuten Rewards design system',
-              'Create a Figma design file from requirements',
-              'Run unit tests on existing UI components',
-              'Scaffold a new Next.js project'
-            ],
-            answer: 0,
-            explain: '<code>forge:ui</code> generates standards-compliant UI code using the Rakuten Rewards design system, applying TDD mode and UIKit guides throughout implementation.'
-          },
-          {
-            q: 'Which command conversationally authors a UI spec (ui-spec.md) by walking the engineer through goal, mode, scope, data, and mode-specific details?',
-            opts: [
-              '<code>forge:ui</code>',
-              '<code>forge:plan</code>',
-              '<code>forge:ui-design</code>',
-              '<code>forge:elaborate</code>'
-            ],
-            answer: 2,
-            explain: '<code>forge:ui-design</code> conversationally authors the UI spec by walking through goal, mode, scope, data, and mode-specific details — producing <code>spec/ui-spec.md</code>.'
-          },
-          {
-            q: 'When a Forge effort is active, which skill generates a structured plan from discovery artifacts?',
-            opts: [
-              '<code>forge:elaborate</code>',
-              '<code>forge:plan</code>',
-              '<code>forge:ui</code>',
-              '<code>forge:promote</code>'
-            ],
-            answer: 1,
-            explain: '<code>forge:plan</code> reads discovery artifacts (BRs, TRs, UI spec) and generates a structured task plan organized into waves, ready for wave-by-wave execution.'
-          }
-        ]
+        type: 'step', num: '10', id: 'step-7',
+        title: 'Design Tests', desc: 'Run forge:spec-tests to generate BDD test suites',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:spec-tests</code> reads your requirements and spec artifacts — <code>business.md</code>, <code>technical.md</code>, API spec, storage schema, and UX strategy — and produces BDD scenario files for every achievable test type: e2e, contract, integration, and UI e2e.</p>
+        <p style="font-size:.93rem;color:var(--muted);margin-bottom:.6rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Can we design the tests"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Can we design the tests')">Copy</button>
+        </div>
+        <p style="font-size:.88rem;color:var(--muted);margin:.75rem 0 .4rem;">Forge will read all available artifacts and write one BDD suite file per test type. Each scenario includes a <code>Verifies: BR-N</code> traceability link.</p>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Output:</strong> BDD suite files written to <code>.forge/efforts/&lt;effort-id&gt;/spec/test/</code>
+        </div>
+        `
+      },
+
+      // ── STEP 8: forge:build-tests ─────────────────────────────────────────
+      {
+        type: 'step', num: '11', id: 'step-8',
+        title: 'Implement Tests', desc: 'Run forge:build-tests to generate executable test code',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:build-tests</code> reads the BDD suite files produced by <code>forge:spec-tests</code> and converts them into executable test code. It auto-detects your language and framework, writes the tests, and confirms they pass.</p>
+        <p style="font-size:.93rem;color:var(--muted);margin-bottom:.6rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Can we implement the tests"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Can we implement the tests')">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Output:</strong> Executable test files written and confirmed passing against your local app.
+        </div>
+        `
+      },
+
+      // ── STEP 9: forge:spec-ui-e2e ─────────────────────────────────────────
+      {
+        type: 'step', num: '12', id: 'step-9',
+        title: 'Generate Feature Files', desc: 'Run forge:spec-ui-e2e to convert UI tests to Gherkin',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:spec-ui-e2e</code> converts the <code>ui-e2e-test-suite.md</code> produced by <code>forge:spec-tests</code> into Gherkin <code>.feature</code> files — one per UI surface. It validates for duplicates and missing screen coverage before writing.</p>
+        <p style="font-size:.93rem;color:var(--muted);margin-bottom:.6rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Convert the UI test suite into Gherkin feature files, one per screen."></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Convert the UI test suite into Gherkin feature files, one per screen.')">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Output:</strong> Gherkin <code>.feature</code> files written to <code>features/us/&lt;surface-name&gt;/</code>
+        </div>
+        `
+      },
+
+      // ── STEP 10: forge:build-playwright-tests ──────────────────────────────
+      {
+        type: 'step', num: '13', id: 'step-10', markComplete: true,
+        title: 'Build Playwright Tests', desc: 'Run forge:build-playwright-tests to generate and run UI specs',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:build-playwright-tests</code> takes the Gherkin <code>.feature</code> files, navigates your live app via browser to discover real CSS selectors, generates Playwright <code>.spec.ts</code> files, runs them, and auto-fixes any failures — up to 3 cycles.</p>
+        <p style="font-size:.88rem;color:#c0392b;font-weight:600;margin-bottom:.6rem;">⚠ Make sure your app is running locally before triggering this skill.</p>
+        <p style="font-size:.93rem;color:var(--muted);margin-bottom:.6rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="The feature files are ready. Generate Playwright specs, run them against the local app, and fix any failures."></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'The feature files are ready. Generate Playwright specs, run them against the local app, and fix any failures.')">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Output:</strong> Playwright <code>.spec.ts</code> files generated, run, and validated. Summary report printed.
+        </div>
+        `
       },
 
       // ── COMPLETE ──────────────────────────────────────────────────
