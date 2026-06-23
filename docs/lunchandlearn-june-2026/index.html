@@ -2063,10 +2063,9 @@
       let completable = 0, done = 0;
       slides.forEach((s, i) => {
         if (isOptionalSlide(s)) return;
-        if (s.type === 'quiz' || (s.type === 'substep' && s.markComplete)) {
-          completable++;
-          if (doneSet.has(i)) done++;
-        }
+        if (s.type === 'welcome' || s.type === 'complete') return;
+        completable++;
+        if (doneSet.has(i)) done++;
       });
       const pct = completable > 0 ? Math.round((done / completable) * 100) : 0;
       document.getElementById('progress-pct').textContent = pct + '%';
