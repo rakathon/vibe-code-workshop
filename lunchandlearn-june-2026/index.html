@@ -1,0 +1,3221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dishly Platform — Lunch &amp; Learn</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #f7f7f7;
+      --surface: #ffffff;
+      --surface2: #fafafa;
+      --border: #e0e0e0;
+      --border2: #bbbbbb;
+      --text: #111111;
+      --muted: #777777;
+      --pale: #f2f2f2;
+      --black: #000000;
+      --dark: #111111;
+      --mid: #333333;
+      --light: #666666;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ══ HEADER ══════════════════════════════════════════════════════════════ */
+    .header {
+      background: linear-gradient(135deg, #000 0%, #1a1a1a 60%, #3a3a3a 100%);
+      padding: 0.9rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('data:image/svg+xml,<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="1.2" fill="rgba(255,255,255,0.1)"/></svg>');
+      pointer-events: none;
+      animation: bgmove 25s linear infinite;
+    }
+
+    @keyframes bgmove {
+      from {
+        background-position: 0 0
+      }
+
+      to {
+        background-position: 60px 60px
+      }
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header-emoji {
+      font-size: 1.8rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(-4px)
+      }
+    }
+
+    .header-title {
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .header-sub {
+      color: rgba(255, 255, 255, .75);
+      font-size: 0.75rem;
+      margin-top: 1px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .h-pill {
+      background: rgba(255, 255, 255, .18);
+      border: 1px solid rgba(255, 255, 255, .25);
+      color: #fff;
+      padding: 0.3rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .h-pill.progress-pill {
+      min-width: 120px;
+    }
+
+    .h-pill.reset-btn {
+      cursor: pointer;
+      background: rgba(239, 68, 68, .18);
+      border-color: rgba(239, 68, 68, .4);
+      color: #fca5a5;
+      transition: background .2s, border-color .2s;
+    }
+    .h-pill.reset-btn:hover {
+      background: rgba(239, 68, 68, .32);
+      border-color: rgba(239, 68, 68, .65);
+    }
+
+    .progress-bar-wrap {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: rgba(255, 255, 255, .15);
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #888, #fff);
+      transition: width .35s ease;
+    }
+
+    /* ══ LAYOUT ══════════════════════════════════════════════════════════════ */
+    .layout {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+      position: relative;
+    }
+
+    /* ══ SIDEBAR ══════════════════════════════════════════════════════════════ */
+    .sidebar {
+      width: 300px;
+      min-width: 180px;
+      max-width: 520px;
+      flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: width .3s ease;
+      position: relative;
+    }
+
+    .sidebar.collapsed {
+      width: 0 !important;
+      border-right: none;
+    }
+
+    .sidebar.collapsed .sidebar-resizer {
+      display: none;
+    }
+
+    /* drag handle */
+    .sidebar-resizer {
+      position: absolute;
+      top: 0;
+      right: -3px;
+      width: 6px;
+      height: 100%;
+      cursor: col-resize;
+      z-index: 20;
+      background: transparent;
+    }
+
+    .sidebar-resizer:hover,
+    .sidebar-resizer.dragging {
+      background: var(--border2);
+    }
+
+    .sidebar-head {
+      padding: .8rem 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface2);
+      flex-shrink: 0;
+    }
+
+    .sidebar-head h3 {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--dark);
+    }
+
+    .collapse-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      cursor: pointer;
+      padding: 2px 6px;
+      color: var(--muted);
+      font-size: .75rem;
+      transition: all .15s;
+    }
+
+    .collapse-btn:hover {
+      background: var(--pale);
+      color: var(--dark);
+      border-color: var(--dark);
+    }
+
+    .sidebar-list {
+      overflow-y: auto;
+      flex: 1;
+      padding: .4rem 0;
+    }
+
+    .sidebar-list::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .sidebar-list::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 2px;
+    }
+
+    .sb-item {
+      display: flex;
+      align-items: flex-start;
+      gap: .55rem;
+      padding: .55rem 1rem;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all .15s;
+      overflow: hidden;
+    }
+
+    .sb-item:hover {
+      background: var(--pale);
+      border-left-color: var(--light);
+    }
+
+    .sb-item.active {
+      background: var(--pale);
+      border-left-color: var(--dark);
+    }
+
+    .sb-item.done {
+      border-left-color: #16a34a;
+    }
+
+    .sb-dot {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 3px;
+      background: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .62rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-top: 1px;
+      transition: all .2s;
+    }
+
+    .sb-item.active .sb-dot {
+      background: var(--dark);
+      color: #fff;
+    }
+
+    .sb-item.done .sb-dot {
+      background: #16a34a;
+      color: #fff;
+    }
+
+    .sb-item.done .sb-dot::after {
+      content: '✓';
+      font-size: .65rem;
+    }
+
+    .sb-item.done .sb-dot .sb-num {
+      display: none;
+    }
+
+    .sb-label {
+      font-size: .78rem;
+      color: var(--text);
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sb-sublabel {
+      font-size: .68rem;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Section headers in sidebar */
+    .sb-section {
+      padding: .65rem 1rem .3rem;
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      margin-top: .3rem;
+      user-select: none;
+    }
+
+    .sb-section:first-child {
+      border-top: none;
+      margin-top: 0;
+    }
+
+    /* Sub-step items (indented, grayed) — collapsed by default */
+    .sb-item.substep {
+      padding-left: 2rem;
+      opacity: 0;
+      height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      margin: 0;
+      overflow: hidden;
+      border: none !important;
+      pointer-events: none;
+      transition: height .25s ease, opacity .2s, padding .25s ease;
+    }
+
+    .sb-item.substep.expanded {
+      height: 44px;
+      padding-top: .55rem;
+      padding-bottom: .55rem;
+      opacity: .55;
+      border-left: 3px solid transparent !important;
+      pointer-events: auto;
+    }
+
+    .sb-item.substep.expanded:hover {
+      opacity: 1;
+    }
+
+    .sb-item.substep.expanded.active {
+      opacity: 1;
+      border-left-color: var(--dark) !important;
+    }
+
+    .sb-item.substep.expanded.done {
+      opacity: 1;
+      border-left-color: #16a34a !important;
+    }
+
+    .sb-item.substep .sb-dot {
+      width: 16px;
+      height: 16px;
+      font-size: .55rem;
+      border-radius: 2px;
+    }
+
+    .sb-item.knowledge .sb-dot {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fcd34d;
+      font-size: .95rem;
+    }
+    .sb-item.knowledge .sb-label { color: #92400e; }
+
+    /* Locked sidebar items */
+    .sb-item.locked {
+      opacity: .3;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* chevron on parent step items that have substeps */
+    .sb-item .sb-chevron {
+      margin-left: auto;
+      font-size: .65rem;
+      color: var(--muted);
+      transition: transform .25s ease;
+      flex-shrink: 0;
+    }
+
+    .sb-item.expanded-parent .sb-chevron {
+      transform: rotate(90deg);
+    }
+
+    .expand-btn {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 44px;
+      background: var(--dark);
+      border: none;
+      border-radius: 0 5px 5px 0;
+      color: #fff;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: .65rem;
+      z-index: 10;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, .2);
+    }
+
+    .expand-btn.visible {
+      display: flex;
+    }
+
+    /* ══ SLIDE AREA ══════════════════════════════════════════════════════════ */
+    .slide-area {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      padding: 2rem 2.5rem 5rem;
+      display: none;
+      animation: fadeIn .22s ease;
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .slide::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .slide::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 3px;
+    }
+
+    /* ══ WELCOME ══════════════════════════════════════════════════════════════ */
+    .welcome-slide {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      height: 100%;
+      min-height: 100%;
+    }
+
+    /* override the slide padding for welcome only */
+    .slide.welcome-active {
+      padding: 0 !important;
+      overflow: hidden !important;
+    }
+
+    .wl-left {
+      padding: 5rem 4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 1px solid var(--border);
+    }
+
+    .wl-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .wl-eyebrow svg {
+      flex-shrink: 0;
+    }
+
+    .wl-left h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--dark);
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+      letter-spacing: -.5px;
+    }
+
+    .wl-left p {
+      font-size: .97rem;
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 380px;
+      margin-bottom: 2rem;
+    }
+
+    .wl-meta {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .wl-meta-item {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: .85rem;
+      color: var(--text);
+    }
+
+    .wl-meta-item svg {
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .btn-begin {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--dark);
+      color: #fff;
+      font-size: .9rem;
+      font-weight: 700;
+      padding: .75rem 1.6rem;
+      border-radius: 9px;
+      border: none;
+      cursor: pointer;
+      transition: opacity .2s;
+      width: fit-content;
+    }
+
+    .btn-begin:hover {
+      opacity: .82;
+    }
+
+    .wl-autosave {
+      margin-top: .9rem;
+      font-size: .75rem;
+      color: var(--muted);
+    }
+
+    .wl-right {
+      padding: 4rem 3.5rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .wl-outline-label {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.25rem;
+    }
+
+    .outline-list {
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+    }
+
+    .outline-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: .95rem 1.1rem;
+      cursor: pointer;
+      transition: border-color .15s, box-shadow .15s;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .outline-item:hover {
+      border-color: var(--border2);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, .06);
+    }
+
+    .outline-item.cert-item {
+      border-style: dashed;
+    }
+
+    .oi-num {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--pale);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--dark);
+      flex-shrink: 0;
+    }
+
+    .oi-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--pale);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .oi-body {
+      flex: 1;
+    }
+
+    .oi-title {
+      font-size: .92rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: .18rem;
+    }
+
+    .oi-meta {
+      font-size: .75rem;
+      color: var(--muted);
+    }
+
+    .oi-arrow {
+      color: var(--border2);
+      font-size: 1rem;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    .badge-pill {
+      display: inline-block;
+      background: var(--dark);
+      color: #fff;
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 3px 13px;
+      border-radius: 999px;
+      margin-bottom: 1.25rem;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--dark);
+      color: #fff;
+      font-size: .92rem;
+      font-weight: 700;
+      padding: .7rem 2.25rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      transition: opacity .2s, transform .15s;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, .18);
+    }
+
+    .btn-primary:hover {
+      opacity: .85;
+      transform: translateY(-2px);
+    }
+
+    .btn-skip {
+      display: inline-block;
+      background: transparent;
+      color: var(--muted);
+      font-size: .82rem;
+      font-weight: 600;
+      padding: .6rem 1.25rem;
+      border-radius: 999px;
+      border: 1px solid var(--border2);
+      cursor: pointer;
+      transition: color .2s, border-color .2s;
+    }
+    .btn-skip:hover { color: var(--text); border-color: var(--muted); }
+
+    /* ══ STEP SLIDE ══════════════════════════════════════════════════════════ */
+    .step-slide {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: .85rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .step-badge {
+      flex-shrink: 0;
+      width: 42px;
+      height: 42px;
+      border-radius: 6px;
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .2);
+    }
+    .kb-badge {
+      background: #fef3c7;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, .25);
+      font-size: 1.3rem;
+    }
+
+    .step-title h2 {
+      font-size: 1.28rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .step-title p {
+      font-size: .82rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ══ BLOCKS ══════════════════════════════════════════════════════════════ */
+    .info-box {
+      background: var(--pale);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: .85rem 1rem;
+      margin: .9rem 0;
+      font-size: .84rem;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .info-box strong {
+      color: var(--dark);
+    }
+
+    .success-box {
+      background: var(--pale);
+      border: 1px solid var(--border2);
+      border-left: 4px solid var(--dark);
+      border-radius: 0 9px 9px 0;
+      padding: .85rem 1rem;
+      margin: .9rem 0;
+      font-size: .84rem;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .cmd-block {
+      background: #111;
+      border-radius: 9px;
+      padding: .9rem 1.1rem;
+      margin: .9rem 0;
+      position: relative;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, .18);
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    .cmd-block pre {
+      color: #e0e0e0;
+      font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+      font-size: .82rem;
+      white-space: pre;
+      line-height: 1.65;
+      flex: 1;
+      min-width: 0;
+      overflow-x: auto;
+    }
+
+    .cmd-block.scrollable pre {
+      max-height: calc(30 * 1.353rem);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #444 #111;
+    }
+    .cmd-block.scrollable pre::-webkit-scrollbar { width: 6px; }
+    .cmd-block.scrollable pre::-webkit-scrollbar-track { background: #111; }
+    .cmd-block.scrollable pre::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+
+    /* ── Syntax highlight tokens inside cmd-block ── */
+    .t-cmd {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .t-flag {
+      color: #aaa;
+    }
+
+    .t-str {
+      color: #d0d0d0;
+      font-style: italic;
+    }
+
+    .t-cmt {
+      color: #555;
+      font-style: italic;
+    }
+
+    .t-key {
+      color: #ccc;
+      font-weight: 600;
+    }
+
+    .t-bullet { color: #a78bfa; }
+    .t-skill  { color: #f59e0b; font-weight: 600; }
+    .t-tool   { color: #a78bfa; font-weight: 600; }
+    .t-muted  { color: #6b7280; }
+    .t-user   { color: #60a5fa; font-weight: 600; }
+
+    .typing-cursor {
+      display: inline-block;
+      color: #aaa;
+      animation: blink .9s step-end infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0
+      }
+    }
+
+    .copy-btn {
+      position: sticky;
+      right: .55rem;
+      top: .55rem;
+      align-self: flex-start;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, .12);
+      border: 1px solid rgba(255, 255, 255, .2);
+      color: rgba(255, 255, 255, .8);
+      border-radius: 5px;
+      padding: 2px 9px;
+      font-size: .68rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s;
+      margin-left: .5rem;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, .22);
+      color: #fff;
+    }
+
+    .copy-btn.copied {
+      background: #333;
+      color: #fff;
+      border-color: #333;
+    }
+
+    /* prompt block (Claude input) */
+    .prompt-block {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--dark);
+      border-radius: 0 9px 9px 0;
+      padding: .85rem 1rem;
+      margin: .9rem 0;
+      position: relative;
+    }
+
+    .prompt-label {
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--dark);
+      margin-bottom: .45rem;
+    }
+
+    .prompt-block p {
+      font-size: .88rem;
+      color: var(--text);
+      line-height: 1.6;
+      padding-right: 3.5rem;
+    }
+
+    .prompt-block .copy-btn {
+      background: var(--pale);
+      border: 1px solid var(--border2);
+      color: var(--dark);
+    }
+
+    .prompt-block .copy-btn:hover {
+      background: var(--dark);
+      color: #fff;
+      border-color: var(--dark);
+    }
+
+    .prompt-block .copy-btn.copied {
+      background: #111;
+      color: #fff;
+      border-color: #111;
+    }
+
+    .forge-cmd {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: var(--dark);
+      color: #fff;
+      font-family: 'SF Mono', monospace;
+      font-size: .85rem;
+      font-weight: 600;
+      padding: .38rem .95rem;
+      border-radius: 7px;
+      margin: .45rem 0;
+    }
+
+    /* dialog table */
+    .dialog-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: .7rem 0;
+      font-size: .82rem;
+    }
+
+    .dialog-table th {
+      background: var(--pale);
+      color: var(--dark);
+      padding: .45rem .75rem;
+      text-align: left;
+      font-size: .68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dialog-table td {
+      padding: .5rem .75rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .dialog-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .dialog-table .prompt-col {
+      color: var(--muted);
+      font-style: italic;
+      font-size: .8rem;
+    }
+
+    .dialog-table .answer-col code {
+      background: var(--dark);
+      color: #fff;
+      padding: 1px 7px;
+      border-radius: 4px;
+      font-size: .77rem;
+      font-weight: 600;
+    }
+
+    /* result rows */
+    .result-grid {
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+      margin: .7rem 0;
+    }
+
+    .result-row {
+      display: flex;
+      align-items: baseline;
+      gap: .7rem;
+      font-size: .8rem;
+      padding: .28rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .result-row:last-child {
+      border-bottom: none;
+    }
+
+    .result-file {
+      font-family: 'SF Mono', monospace;
+      font-size: .75rem;
+      color: var(--dark);
+      min-width: 270px;
+      flex-shrink: 0;
+    }
+
+    .result-desc {
+      color: var(--muted);
+      flex: 1;
+    }
+
+    .result-pass {
+      font-size: .67rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: var(--pale);
+      color: var(--dark);
+      border: 1px solid var(--border2);
+      white-space: nowrap;
+    }
+
+    /* substep card */
+    .substep {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.15rem;
+      margin: .9rem 0;
+    }
+
+    .substep-title {
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--dark);
+      margin-bottom: .7rem;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+
+    .substep-title::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--dark);
+      flex-shrink: 0;
+    }
+
+    hr.div {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 1.1rem 0;
+    }
+
+    /* ══ QUIZ ════════════════════════════════════════════════════════════════ */
+    .quiz-slide {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .quiz-header {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      margin-bottom: 1.3rem;
+    }
+
+    .quiz-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 6px;
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .quiz-header h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .quiz-header p {
+      font-size: .8rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .quiz-q {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.1rem 1.25rem;
+      margin: .85rem 0;
+    }
+
+    .quiz-q p {
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: .8rem;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: .45rem;
+    }
+
+    .quiz-opt {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .55rem .85rem;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: .85rem;
+      color: var(--text);
+      transition: all .15s;
+      background: var(--surface);
+      user-select: none;
+    }
+
+    .quiz-opt:hover {
+      border-color: var(--border2);
+      background: var(--pale);
+    }
+
+    .quiz-opt.selected {
+      border-color: var(--dark);
+      background: var(--pale);
+      font-weight: 600;
+    }
+
+    .quiz-opt.correct {
+      border-color: var(--dark);
+      background: #e8e8e8;
+    }
+
+    .quiz-opt.wrong {
+      border-color: #999;
+      background: #f5f5f5;
+      opacity: .6;
+    }
+
+    .quiz-opt code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: .8rem;
+      background: #e8e4f0;
+      color: #5b21b6;
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    .quiz-opt .opt-letter {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      transition: all .15s;
+    }
+
+    .quiz-opt.selected .opt-letter {
+      background: var(--dark);
+      color: #fff;
+      border-color: var(--dark);
+    }
+
+    .quiz-opt.correct .opt-letter {
+      background: var(--dark);
+      color: #fff;
+      border-color: var(--dark);
+    }
+
+    .quiz-feedback code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: .78rem;
+      background: rgba(0,0,0,.08);
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    .quiz-feedback {
+      margin-top: .7rem;
+      padding: .65rem .9rem;
+      border-radius: 7px;
+      font-size: .82rem;
+      font-weight: 600;
+      display: none;
+    }
+
+    .quiz-feedback.show {
+      display: block;
+    }
+
+    .quiz-feedback.ok {
+      background: #e8e8e8;
+      color: var(--dark);
+      border: 1px solid var(--border2);
+    }
+
+    .quiz-feedback.err {
+      background: #f5f5f5;
+      color: #555;
+      border: 1px solid var(--border);
+    }
+
+    .quiz-submit {
+      margin-top: 1rem;
+      background: var(--dark);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: .6rem 1.8rem;
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity .2s;
+    }
+
+    .quiz-submit:hover {
+      opacity: .85;
+    }
+
+    .quiz-submit:disabled {
+      background: var(--border);
+      color: var(--muted);
+      cursor: default;
+    }
+
+    .quiz-score {
+      margin-top: 1rem;
+      padding: .8rem 1rem;
+      border-radius: 9px;
+      text-align: center;
+      background: var(--pale);
+      border: 1px solid var(--border2);
+      display: none;
+    }
+
+    .quiz-score.show {
+      display: block;
+    }
+
+    .quiz-score .score-num {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--dark);
+    }
+
+    .quiz-score .score-label {
+      font-size: .75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+
+    /* ══ COMPLETE ════════════════════════════════════════════════════════════ */
+    .complete-slide {
+      max-width: 640px;
+      margin: 1.5rem auto;
+      text-align: center;
+    }
+
+    .complete-emoji {
+      font-size: 3.5rem;
+      margin-bottom: .9rem;
+    }
+
+    .complete-slide h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: .7rem;
+    }
+
+    .complete-slide>p {
+      color: var(--muted);
+      font-size: .95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stats-row {
+      display: flex;
+      justify-content: center;
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      background: var(--pale);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: .85rem 1.35rem;
+      min-width: 90px;
+    }
+
+    .stat-num {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: var(--dark);
+    }
+
+    .stat-label {
+      font-size: .68rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-top: 2px;
+    }
+
+    /* Certificate section */
+    .cert-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.25rem 0;
+      text-align: left;
+    }
+
+    .cert-section h3 {
+      font-size: .85rem;
+      font-weight: 700;
+      margin-bottom: .75rem;
+      color: var(--dark);
+    }
+
+    .cert-name-row {
+      display: flex;
+      gap: .6rem;
+      margin-bottom: .75rem;
+    }
+
+    .cert-name-input {
+      flex: 1;
+      padding: .6rem .85rem;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      font-size: .9rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color .15s;
+      background: var(--surface);
+    }
+
+    .cert-name-input:focus {
+      border-color: var(--dark);
+    }
+
+    .cert-name-input::placeholder {
+      color: #bbb;
+    }
+
+    .btn-download-cert {
+      background: var(--dark);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: .6rem 1.25rem;
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity .2s;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+
+    .btn-download-cert:hover {
+      opacity: .85;
+    }
+
+    /* ══ CERTIFICATE CANVAS (hidden, used for download) ══════════════════════ */
+    #cert-canvas {
+      display: none;
+    }
+
+    /* ══ NAV BAR ══════════════════════════════════════════════════════════════ */
+    .nav-bar {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: .65rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, .04);
+    }
+
+    .nav-btn {
+      background: var(--dark);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: .5rem 1.5rem;
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity .2s, transform .15s;
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      opacity: .85;
+      transform: translateY(-1px);
+    }
+
+    .nav-btn:disabled {
+      background: var(--border);
+      color: var(--muted);
+      cursor: default;
+    }
+
+    .nav-btn.sec {
+      background: var(--pale);
+      color: var(--dark);
+      border: 1px solid var(--border2);
+    }
+
+    .nav-btn.sec:hover:not(:disabled) {
+      background: var(--border);
+    }
+
+    .nav-hint {
+      font-size: .72rem;
+      color: var(--muted);
+    }
+
+    /* ══ TOAST ════════════════════════════════════════════════════════════════ */
+    .toast {
+      position: fixed;
+      bottom: 5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: var(--dark);
+      color: #fff;
+      padding: .55rem 1.3rem;
+      border-radius: 999px;
+      font-size: .8rem;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: all .22s ease;
+      z-index: 9999;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <span class="header-emoji">🍽️</span>
+      <div>
+        <div class="header-title">Dishly Platform</div>
+        <div class="header-sub">Lunch &amp; Learn · Forge Walkthrough</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="h-pill">Step <span id="cur-slide">1</span> / <span id="tot-slides">—</span></div>
+      <div class="h-pill progress-pill">Progress: <span id="progress-pct">0%</span></div>
+      <div class="h-pill reset-btn" onclick="resetProgress()">↺ Reset</div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Layout -->
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-resizer" id="sidebar-resizer"></div>
+      <div class="sidebar-head">
+        <h3>Steps</h3>
+        <button class="collapse-btn" onclick="toggleSidebar()">◀</button>
+      </div>
+      <div class="sidebar-list" id="sidebar-list"></div>
+    </aside>
+    <button class="expand-btn" id="expand-btn" onclick="toggleSidebar()">▶</button>
+    <div class="slide-area" id="slide-area"></div>
+  </div>
+
+
+  <!-- Footer -->
+  <div id="site-footer"
+    style="text-align:center;padding:.55rem;font-size:.72rem;color:#aaa;flex-shrink:0;background:var(--bg);">
+    🌿 Platform Engineering Trainings 🌿 &nbsp;·&nbsp; © Rakuten Rewards
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Hidden canvas for certificate -->
+  <canvas id="cert-canvas" width="1200" height="900"></canvas>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════════
+    // SLIDE DATA
+    // ═══════════════════════════════════════════════════════════════
+    // Section definitions — maps slide index ranges to section labels
+    // Built after slides array is defined (see buildSections())
+    const SECTIONS = [
+      { label: 'Section 1: Getting Started', slideIds: ['step-1'] },
+      { label: 'Section 2: Create a Forge Work Effort', slideIds: ['step-2'] },
+      { label: 'Section 3: Elaborate Requirements', slideIds: ['step-3'] },
+      { label: 'Section 4: Design & Spec', slideIds: ['step-4', 'step-5', 'step-6', 'step-7'] },
+      { label: 'Section 5: Implement', slideIds: ['step-8'] },
+      { label: 'Section 6: Validate & Promote', slideIds: ['step-9-validate', 'step-10-verify', 'step-11-promote'] },
+      { label: 'Section 7: Plan & Build', slideIds: ['step-5-impl', 'step-6-impl'] },
+    ];
+
+    // Sub-steps that live under a parent step (displayed indented + grayed in sidebar)
+    const SUBSTEPS = {
+      'step-2': [
+        { id: 's2-1', label: '2.1 — Repository Type' },
+        { id: 's2-2', label: '2.2 — Legacy Repository Check' },
+        { id: 's2-3', label: '2.3 — Brownfield Analysis' },
+        { id: 's2-4', label: '2.4 — Branch Naming Convention' },
+        { id: 's2-5', label: '2.5 — Directory & File Creation' },
+        { id: 's2-6', label: '2.6 — Confirm & Commit' },
+      ],
+      'step-2': [
+        { id: 's3-1', label: '3.1 — Select Work Item Type' },
+        { id: 's3-2', label: '3.2 — Select Risk Level' },
+        { id: 's3-3', label: '3.3 — Skip Jira Association' },
+        { id: 's3-4', label: '3.4 — Allow Branch Creation' },
+        { id: 's3-5', label: '3.5 — Allow Effort Scaffold Commit' },
+        { id: 's3-6', label: '3.6 — Effort Creation Complete' },
+      ],
+    };
+
+    const slides = [
+
+      // ── WELCOME ──────────────────────────────────────────────────
+      { type: 'welcome', title: 'Welcome' },
+
+      // ── STEP 1 ───────────────────────────────────────────────────
+      {
+        type: 'step', num: '1', id: 'step-1',
+        title: 'Clone the Repo', desc: 'Get the codebase onto your machine',
+        content: `
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Clone the lunch &amp; learn repo and switch into it.</p>
+        <div class="cmd-block">
+          <pre><span class="t-cmd">gh</span> repo clone rewards-devops/dishly-platform <span class="t-flag">&amp;&amp;</span> <span class="t-cmd">cd</span> dishly-platform</pre>
+          <button class="copy-btn" onclick="copyText(this,'gh repo clone rewards-devops/dishly-platform && cd dishly-platform')">Copy</button>
+        </div>
+        <div style="margin-top:1.1rem;padding:14px 18px;background:rgba(124,58,237,0.07);border:1px solid rgba(124,58,237,0.25);border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+          <div>
+            <p style="font-size:.85rem;font-weight:600;color:var(--dark);margin-bottom:3px;">No git access?</p>
+            <p style="font-size:.8rem;color:var(--muted);">Download the zip, unzip it, then <code>cd rr-lunchnlearn-web-main</code> in your terminal.</p>
+          </div>
+          <a href="rr-lunchnlearn-web-main.zip" download="rr-lunchnlearn-web-main.zip"
+             style="display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:999px;background:linear-gradient(135deg,#5b21b6,#7c3aed);color:#fff;font-size:.82rem;font-weight:600;text-decoration:none;white-space:nowrap;flex-shrink:0;">
+            &#8659; Download ZIP
+          </a>
+        </div>
+      `
+      },
+
+      // ── STEP 1.1 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '1.1', parentId: 'step-1',
+        title: 'Install Playwright MCP', desc: 'Enable browser automation for Claude Code',
+        content: `
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Install the Playwright MCP server globally so Claude Code can open and interact with browsers during implementation.</p>
+        <div class="cmd-block">
+          <pre><span class="t-cmd typing-text" data-type-text="npm install -g @playwright/mcp"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'npm install -g @playwright/mcp')">Copy</button>
+        </div>
+        `
+      },
+
+      // ── STEP 1.2 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '1.2', parentId: 'step-1', id: 'step-1-1',
+        title: 'Set Up the Forge Status Line', desc: 'Keep effort context visible in Claude Code',
+        content: `
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.9rem;">The Forge status line shows your active effort, current phase, cost of session, model, current directory and risk level directly in the Claude Code interface. This keeps both you and the AI oriented throughout the session — you always know which effort is active and which phase you are in without having to ask.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">First, open Claude Code in your terminal:</p>
+        <div class="cmd-block">
+          <pre><span class="t-cmd typing-text" data-type-text="claude"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'claude')">Copy</button>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .75rem;">Then run once to set up the status line:</p>
+        <div class="cmd-block">
+          <pre><span class="t-cmd typing-text" data-type-text="/forge:statusline"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'/forge:statusline')">Copy</button>
+        </div>
+        <p style="font-size:.88rem;color:var(--muted);margin:.9rem 0 .5rem;">After setup, the status line will display context like <em>(e.g. not exactly the same)</em>:</p>
+        <div class="cmd-block" style="font-size:.78rem;">
+          <pre style="white-space:pre;line-height:1.6;"><span class="t-key">❯</span>
+<span class="t-str">──────────────────────────────────────────────────────────────────────────────────────────────────</span>
+    <span class="t-flag">🌿 main</span> | <span class="t-num">$0.11 16m19s</span> | <span class="t-cmd">Sonnet 4.6</span> | <span class="t-key">📁 rr-lunchnlearn-web</span> | <span class="t-str">█░░░░░░░░░ 14% context</span></pre>
+        </div>
+      `
+      },
+
+      // ── STEP 1.3 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '1.3', parentId: 'step-1', markComplete: true,
+        title: 'Select Model — Sonnet 1M Context', desc: 'Switch to the long-context model for this session',
+        content: `
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run the model picker to switch to Sonnet with 1M context — this keeps the full effort context in memory throughout the workshop session.</p>
+        <div class="cmd-block">
+          <pre><span class="t-cmd typing-text" data-type-text="/model"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'/model')">Copy</button>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .5rem;">Claude Code will show the model picker. Select option 3:</p>
+        <div class="cmd-block" style="font-size:.8rem;">
+          <pre style="line-height:1.7;"><span class="t-key">❯ /model</span>
+
+<span class="t-str">──────────────────────────────────────────────────────────────────────────────────────────────────────────</span>
+  <span class="t-key">Select model</span>
+  Switch between Claude models. Applies to this session and future Claude Code sessions. For
+  other/previous model names, specify with --model.
+
+    <span class="t-muted">1. Default                Use the default model (currently Sonnet 4.5)</span>
+    <span class="t-muted">2. Sonnet                 Sonnet 4.6 · Best for everyday tasks</span>
+  <span class="t-str">❯ 3. Sonnet (1M context) ✔  Sonnet 4.6 for long sessions</span>
+    <span class="t-muted">4. Opus 4.1               Opus 4.1 · Legacy</span>
+    <span class="t-muted">5. Opus 4.7               Opus 4.7 · Most capable for complex work</span>
+    <span class="t-muted">6. Opus 4.7 (1M context)  Opus 4.7 for long sessions</span>
+    <span class="t-muted">7. Opus 4.6               Opus 4.6 · Most capable for complex work</span>
+    <span class="t-muted">8. Opus 4.6 (1M context)  Opus 4.6 for long sessions</span>
+    <span class="t-muted">9. Haiku                  Haiku 4.5 · Fastest for quick answers</span>
+
+  <span class="t-flag">● High effort (default)</span> <span class="t-muted">← → to adjust</span>
+
+  <span class="t-muted">Enter to confirm · Esc to exit</span></pre>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.75rem;">Use arrow keys to highlight <strong>3. Sonnet (1M context)</strong> and press <kbd style="background:#222;border:1px solid #555;border-radius:3px;padding:1px 6px;font-size:.78rem;">Enter</kbd> to confirm.</p>
+      `
+      },
+
+      // ── KNOWLEDGE: forge:init ─────────────────────────────────────
+      {
+        type: 'knowledge', id: 'kb-forge-init',
+        title: 'Knowledge Base — Initialize Forge',
+        desc: 'What forge:init does and when to use it',
+        content: `
+        <p style="font-size:.95rem;color:var(--muted);line-height:1.8;margin-bottom:1rem;"><code>forge:init</code> sets up the <code>.forge/</code> workspace in a repository. This folder holds everything related to the feature lifecycle — requirements, architecture decisions, UI specs, and task plans — so the whole team and the AI are working from the same shared context. It also creates a <code>CLAUDE.md</code> file so Claude Code understands the repository structure from the start. You run it <strong>once per repository</strong>, not once per feature.</p>
+        <p style="font-size:.9rem;font-weight:700;color:var(--dark);margin-bottom:.5rem;">When you need it:</p>
+        <ul style="padding-left:1.2rem;margin-bottom:1rem;">
+          <li style="font-size:.88rem;color:var(--muted);line-height:1.8;"><strong style="color:var(--dark);">Greenfield repo</strong> — a brand new repository with no <code>.forge/</code> folder yet</li>
+          <li style="font-size:.88rem;color:var(--muted);line-height:1.8;"><strong style="color:var(--dark);">Brownfield repo</strong> — an existing codebase you want to bring under Forge for the first time</li>
+        </ul>
+        <p style="font-size:.9rem;font-weight:700;color:var(--dark);margin-bottom:.5rem;">When you don't need it:</p>
+        <ul style="padding-left:1.2rem;margin-bottom:1.25rem;">
+          <li style="font-size:.88rem;color:var(--muted);line-height:1.8;">The repository already has a <code>.forge/</code> folder — Forge is already initialized <em>(this workshop repo falls into this category)</em></li>
+        </ul>
+        <p style="font-size:.9rem;font-weight:700;color:var(--dark);margin-bottom:.5rem;">Open Claude Code in the repo root and run:</p>
+        <div class="cmd-block">
+          <pre><span class="t-cmd typing-text" data-type-text="/forge:init"></span><span class="typing-cursor">▌</span></pre>
+          <button class="copy-btn" onclick="copyText(this,'/forge:init')">Copy</button>
+        </div>
+        `
+      },
+
+      // ── STEP 2 ───────────────────────────────────────────────────
+      {
+        type: 'step', num: '2', id: 'step-2',
+        title: 'Create a Work Effort', desc: 'Run /forge:effort',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>/forge:effort</code> registers a new work item inside the <code>.forge/</code> workspace. Each feature, bug fix, or investigation in Forge is tracked as an effort with a title, type (epic, story, task, etc.), risk level, and its own folder for requirements, specs, and plans. This command creates that folder, assigns a unique ID based on the title, creates a dedicated git branch, and commits the scaffold atomically, so the effort is tracked in version control immediately. Run it <strong>once per feature</strong> at the start of work.</p>
+        <p style="font-size:.93rem;color:var(--muted);margin-bottom:.6rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="let's work on a new project called &quot;dishly platform&quot;"></span></pre>
+          <button class="copy-btn" data-copy="let's work on a new project called &quot;dishly platform&quot;" onclick="copyText(this, this.dataset.copy)">Copy</button>
+        </div>
+        <p style="font-size:.88rem;color:var(--muted);margin:.75rem 0 .5rem;">Forge picks up the project name from your message and skips asking for a title — it will ask all other questions as usual.</p>
+        <p style="font-size:.88rem;color:var(--muted);margin:.75rem 0 .4rem;">Claude will respond with something like:</p>
+        <div class="cmd-block" style="font-size:.82rem;">
+          <pre style="line-height:1.7;"><span class="t-flag">Skill(forge:effort)</span>
+  <span class="t-str">⎿  Successfully loaded skill</span>
+<span class="t-muted" style="color:#6b7280;">Forge is initialized and no collision. The effort ID will be:</span> <span class="t-key">dishly-platform</span></pre>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Note:</strong> This step will load the <code>forge:effort</code> skill. If it doesn't, add <code>/forge:effort</code> to your prompt.
+        </div>
+      `
+      },
+
+      // ── STEP 3.1 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '2.1', parentId: 'step-2',
+        title: 'Select Work Item Type', desc: 'Choose the effort type',
+        content: `
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will prompt:</p>
+        <div class="cmd-block">
+          <pre><span class="t-key">What type of work item is this?</span>
+
+  <span class="t-str">program</span>       — cross-team strategic initiative (largest scope)
+  <span class="t-str">initiative</span>    — multi-epic project within a program
+  <span class="t-str">epic</span>          — significant feature set (weeks to months)
+  <span class="t-str">story</span>         — single feature or user-facing behavior change
+  <span class="t-str">task</span>          — technical work item, no direct user story
+  <span class="t-str">spike</span>         — time-boxed research or technical investigation
+
+<span class="t-key">Enter type:</span></pre>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter</p>
+        <div class="cmd-block" style="margin-top:.4rem;">
+          <pre><span class="t-str typing-text" data-type-text="epic"></span><span class="typing-cursor">▌</span></pre>
+          <button class="copy-btn" onclick="copyText(this,'epic')">Copy</button>
+        </div>
+        <p style="font-size:.88rem;color:var(--muted);margin-top:.6rem;">Forge automatically sets tier to full for epics — no tier prompt.</p>
+      `
+      },
+
+      // ── STEP 3.3 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '2.2', parentId: 'step-2',
+        title: 'Select Risk Level', desc: 'Choose the risk classification',
+        content: `
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will prompt:</p>
+        <div class="cmd-block">
+          <pre><span class="t-key">What is the risk level?</span>
+
+  <span class="t-str">R1</span> — Critical: authentication, payments, data migrations, PII
+  <span class="t-str">R2</span> — High: core features, external integrations
+  <span class="t-str">R3</span> — Moderate: new features, UI updates
+  <span class="t-str">R4</span> — Low: logging, minor changes, documentation
+
+<span class="t-key">Enter R1, R2, R3, or R4:</span></pre>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter</p>
+        <div class="cmd-block" style="margin-top:.4rem;">
+          <pre><span class="t-str typing-text" data-type-text="R2"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'R2')">Copy</button>
+        </div>
+        <p style="font-size:.88rem;color:var(--muted);margin-top:.6rem;">this is a core feature integrating with existing external Dishly Platform APIs.</p>
+      `
+      },
+
+      // ── STEP 3.4 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '2.3', parentId: 'step-2', markComplete: true,
+        title: 'Jira Association', desc: 'Link or skip a Jira ticket',
+        content: `
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will attempt to check Atlassian authentication and prompt:</p>
+        <div class="cmd-block">
+          <pre><span class="t-key">Tool use</span>
+
+  plugin:forge:atlassian - Get current user info() (MCP)
+  Get current user info
+
+<span class="t-key">Do you want to proceed?</span>
+  <span class="t-str">1.</span> Yes
+  <span class="t-str">2.</span> Yes, and don't ask again for plugin:forge:atlassian commands in this project
+  <span class="t-str">3.</span> No</pre>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Select</p>
+        <div class="cmd-block" style="margin-top:.4rem;">
+          <pre><span class="t-str typing-text" data-type-text="1. Yes"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'1. Yes')">Copy</button>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin:.9rem 0 .5rem;">Claude's next question:</p>
+        <div class="cmd-block">
+          <pre><span class="t-key">Do you have a Jira ticket for this effort?</span>
+
+  <span class="t-str">1.</span> Yes — I have an existing ticket
+  <span class="t-str">2.</span> No  — Create one now
+  <span class="t-str">3.</span> Skip — No Jira association (not recommended)
+
+<span class="t-key">Enter 1, 2, or 3 [1]:</span></pre>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">Enter</p>
+        <div class="cmd-block" style="margin-top:.4rem;">
+          <pre><span class="t-str typing-text" data-type-text="3 — Skip — No Jira association for this workshop"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'3')">Copy</button>
+        </div>
+      `
+      },
+
+      // ── STEP 3.7 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '2.4', parentId: 'step-2',
+        title: 'Effort Creation Complete', desc: 'Your work effort is ready',
+        content: `
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Forge will confirm the active effort and print a summary:</p>
+        <div class="cmd-block">
+          <pre><span class="t-key">Active effort: dishly-platform</span>
+
+---
+Effort created: dishly-platform
+Title:          dishly platform
+Type:           epic | Tier: full | Risk: R2
+Subtype:        full-tier
+Production-bound: yes
+Phase:          discovery
+Directory:      .forge/efforts/dishly-platform/
+Branch:         <span class="t-str">feat/dishly-platform</span> (created)
+Jira:           not linked
+
+Next steps:
+  Create requirements/business.md and requirements/technical.md to define scope.
+  Run forge:arch-review when discovery artifacts are ready.</pre>
+        </div>
+        <p style="font-size:.95rem;color:var(--muted);margin-top:.9rem;">The effort is now scaffolded and ready. You are on branch <code>feat/dishly-platform</code> and in the discovery phase.</p>
+        <p style="font-size:.88rem;color:var(--muted);margin:.75rem 0 .4rem;">In the Claude Code status line you can now see the active effort and current phase:</p>
+        <div class="cmd-block" style="font-size:.78rem;">
+          <pre style="white-space:pre;line-height:1.7;"><span class="t-key">❯</span>
+<span class="t-str">────────────────────────────────────────────────────────────────────────────────────────────────────────────────</span>
+    <span class="t-flag">🌿 feat/dishly-platform</span> [<span class="t-key">dishly-platform · discovery</span>] | <span class="t-num">$0.33 6m37s</span> | <span class="t-cmd">Sonnet 4.6</span> | <span class="t-key">📁 rr-lunchnlearn-web</span>
+    <span class="t-str">██░░░░░░░░ 21% context</span>
+  <span class="t-muted" style="color:#6b7280;">⏵⏵ accept edits on (shift+tab to cycle)</span></pre>
+        </div>
+      `
+      },
+
+      // ── STEP 4 ───────────────────────────────────────────────────
+      {
+        type: 'step', num: '3', id: 'step-3',
+        title: 'Elaborate Technical Requirements', desc: 'Run /forge:elaborate',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;"><code>/forge:elaborate</code> reads your PRD, extracts business requirements, and derives the matching technical requirements — NFRs, integration constraints, security implications, and scalability targets. It writes <code>requirements/business.md</code> and <code>requirements/technical.md</code> inside the effort folder.</p>
+      `
+      },
+
+      // ── STEP 4.1 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '3.1', parentId: 'step-3',
+        title: 'Start with Your PRD', desc: 'Give Forge the project name and PRD URL',
+        content: `
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code, naming the project first and then attaching the PRD URL:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Let's understand this project for the dishly-platform effort. Here is the PRD to use as context:&#10;  https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44435308663/PRD+Dishly+Platform+v1"></span></pre>
+          <button class="copy-btn" data-copy="Let's understand this project for the dishly-platform effort. Here is the PRD to use as context:&#10;  https://rakutenrewards.atlassian.net/wiki/spaces/~ppatel/pages/44435308663/PRD+Dishly+Platform+v1" onclick="copyText(this, this.dataset.copy)">Copy</button>
+        </div>
+        <p style="font-size:.88rem;color:var(--muted);margin-top:.75rem;">Forge picks up the project name, fetches the PRD, extracts business requirements, and then begins asking clarifying questions about any gaps or design decisions.</p>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Note:</strong> This step will load the <code>forge:elaborate</code> skill. If it doesn't, add <code>/forge:elaborate</code> as a prefix to your prompt.
+        </div>
+      `
+      },
+
+      // ── STEP 4.2 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '3.2', parentId: 'step-3', markComplete: true,
+        title: 'Workshop Shortcut: Auto-Accept All Questions', desc: 'Let Forge apply its own best recommendations',
+        content: `
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">After fetching the PRD, Forge asks a series of clarifying questions. Use this follow-up prompt to tell Forge to take its own best recommendation for every question and document it automatically:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="We're on tight timeline so let's keep moving — go through all the remaining questions, take your best recommendation for each one, and document them."></span></pre>
+          <button class="copy-btn" data-copy="We're on tight timeline so let's keep moving — go through all the remaining questions, take your best recommendation for each one, and document them." onclick="copyText(this, this.dataset.copy)">Copy</button>
+        </div>
+        <p style="font-size:.88rem;color:var(--muted);margin:.75rem 0 0;">Forge works through all open questions, applies its recommendations, and writes the complete requirements to <code>requirements/business.md</code> and <code>requirements/technical.md</code>.</p>
+      `
+      },
+
+
+      // ── STEP 4: forge:ux-design ──────────────────────────────────
+      {
+        type: 'step', num: '4', id: 'step-4',
+        title: 'Design the UX', desc: 'Wireframes and hi-fi mockup — run right after elaborate',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:ux-design</code> generates personas, wireframes, and hi-fi visual mockups from your requirements. Run this right after <code>forge:elaborate</code> to visualise the product before writing specs.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Let's design the UX for this effort. Use the requirements as input."></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Let\'s design the UX for this effort. Use the requirements as input.')">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Note:</strong> If forge:ux-design doesn't trigger, add <code>/forge:ux-design</code> as a prefix.
+        </div>
+        `
+      },
+
+      // ── STEP 5: forge:spec-ui ─────────────────────────────────────
+      {
+        type: 'step', num: '5', id: 'step-5',
+        title: 'Write the UI Spec', desc: 'Author the UI spec before building',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:spec-ui</code> walks you through goal, mode, scope, data, and mode-specific details to produce a <code>spec/ui-spec.md</code> file ready for implementation.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Let's write the UI spec for this effort before we build it."></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Let\'s write the UI spec for this effort before we build it.')">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Output:</strong> <code>spec/ui-spec.md</code> written to your effort directory.
+        </div>
+        `
+      },
+
+      // ── STEP 6: forge:spec-api ────────────────────────────────────
+      {
+        type: 'step', num: '6', id: 'step-6',
+        title: 'Design the API', desc: 'Author the API contract',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:spec-api</code> drafts REST API contracts from your requirements — endpoints, request/response schemas, and authentication.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Let's design API Specs"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Let\'s design API Specs')">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Output:</strong> OpenAPI contract written to <code>spec/api/*.yaml</code>
+        </div>
+        `
+      },
+
+      // ── STEP 7: forge:spec-storage ────────────────────────────────
+      {
+        type: 'step', num: '7', id: 'step-7',
+        title: 'Design the Storage Schema', desc: 'Model the data before building',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:spec-storage</code> walks through logical schema, query patterns, and physical schema — tables, collections, caches, and search indexes.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Design the storage schema for this effort."></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Design the storage schema for this effort.')">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Output:</strong> Schema files written to <code>spec/storage/</code>
+        </div>
+        `
+      },
+
+      // ── STEP 8: forge:ui (implementation) ────────────────────────
+      {
+        type: 'step', num: '5', id: 'step-9-validate',
+        title: 'Validate Discovery Artifacts', desc: 'Cross-reference all artifacts before promoting',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:validate</code> cross-checks all discovery artifacts — BRs, TRs, storage, API spec, UI spec — for completeness and consistency. It produces a gate artifact that <code>forge:promote</code> reads before advancing the phase.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Validate all discovery artifacts for this effort."></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Validate all discovery artifacts for this effort.')">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Output:</strong> <code>validation/report.md</code> — PASS or PASS WITH WARNINGS required to promote.
+        </div>
+        `
+      },
+
+      // ── STEP 10: forge:verify ─────────────────────────────────────
+      {
+        type: 'step', num: '6', id: 'step-11-promote',
+        title: 'Promote to Planning', desc: 'Advance the effort from discovery to planning phase',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:promote</code> checks the validation gate and advances the effort phase from discovery → planning. Run this after <code>forge:validate</code> passes.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Discovery is complete and validated. Promote this effort to planning phase."></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Discovery is complete and validated. Promote this effort to planning phase.')">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Output:</strong> Effort phase advanced from <code>discovery</code> → <code>planning</code> in <code>.state.json</code>.
+        </div>
+        `
+      },
+
+      // ── STEP 7 ───────────────────────────────────────────────────
+      {
+        type: 'step', num: '7', id: 'step-5',
+        title: 'Commit Discovery Artifacts and Promote to Planning', desc: 'Break into tasks and implement',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.75rem;">Forge needs to commit discovery work and promote the effort to the planning phase before running forge:plan. Forge automatically detects the phase and runs forge:promote first.</p>
+        <p style="font-size:.88rem;color:var(--muted);margin-bottom:.75rem;">Promote phase sequence: <code>discovery → planning → implementation → verification → review → qa → deployment</code></p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Run:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Generate a plan for this effort — break it into implementation tasks ready for wave-by-wave execution. Implement each task from the plan using subagents in parallel — one task per subagent where tasks are independent. Resolve any dependency issues autonomously without asking."></span><span class="typing-cursor">▌</span>
+<span class="t-muted">  Constraints:</span>
+<span class="t-muted">  - Skip unit, integration — write minimum required e2e tests only</span>
+<span class="t-muted">  - Open Page when it is ready to display without waiting for all test cases to be passed.</span>
+<span class="t-muted">  - Use Rakuten UI kit design tokens and standards only</span>
+<span class="t-muted">  - Open webpage it in browser as it get ready</span></pre>
+          <button class="copy-btn" data-copy="Generate a plan for this effort — break it into implementation tasks ready for wave-by-wave execution. Implement each task from the plan using subagents in parallel — one task per subagent where tasks are independent. Resolve any dependency issues autonomously without asking.&#10;  Constraints:&#10;  - Skip unit, integration — write minimum required e2e tests only&#10;  - Open Page when it is ready to display without waiting for all test cases to be passed.&#10;  - Use Rakuten UI kit design tokens and standards only&#10;  - Open webpage it in browser as it get ready" onclick="copyText(this, this.dataset.copy)">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Note:</strong> This step will load <code>forge:plan</code> skill. If it doesn't, add <code>/forge:plan</code> as a prefix in your prompt.
+        </div>
+      `
+      },
+
+      // ── STEP 7.1 ─────────────────────────────────────────────────
+      {
+        type: 'substep', num: '5.1', parentId: 'step-5', markComplete: true,
+        title: 'Forge Generates Plan', desc: 'Tasks written, effort promoted to implementation phase',
+        content: `
+        <div class="cmd-block"><pre><span class="t-bullet">⏺</span> <span class="t-tool">Skill(forge:plan)</span>
+  <span class="t-muted">⎿  Successfully loaded skill</span>
+
+<span class="t-bullet">⏺</span> Reading all artifacts in parallel to build the plan.
+  <span class="t-muted">···</span>
+
+<span class="t-muted">···</span>
+
+  Plan written: .forge/efforts/dishly-platform/plan/tasks.md
+  Tasks:        <span class="t-key">17 tasks across 6 waves</span>
+
+  Wave summary:
+
+  ┌──────┬──────────────┬────────────────────────────────────────────────────────────────────────────┐
+  │ Wave │    Tasks     │                              What gets built                               │
+  ├──────┼──────────────┼────────────────────────────────────────────────────────────────────────────┤
+  │ 1    │ TASK-001–003 │ Dependencies, types, utility functions (Haversine, ctaId parser)           │
+  ├──────┼──────────────┼────────────────────────────────────────────────────────────────────────────┤
+  │      │     ···      │                                   ···                                      │
+  ├──────┼──────────────┼────────────────────────────────────────────────────────────────────────────┤
+  │ 6    │ TASK-017     │ Playwright E2E integration tests                                           │
+  └──────┴──────────────┴────────────────────────────────────────────────────────────────────────────┘
+
+  Wave 1–2 tasks can start immediately. TASK-008 (feedapi inspection) is the only checkpoint.
+
+  Begin with: forge:implement dishly-platform TASK-001</pre></div>
+      `
+      },
+
+      // ── STEP 8 ───────────────────────────────────────────────────
+      {
+        type: 'step', num: '9', id: 'step-8',
+        title: 'Build the UI', desc: 'forge:ui generates implementation — run after all specs',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:ui</code> generates standards-compliant UI code using the Rakuten Rewards design system. This is an <strong>implementation skill</strong> — run it only after all spec files are written.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Build the UI components for this effort using the design system"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Build the UI components for this effort using the design system')">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Note:</strong> This step generates the actual UI code. Make sure specs are complete first.
+        </div>
+        `
+      },
+
+
+      // ── STEP 9: forge:validate ────────────────────────────────────
+      {
+        type: 'step', num: '9', id: 'step-6', markComplete: true,
+        title: 'Implement and Parallel Task Execution', desc: 'Executes planned tasks wave by wave using forge:plan',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.75rem;">Executes the planned tasks wave by wave. forge:plan detects the effort's UI spec and delegates to forge:ui.</p>
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin-bottom:.5rem;">Run task if it was paused:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Implement each task from the plan using subagents in parallel — Resolve any dependency issues autonomously or errors without asking further questions."></span><span class="typing-cursor">▌</span>
+<span class="t-muted">  Constraints:</span>
+<span class="t-muted">  - Skip unit, integration and e2e tests</span>
+<span class="t-muted">  - Use Rakuten UI kit design tokens and standards only</span>
+<span class="t-muted">  - Open webpage it in browser as it get ready</span></pre>
+          <button class="copy-btn" data-copy="Implement each task from the plan using subagents in parallel — Resolve any dependency issues autonomously or errors without asking further questions.&#10;  Constraints:&#10;  - Skip unit, integration and e2e tests&#10;  - Use Rakuten UI kit design tokens and standards only&#10;  - Open webpage it in browser as it get ready" onclick="copyText(this, this.dataset.copy)">Copy</button>
+        </div>
+        <p style="font-size:.9rem;font-weight:600;color:var(--dark);margin:.9rem 0 .5rem;">Progress on:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="continue"></span><span class="typing-cursor">▌</span></pre>
+          <button class="copy-btn" onclick="copyText(this,'continue')">Copy</button>
+        </div>
+        <div class="cmd-block scrollable" style="margin-top:.75rem;"><pre><span class="t-bullet">⏺</span> The effort is in implementation. Wave 1 tasks are ready to start — and since this is a UI-first effort with a complete
+  ui-spec.md, let me kick off forge:ui to generate the implementation:
+
+<span class="t-bullet">⏺</span> <span class="t-tool">Skill(forge:ui)</span>
+  <span class="t-muted">⎿  Successfully loaded skill</span>
+
+  <span class="t-muted">Searched for 1 pattern (ctrl+o to expand)</span>
+
+<span class="t-bullet">⏺</span> Web platform detected. Loading standards and guides now.
+
+<span class="t-bullet">⏺</span> Good. Source tree: src/pages/, src/components/. Uses @rakuten-rewards/next/app, UIKit imports confirmed. Path alias ~ for src/.
+
+  <span class="t-tool">Bash(/Users/paras.patel/.nvm/versions/node/v22.22.0/bin/yarn add node-geocoder all-the-cities 2&gt;&amp;1 | tail -8)</span>
+  <span class="t-muted">⎿  ➤ YN0007: │ protobufjs@npm:7.5.4 must be built because it never has been before or the last one failed
+     ➤ YN0007: │ @datadog/native-appsec@npm:8.1.1 must be built because it never has been before or the last one failed
+     ➤ YN0007: │ @datadog/native-iast-taint-tracking@npm:3.1.0 must be built because it never has been before or the last one failed
+     … +5 lines (ctrl+o to expand)</span>
+  <span class="t-muted">⎿  (timeout 2m)</span>
+
+<span class="t-bullet">⏺</span> Packages installed. TASK-001's code is done — next.config.js updated, both packages added. Now I'll launch TASK-002 and TASK-003 in parallel as
+  subagents while I commit TASK-001.
+
+  <span class="t-tool">Bash(git add next.config.js package.json yarn.lock &amp;&amp; FORGE_COMMIT_IN_PROGRESS=1 git commit -m "chore(dishly-platform): add node-geocoder and all-the-cities…")</span>
+  <span class="t-muted">⎿  [feat/dishly-platform 7a4fdbf] chore(dishly-platform): add node-geocoder and all-the-cities, exclude from client bundle (TASK-001)
+      3 files changed, 80 insertions(+), 22 deletions(-)</span>
+
+<span class="t-bullet">⏺</span> <span class="t-muted">2 agents finished (ctrl+o to expand)
+   ├─ TASK-002: TypeScript types for dishly · 1 tool use · 17.4k tokens
+   │  ⎿  Done
+   └─ TASK-003: Haversine + ctaId utilities · 6 tool uses · 23.5k tokens
+      ⎿  Done</span>
+
+<span class="t-bullet">⏺</span> Wave 1 complete. Committing TASK-002 and TASK-003, then launching all 4 wave-2 API routes in parallel.
+
+  <span class="t-tool">Bash(git add src/types/dishly.ts src/utils/dishly.ts src/__tests__/utils/dishly.test.ts &amp;&amp; FORGE_COMMIT_IN_PROGRESS=1 git commit -m "feat(dishly-platform):…")</span>
+  <span class="t-muted">⎿  [feat/dishly-platform c4fe453] feat(dishly-platform): add shared types, Haversine distance, and ctaId utilities (TASK-002, TASK-003)
+      3 files changed, 125 insertions(+)
+     … +3 lines (ctrl+o to expand)</span>
+
+<span class="t-bullet">⏺</span> Now launching all 4 wave-2 API routes in parallel.
+
+<span class="t-bullet">⏺</span> <span class="t-muted">4 agents finished (ctrl+o to expand)
+   ├─ TASK-004: /api/dishly/restaurants proxy · 17 tool uses · 32.1k tokens
+   │  ⎿  Done
+   ├─ TASK-005: /api/dishly/[id] detail proxy · 29 tool uses · 40.1k tokens
+   │  ⎿  Done
+   ├─ TASK-006: /api/geocode route · 16 tool uses · 30.9k tokens
+   │  ⎿  Done
+   └─ TASK-007: /api/dishly/suggest route · 23 tool uses · 30.4k tokens
+      ⎿  Done</span>
+
+<span class="t-bullet">⏺</span> All 4 wave-2 routes complete. All tests pass. Committing and launching wave-3 components in parallel.
+
+  <span class="t-tool">Bash(git add src/pages/api/dishly/ src/pages/api/geocode.ts src/__tests__/api/ &amp;&amp; FORGE_COMMIT_IN_PROGRESS=1 git commit -m "feat(dishly-platform): implement…")</span>
+  <span class="t-muted">⎿  [feat/dishly-platform 1e4776e] feat(dishly-platform): implement API routes — restaurants, detail, geocode, suggest (TASK-004 to TASK-007)
+      8 files changed, 837 insertions(+)
+     … +8 lines (ctrl+o to expand)</span>
+
+<span class="t-bullet">⏺</span> <span class="t-muted">Running 3 agents… (ctrl+o to expand)
+   ├─ TASK-009: RestaurantCard component · 0 tool uses
+   │  ⎿  Initializing…
+   ├─ TASK-010: SearchBar component · 14 tool uses · 27.8k tokens
+   │  ⎿  Bash: Find jest config files
+   └─ TASK-011: RestaurantModal component · 0 tool uses
+      ⎿  Initializing…
+     (ctrl+b to run in background)</span></pre></div>
+      `
+      },
+
+      // ── STEP 6.1 ─────────────────────────────────────────────────
+      {
+        type: 'step', num: '11', id: 'step-10-verify',
+        title: 'Verify Implementation', desc: 'Confirm implementation matches requirements',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:verify</code> reads discovery artifacts and implementation code, confirms each BR and TR has implementation evidence, and produces a PASS/FAIL report per requirement.</p>
+        <p style="font-size:.95rem;color:var(--muted);margin-bottom:.75rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Verify that the implementation delivers the stated requirements."></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Verify that the implementation delivers the stated requirements.')">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Output:</strong> <code>verification/report.md</code> with PASS/FAIL per requirement.
+        </div>
+        `
+      },
+
+
+      // ── STEP 11: forge:promote ───────────────────────────────────
+      {
+        type: 'step', num: '10', id: 'step-7',
+        title: 'Design Tests', desc: 'Run forge:spec-tests to generate BDD test suites',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:spec-tests</code> reads your requirements and spec artifacts — <code>business.md</code>, <code>technical.md</code>, API spec, storage schema, and UX strategy — and produces BDD scenario files for every achievable test type: e2e, contract, integration, and UI e2e.</p>
+        <p style="font-size:.93rem;color:var(--muted);margin-bottom:.6rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Can we design the tests"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Can we design the tests')">Copy</button>
+        </div>
+        <p style="font-size:.88rem;color:var(--muted);margin:.75rem 0 .4rem;">Forge will read all available artifacts and write one BDD suite file per test type. Each scenario includes a <code>Verifies: BR-N</code> traceability link.</p>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Output:</strong> BDD suite files written to <code>.forge/efforts/&lt;effort-id&gt;/spec/test/</code>
+        </div>
+        `
+      },
+
+      // ── STEP 8: forge:build-tests ─────────────────────────────────────────
+      {
+        type: 'step', num: '11', id: 'step-8',
+        title: 'Implement Tests', desc: 'Run forge:build-tests to generate executable test code',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:build-tests</code> reads the BDD suite files produced by <code>forge:spec-tests</code> and converts them into executable test code. It auto-detects your language and framework, writes the tests, and confirms they pass.</p>
+        <p style="font-size:.93rem;color:var(--muted);margin-bottom:.6rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Can we implement the tests"></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Can we implement the tests')">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Output:</strong> Executable test files written and confirmed passing against your local app.
+        </div>
+        `
+      },
+
+      // ── STEP 9: forge:spec-ui-e2e ─────────────────────────────────────────
+      {
+        type: 'step', num: '12', id: 'step-9',
+        title: 'Generate Feature Files', desc: 'Run forge:spec-ui-e2e to convert UI tests to Gherkin',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:spec-ui-e2e</code> converts the <code>ui-e2e-test-suite.md</code> produced by <code>forge:spec-tests</code> into Gherkin <code>.feature</code> files — one per UI surface. It validates for duplicates and missing screen coverage before writing.</p>
+        <p style="font-size:.93rem;color:var(--muted);margin-bottom:.6rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="Convert the UI test suite into Gherkin feature files, one per screen."></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'Convert the UI test suite into Gherkin feature files, one per screen.')">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Output:</strong> Gherkin <code>.feature</code> files written to <code>features/us/&lt;surface-name&gt;/</code>
+        </div>
+        `
+      },
+
+      // ── STEP 10: forge:build-playwright-tests ──────────────────────────────
+      {
+        type: 'step', num: '13', id: 'step-10', markComplete: true,
+        title: 'Build Playwright Tests', desc: 'Run forge:build-playwright-tests to generate and run UI specs',
+        content: `
+        <p style="font-size:.93rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;"><code>forge:build-playwright-tests</code> takes the Gherkin <code>.feature</code> files, navigates your live app via browser to discover real CSS selectors, generates Playwright <code>.spec.ts</code> files, runs them, and auto-fixes any failures — up to 3 cycles.</p>
+        <p style="font-size:.88rem;color:#c0392b;font-weight:600;margin-bottom:.6rem;">⚠ Make sure your app is running locally before triggering this skill.</p>
+        <p style="font-size:.93rem;color:var(--muted);margin-bottom:.6rem;">Type this in Claude Code:</p>
+        <div class="cmd-block">
+          <pre><span class="t-str typing-text" data-type-text="The feature files are ready. Generate Playwright specs, run them against the local app, and fix any failures."></span></pre>
+          <button class="copy-btn" onclick="copyText(this,'The feature files are ready. Generate Playwright specs, run them against the local app, and fix any failures.')">Copy</button>
+        </div>
+        <div class="success-box" style="margin-top:.75rem;">
+          <strong>Output:</strong> Playwright <code>.spec.ts</code> files generated, run, and validated. Summary report printed.
+        </div>
+        `
+      },
+
+      // ── COMPLETE ──────────────────────────────────────────────────
+      { type: 'complete', title: 'Complete' },
+    ];
+
+    // ═══════════════════════════════════════════════════════════════
+    // STATE
+    // ═══════════════════════════════════════════════════════════════
+    let current = 0;
+    let doneSet = new Set(JSON.parse(localStorage.getItem('lnl_done') || '[]'));
+    let quizAnswers = JSON.parse(localStorage.getItem('lnl_quiz') || '{}');
+    let maxReached = parseInt(localStorage.getItem('lnl_reached') || '0', 10);
+
+    function saveDone() { localStorage.setItem('lnl_done', JSON.stringify([...doneSet])); }
+    function saveQuiz() { localStorage.setItem('lnl_quiz', JSON.stringify(quizAnswers)); }
+    function saveReached() { localStorage.setItem('lnl_reached', maxReached); }
+
+    function resetProgress() {
+      if (!confirm('Reset all progress? This cannot be undone.')) return;
+      localStorage.removeItem('lnl_done');
+      localStorage.removeItem('lnl_quiz');
+      localStorage.removeItem('lnl_reached');
+      doneSet = new Set();
+      quizAnswers = {};
+      maxReached = 0;
+      slides.forEach((_, i) => {
+        document.getElementById('sb-' + i)?.classList.remove('done');
+      });
+      updateSidebarLocks();
+      goTo(0);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // BUILD
+    // ═══════════════════════════════════════════════════════════════
+    function build() {
+      const area = document.getElementById('slide-area');
+      const list = document.getElementById('sidebar-list');
+      document.getElementById('tot-slides').textContent = slides.length;
+
+      // Track which section we last emitted to avoid duplicate headers
+      const sectionBySlideId = {};
+      SECTIONS.forEach(sec => sec.slideIds.forEach(sid => sectionBySlideId[sid] = sec.label));
+      const emittedSections = new Set();
+
+      slides.forEach((s, i) => {
+        // ── Slide element ──
+        const el = document.createElement('div');
+        el.className = 'slide' + (i === 0 ? ' active' + (s.type === 'welcome' ? ' welcome-active' : '') : '');
+        el.id = 'slide-' + i;
+        el.innerHTML = renderSlide(s, i);
+        area.appendChild(el);
+
+        // ── Sidebar: inject section header if needed ──
+        if (s.id && sectionBySlideId[s.id] && !emittedSections.has(sectionBySlideId[s.id])) {
+          const secEl = document.createElement('div');
+          secEl.className = 'sb-section';
+          secEl.textContent = sectionBySlideId[s.id];
+          list.appendChild(secEl);
+          emittedSections.add(sectionBySlideId[s.id]);
+        }
+
+        // ── Sidebar: main item ──
+        const li = document.createElement('div');
+        li.className = 'sb-item' + (i === 0 ? ' active' : '') + (doneSet.has(i) ? ' done' : '');
+        li.id = 'sb-' + i;
+        li.onclick = () => goTo(i);
+
+        const hasChildren = s.type === 'step' && s.id && slides.some(x => x.type === 'substep' && x.parentId === s.id);
+        let dotContent, labelText, subText, isSubstep = false;
+        if (s.type === 'welcome') { dotContent = '★'; labelText = 'Welcome'; subText = 'Start here'; }
+        else if (s.type === 'complete') { dotContent = '✦'; labelText = 'All Done'; subText = 'Certificate'; }
+        else if (s.type === 'quiz') { dotContent = '?'; labelText = 'Checkpoint'; subText = s.title; }
+        else if (s.type === 'knowledge') { dotContent = '💡'; labelText = s.title; subText = s.desc || ''; }
+        else if (s.type === 'substep') { dotContent = s.num; labelText = s.num + ' — ' + s.title; subText = s.desc || ''; isSubstep = true; }
+        else { dotContent = s.num; labelText = 'Step ' + s.num + (s.optional ? ' <span style="font-size:.6rem;opacity:.55;font-weight:400;letter-spacing:.04em;">[optional]</span>' : ''); subText = s.title; }
+
+        if (isSubstep) li.classList.add('substep');
+        if (s.type === 'knowledge') li.classList.add('knowledge');
+
+        li.innerHTML = `
+        <div class="sb-dot"><span class="sb-num">${dotContent}</span></div>
+        <div style="flex:1;min-width:0;">
+          <div class="sb-label">${labelText}</div>
+          ${subText ? `<div class="sb-sublabel">${subText}</div>` : ''}
+        </div>
+        ${hasChildren ? '<span class="sb-chevron">›</span>' : ''}`;
+        list.appendChild(li);
+
+        // ── Sidebar: decorative sub-step items for steps WITHOUT real substep slides ──
+        if (s.id && SUBSTEPS[s.id] && !slides.some(x => x.type === 'substep' && x.parentId === s.id)) {
+          SUBSTEPS[s.id].forEach(sub => {
+            const subLi = document.createElement('div');
+            subLi.className = 'sb-item substep';
+            subLi.innerHTML = `
+            <div class="sb-dot"><span class="sb-num">·</span></div>
+            <div>
+              <div class="sb-label">${sub.label}</div>
+            </div>`;
+            list.appendChild(subLi);
+          });
+        }
+      });
+
+      updateNav();
+      updateProgress();
+      updateSidebarLocks();
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // RENDER
+    // ═══════════════════════════════════════════════════════════════
+    function renderSlide(s, idx) {
+      if (s.type === 'welcome') {
+        // Build outline rows from slides (steps + quizzes + cert)
+        const stepSlides = slides.filter(x => x.type === 'step');
+        const quizSlides = slides.filter(x => x.type === 'quiz');
+        const totalMins = 60;
+
+        const groups = [
+          { num: 1, title: 'Getting Started', mins: 10, quiz: true },
+          { num: 2, title: 'Create a Forge Work Effort', mins: 10, quiz: false },
+          { num: 3, title: 'Elaborate Requirements', mins: 10, quiz: true },
+          { num: 4, title: 'Promote & Implement', mins: 30, quiz: true },
+        ];
+
+        const outlineRows = groups.map((g, i) => `
+        <div class="outline-item" onclick="goToSection(${i})" style="cursor:pointer;">
+          <div class="oi-num">${g.num}</div>
+          <div class="oi-body">
+            <div class="oi-title">${g.title}</div>
+            <div class="oi-meta">${g.mins} min${g.quiz ? ' &bull; Includes quiz' : ''}</div>
+          </div>
+          <span class="oi-arrow">›</span>
+        </div>`).join('');
+
+        return `<div class="welcome-slide">
+        <div class="wl-left">
+          <div class="wl-eyebrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            LUNCH &amp; LEARN
+          </div>
+          <h1>Dishly Platform</h1>
+          <p>A step-by-step guide to building the Dishly Platform experience using the Forge framework inside Claude Code — this session is focused on <code style="background:rgba(0,0,0,.08);padding:1px 6px;border-radius:4px;font-size:.88em;">forge:elaborate</code>.</p>
+          <div class="wl-meta">
+            <div class="wl-meta-item">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              ${totalMins} minutes
+            </div>
+            <div class="wl-meta-item">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" y1="19" x2="19" y2="13"/><line x1="16" y1="16" x2="20" y2="20"/><line x1="19" y1="21" x2="21" y2="19"/></svg>
+              Certificate
+            </div>
+          </div>
+          <button class="btn-begin" onclick="nextSlide()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Begin Tutorial
+          </button>
+          <div class="wl-autosave">Your progress is saved automatically</div>
+        </div>
+        <div class="wl-right">
+          <div class="wl-outline-label">COURSE OUTLINE</div>
+          <div class="outline-list">
+            ${outlineRows}
+            <div class="outline-item cert-item">
+              <div class="oi-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" y1="19" x2="19" y2="13"/><line x1="16" y1="16" x2="20" y2="20"/><line x1="19" y1="21" x2="21" y2="19"/></svg>
+              </div>
+              <div class="oi-body">
+                <div class="oi-title">Completion Certificate</div>
+                <div class="oi-meta">Awarded after completing all lessons</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+      }
+
+      if (s.type === 'complete') {
+        const total = slides.filter(x => x.type === 'step').length;
+        const quizzes = slides.filter(x => x.type === 'quiz').length;
+        return `<div class="complete-slide">
+        <div class="complete-emoji">🎉</div>
+        <h1>All Done!</h1>
+        <p>You've walked through the complete Forge workflow — from repo init to a fully tested Dishly Platform feature.</p>
+        <div class="stats-row">
+          <div class="stat-box"><div class="stat-num">${total}</div><div class="stat-label">Steps</div></div>
+          <div class="stat-box"><div class="stat-num">${quizzes}</div><div class="stat-label">Quizzes</div></div>
+          <div class="stat-box"><div class="stat-num">24</div><div class="stat-label">Tests Passing</div></div>
+          <div class="stat-box"><div class="stat-num">7</div><div class="stat-label">Tasks Done</div></div>
+        </div>
+        <div class="cert-section">
+          <h3>📜 Download Your Certificate of Completion</h3>
+          <div class="cert-name-row">
+            <input type="text" class="cert-name-input" id="cert-name" placeholder="Enter your full name" maxlength="60" />
+            <button class="btn-download-cert" onclick="downloadCert()">⬇ Download PDF</button>
+          </div>
+          <p style="font-size:.75rem;color:var(--muted);">Enter your name above and click Download — a PNG certificate will save to your Downloads folder.</p>
+        </div>
+        <button class="btn-primary" onclick="goTo(0)" style="margin-top:.5rem;background:var(--pale);color:var(--dark);border:1px solid var(--border2);box-shadow:none;">↩ Start Over</button>
+      </div>`;
+      }
+
+      if (s.type === 'quiz') {
+        return renderQuiz(s, idx);
+      }
+
+      if (s.type === 'knowledge') {
+        return `<div class="step-slide">
+        <div class="step-header">
+          <div class="step-badge kb-badge">💡</div>
+          <div class="step-title">
+            <h2>${s.title}</h2>
+            <p>${s.desc || ''}</p>
+          </div>
+        </div>
+        ${s.content}
+        <div style="margin-top:1.5rem;text-align:right;">
+          <button class="btn-primary" onclick="nextSlide()">Continue →</button>
+        </div>
+      </div>`;
+      }
+
+      if (s.type === 'substep') {
+        const isLast = s.markComplete === true;
+        const btnHTML = isLast
+          ? `<button class="btn-primary" onclick="markDone(${idx})" id="done-btn-${idx}">
+            ${doneSet.has(idx) ? '<span style="color:#16a34a;font-size:1rem;">✓</span> Marked Complete' : 'Mark as Complete'}
+           </button>`
+          : `<button class="btn-primary" onclick="nextSlide()">Next Lesson →</button>`;
+        return `<div class="step-slide">
+        <div class="step-header">
+          <div class="step-badge" style="font-size:.75rem;width:36px;height:36px;">${s.num}</div>
+          <div class="step-title">
+            <h2>${s.title}</h2>
+            <p>${s.desc || ''}</p>
+          </div>
+        </div>
+        ${s.content}
+        <div style="margin-top:1.5rem;text-align:right;">${btnHTML}</div>
+      </div>`;
+      }
+
+      // For step slides that have substeps, show Next Lesson instead of Mark Complete
+      const hasSubsteps = s.id && slides.some(x => x.type === 'substep' && x.parentId === s.id);
+      const skipBtn = s.optional
+        ? `<button class="btn-skip" onclick="skipStep(${idx})" title="Mark as complete and skip ahead">Skip →</button>`
+        : '';
+      const stepBtnHTML = hasSubsteps
+        ? `<div style="display:flex;align-items:center;gap:.75rem;justify-content:flex-end;">${skipBtn}<button class="btn-primary" onclick="nextSlide()">Next Lesson →</button></div>`
+        : `<div style="display:flex;align-items:center;gap:.75rem;justify-content:flex-end;">${skipBtn}<button class="btn-primary" onclick="markDone(${idx})" id="done-btn-${idx}">
+          ${doneSet.has(idx) ? '<span style="color:#16a34a;font-size:1rem;">✓</span> Marked Complete' : 'Mark Step Complete'}
+        </button></div>`;
+
+      return `<div class="step-slide">
+      <div class="step-header">
+        <div class="step-badge">${s.num}</div>
+        <div class="step-title">
+          <h2>${s.title}</h2>
+          <p>${s.desc}</p>
+        </div>
+      </div>
+      ${s.content}
+      <div style="margin-top:1.5rem;">${stepBtnHTML}</div>
+    </div>`;
+    }
+
+    function renderQuiz(s, idx) {
+      const saved = quizAnswers[s.id] || {};
+      const submitted = saved.submitted;
+      let score = 0;
+
+      const qHTML = s.questions.map((q, qi) => {
+        const chosen = saved[qi];
+        const isSubmitted = submitted;
+
+        const optsHTML = q.opts.map((opt, oi) => {
+          let cls = 'quiz-opt';
+          if (isSubmitted) {
+            if (oi === q.answer) cls += ' correct';
+            else if (oi === chosen && oi !== q.answer) cls += ' wrong';
+            else if (oi === chosen) cls += ' selected';
+          } else {
+            if (oi === chosen) cls += ' selected';
+          }
+          const letter = String.fromCharCode(65 + oi);
+          return `<div class="${cls}" onclick="${isSubmitted ? '' : `pickOpt('${s.id}',${qi},${oi},${idx})`}">
+          <div class="opt-letter">${letter}</div>
+          <span>${opt}</span>
+        </div>`;
+        }).join('');
+
+        if (isSubmitted && chosen === q.answer) score++;
+        const fb = isSubmitted
+          ? `<div class="quiz-feedback ${chosen === q.answer ? 'ok' : 'err'} show">
+            ${chosen === q.answer ? '✓ Correct — ' : '✗ Incorrect — '}${q.explain}
+           </div>` : '';
+
+        return `<div class="quiz-q" id="${s.id}-q${qi}">
+        <p>${qi + 1}. ${q.q}</p>
+        <div class="quiz-options">${optsHTML}</div>
+        ${fb}
+      </div>`;
+      }).join('');
+
+      const scoreHTML = submitted
+        ? `<div class="quiz-score show"><div class="score-num">${score}/${s.questions.length}</div><div class="score-label">Score</div></div>` : '';
+
+      const btnHTML = submitted
+        ? `<div style="display:flex;flex-direction:column;align-items:center;gap:1rem;margin-top:1.5rem;">
+            ${scoreHTML}
+            <button class="btn-primary" onclick="nextSlide()">Next Lesson →</button>
+           </div>`
+        : `<button class="quiz-submit" id="${s.id}-submit" onclick="submitQuiz('${s.id}',${idx})" ${Object.keys(saved).length < s.questions.length ? 'disabled' : ''}>Submit Answers</button>`;
+
+      return `<div class="quiz-slide">
+      <div class="quiz-header">
+        <div class="quiz-badge">❓</div>
+        <div>
+          <h2>${s.title}</h2>
+          <p>${s.desc}</p>
+        </div>
+      </div>
+      ${qHTML}
+      ${btnHTML}
+    </div>`;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // QUIZ LOGIC
+    // ═══════════════════════════════════════════════════════════════
+    function pickOpt(qid, qi, oi, slideIdx) {
+      if (!quizAnswers[qid]) quizAnswers[qid] = {};
+      quizAnswers[qid][qi] = oi;
+      saveQuiz();
+
+      // Update option visuals
+      const slide = slides[slideIdx];
+      const opts = document.querySelectorAll(`#${qid}-q${qi} .quiz-opt`);
+      opts.forEach((el, i) => {
+        el.classList.toggle('selected', i === oi);
+      });
+
+      // Enable submit if all answered
+      const allAnswered = slide.questions.every((_, i) => quizAnswers[qid][i] !== undefined);
+      const btn = document.getElementById(`${qid}-submit`);
+      if (btn) btn.disabled = !allAnswered;
+    }
+
+    function submitQuiz(qid, slideIdx) {
+      if (!quizAnswers[qid]) return;
+      quizAnswers[qid].submitted = true;
+      saveQuiz();
+
+      // Re-render quiz slide
+      const slide = slides[slideIdx];
+      const el = document.getElementById('slide-' + slideIdx);
+      el.innerHTML = renderQuiz(slide, slideIdx);
+
+      markDone(slideIdx);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // PROGRESS
+    // ═══════════════════════════════════════════════════════════════
+    function skipStep(idx) {
+      const s = slides[idx];
+      // Mark the step itself done
+      doneSet.add(idx);
+      // Mark all its substeps done too
+      if (s.id) {
+        slides.forEach((sub, i) => {
+          if (sub.type === 'substep' && sub.parentId === s.id) doneSet.add(i);
+        });
+      }
+      saveDone();
+      updateProgress();
+      // Jump past all substeps of this step to the next step/section
+      let target = idx + 1;
+      if (s.id) {
+        for (let i = idx + 1; i < slides.length; i++) {
+          if (slides[i].type === 'substep' && slides[i].parentId === s.id) target = i + 1;
+          else break;
+        }
+      }
+      if (target > maxReached) { maxReached = target; localStorage.setItem('lnl_reached', maxReached); }
+      showToast('Step skipped & marked complete');
+      goTo(Math.min(target, slides.length - 1));
+    }
+
+    function markDone(idx) {
+      doneSet.add(idx);
+      saveDone();
+
+      // Update sidebar item
+      const sb = document.getElementById('sb-' + idx);
+      if (sb) sb.classList.add('done');
+
+      // If this is a markComplete substep, also mark the parent step done in sidebar
+      const s = slides[idx];
+      if (s.type === 'substep' && s.markComplete && s.parentId) {
+        const parentIdx = slides.findIndex(x => x.id === s.parentId);
+        if (parentIdx !== -1) {
+          doneSet.add(parentIdx);
+          saveDone();
+          const parentSb = document.getElementById('sb-' + parentIdx);
+          if (parentSb) parentSb.classList.add('done');
+        }
+      }
+
+      // Update button
+      const btn = document.getElementById('done-btn-' + idx);
+      if (btn) {
+        btn.innerHTML = '<span style="color:#16a34a;font-size:1rem;">✓</span> Marked Complete';
+        btn.style.cssText = '';
+      }
+
+      updateProgress();
+
+      // If completing a substep section, collapse substeps then jump to next non-quiz slide
+      if (s && s.type === 'substep' && s.markComplete) {
+        showToast('Section complete!');
+        setTimeout(() => {
+          let next = idx + 1;
+          while (next < slides.length && slides[next].type === 'quiz') next++;
+          if (next > maxReached) { maxReached = next; saveReached(); updateSidebarLocks(); }
+          if (next < slides.length) goTo(next); else nextSlide();
+        }, 600);
+      } else {
+        showToast('Step marked complete!');
+        setTimeout(() => nextSlide(), 600);
+      }
+    }
+
+    function isOptionalSlide(s) {
+      if (s.optional) return true;
+      if (s.type === 'substep' && s.parentId) {
+        const parent = slides.find(x => x.id === s.parentId);
+        if (parent && parent.optional) return true;
+      }
+      return false;
+    }
+
+    function updateProgress() {
+      let completable = 0, done = 0;
+      slides.forEach((s, i) => {
+        if (isOptionalSlide(s)) return;
+        if (s.type === 'quiz' || (s.type === 'substep' && s.markComplete)) {
+          completable++;
+          if (doneSet.has(i)) done++;
+        }
+      });
+      const pct = completable > 0 ? Math.round((done / completable) * 100) : 0;
+      document.getElementById('progress-pct').textContent = pct + '%';
+      document.getElementById('progress-fill').style.width = pct + '%';
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // NAVIGATION
+    // ═══════════════════════════════════════════════════════════════
+    function goTo(idx) {
+      if (idx < 0 || idx >= slides.length) return;
+      if (idx > maxReached) { showToast('Complete the current step first'); return; }
+      const prevEl = document.getElementById('slide-' + current);
+      prevEl.classList.remove('active', 'welcome-active');
+      document.getElementById('sb-' + current)?.classList.remove('active');
+      current = idx;
+      const curEl = document.getElementById('slide-' + current);
+      curEl.classList.add('active');
+      if (slides[current].type === 'welcome') curEl.classList.add('welcome-active');
+      const sb = document.getElementById('sb-' + current);
+      sb?.classList.add('active');
+      sb?.scrollIntoView({ block: 'nearest' });
+      updateSubstepExpansion();
+      updateNav();
+      updateProgress();
+      startTypingAnimations();
+    }
+
+    function updateSidebarLocks() {
+      slides.forEach((s, i) => {
+        const el = document.getElementById('sb-' + i);
+        if (!el) return;
+        if (i > maxReached) {
+          el.classList.add('locked');
+        } else {
+          el.classList.remove('locked');
+        }
+      });
+    }
+
+    function updateSubstepExpansion() {
+      const cur = slides[current];
+      // Determine which parentId is currently "active"
+      const activeParentId = cur.type === 'substep' ? cur.parentId
+        : cur.type === 'step' && slides.some(x => x.type === 'substep' && x.parentId === cur.id) ? cur.id
+          : null;
+
+      slides.forEach((s, i) => {
+        if (s.type !== 'substep') return;
+        const sbEl = document.getElementById('sb-' + i);
+        if (!sbEl) return;
+        if (s.parentId === activeParentId) {
+          sbEl.classList.add('expanded');
+        } else {
+          sbEl.classList.remove('expanded');
+        }
+      });
+
+      // Update chevron on parent items
+      slides.forEach((s, i) => {
+        if (s.type !== 'step') return;
+        const sbEl = document.getElementById('sb-' + i);
+        if (!sbEl) return;
+        if (s.id === activeParentId) {
+          sbEl.classList.add('expanded-parent');
+        } else {
+          sbEl.classList.remove('expanded-parent');
+        }
+      });
+    }
+
+    function nextSlide() {
+      // Mark current slide done so sidebar turns green
+      if (!doneSet.has(current)) {
+        doneSet.add(current);
+        saveDone();
+        const li = document.getElementById('sb-' + current);
+        if (li) li.classList.add('done');
+        updateProgress();
+      }
+      const next = current + 1;
+      if (next > maxReached) { maxReached = next; saveReached(); updateSidebarLocks(); }
+      goTo(next);
+    }
+    function prevSlide() { goTo(current - 1); }
+
+    function goToSection(sectionIndex) {
+      const sec = SECTIONS[sectionIndex];
+      if (!sec) { nextSlide(); return; }
+      // Find the first slide matching this section's first slideId
+      const firstId = sec.slideIds[0];
+      const idx = slides.findIndex(s => s.id === firstId);
+      if (idx === -1) { nextSlide(); return; }
+      if (idx > maxReached) {
+        showToast('Complete earlier sections first');
+        return;
+      }
+      goTo(idx);
+    }
+
+    function updateNav() {
+      const isWelcome = slides[current].type === 'welcome';
+      document.getElementById('cur-slide').textContent = current + 1;
+      document.querySelector('.header').style.display = isWelcome ? 'none' : '';
+      document.getElementById('sidebar').style.display = isWelcome ? 'none' : '';
+      document.getElementById('expand-btn').style.display = isWelcome ? 'none' : '';
+      document.getElementById('site-footer').style.display = isWelcome ? 'none' : '';
+      document.getElementById('support-widget').style.display = isWelcome ? 'none' : '';
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // SIDEBAR
+    // ═══════════════════════════════════════════════════════════════
+    function toggleSidebar() {
+      const sb = document.getElementById('sidebar');
+      const eb = document.getElementById('expand-btn');
+      const c = sb.classList.toggle('collapsed');
+      eb.classList.toggle('visible', c);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // COPY
+    // ═══════════════════════════════════════════════════════════════
+    function copyText(btn, text) {
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        showToast('Copied to clipboard!');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2200);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // CERTIFICATE DOWNLOAD
+    // ═══════════════════════════════════════════════════════════════
+    function downloadCert() {
+      const name = document.getElementById('cert-name')?.value.trim();
+      if (!name) { showToast('Please enter your name first'); return; }
+
+      const canvas = document.getElementById('cert-canvas');
+      const ctx = canvas.getContext('2d');
+      const W = 1200, H = 900;
+
+      // Background
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, W, H);
+
+      // Outer border
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 10;
+      ctx.strokeRect(28, 28, W - 56, H - 56);
+
+      // Inner border
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#555555';
+      ctx.strokeRect(48, 48, W - 96, H - 96);
+
+      // Header band
+      ctx.fillStyle = '#111111';
+      ctx.fillRect(28, 28, W - 56, 100);
+
+      // Rakuten R logo in header (left side)
+      ctx.save();
+      const logoSize = 60;
+      const logoX = 58;
+      const logoY = 48;
+      const scale = logoSize / 24;
+      ctx.translate(logoX, logoY);
+      ctx.scale(scale, scale);
+      ctx.fillStyle = '#ffffff';
+      const rPath = new Path2D('M23.277 21.3L3.939 24 .722 21.3h22.555zM7.6 19.276H3.939V0h6.052a6.653 6.653 0 0 1 6.65 6.646c0 2.234-1.108 4.204-2.799 5.418l5.418 7.211h-4.585l-4.486-5.979H7.6v5.98zm0-9.64h2.392a2.992 2.992 0 0 0 2.989-2.989 2.994 2.994 0 0 0-2.989-2.986H7.6v5.975z');
+      ctx.fill(rPath);
+      ctx.restore();
+
+      // Header text
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 28px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('RAKUTEN REWARDS · LUNCH & LEARN', W / 2, 90);
+
+      // Title
+      ctx.fillStyle = '#111111';
+      ctx.font = 'bold 58px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.fillText('Certificate of Completion', W / 2, 235);
+
+      // Divider
+      ctx.strokeStyle = '#bbbbbb';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(200, 265); ctx.lineTo(W - 200, 265); ctx.stroke();
+
+      // Body text
+      ctx.fillStyle = '#444444';
+      ctx.font = '26px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.fillText('This is to certify that', W / 2, 330);
+
+      // Name
+      ctx.fillStyle = '#000000';
+      ctx.font = 'bold 56px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.fillText(name, W / 2, 415);
+
+      // Underline name
+      const nameW = ctx.measureText(name).width;
+      ctx.strokeStyle = '#111111';
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(W / 2 - nameW / 2, 428); ctx.lineTo(W / 2 + nameW / 2, 428); ctx.stroke();
+
+      // Body
+      ctx.fillStyle = '#444444';
+      ctx.font = '26px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.fillText('has successfully completed the', W / 2, 490);
+
+      ctx.fillStyle = '#000000';
+      ctx.font = 'bold 32px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.fillText('Dishly Platform — Forge Walkthrough', W / 2, 545);
+
+      ctx.fillStyle = '#444444';
+      ctx.font = '22px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.fillText('covering Forge framework, work effort management,', W / 2, 590);
+      ctx.fillText('UI design, TDD implementation, and 9-step prompt guide', W / 2, 620);
+
+      // Date
+      ctx.fillStyle = '#777777';
+      ctx.font = '20px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.fillText(new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }), W / 2, 660);
+
+      // ── Signature section ──
+      const sigY = 715;
+      const sig1X = 280; // left signature center
+      const sig2X = 920; // right signature center
+      const sigLineW = 220;
+
+      function drawSignature(cx, name) {
+        ctx.save();
+        ctx.translate(cx, sigY - 18);
+        ctx.strokeStyle = '#222';
+        ctx.lineWidth = 1.8;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        if (name === 'ralph') {
+          // R swoop + loop
+          ctx.beginPath();
+          ctx.moveTo(-48, 12); ctx.bezierCurveTo(-40, -20, -10, -28, 8, -10);
+          ctx.bezierCurveTo(22, 4, 14, 18, -2, 12);
+          ctx.bezierCurveTo(-14, 6, -6, -2, 12, 14);
+          ctx.bezierCurveTo(28, 28, 40, 20, 52, 8);
+          ctx.stroke();
+          // second stroke - a underline flick
+          ctx.beginPath();
+          ctx.moveTo(-52, 18); ctx.bezierCurveTo(-20, 22, 20, 20, 54, 16);
+          ctx.stroke();
+        } else {
+          // B loop + V downstroke
+          ctx.beginPath();
+          ctx.moveTo(-50, 14); ctx.bezierCurveTo(-44, -18, -18, -22, -4, -6);
+          ctx.bezierCurveTo(10, 8, 0, 20, -10, 14);
+          ctx.bezierCurveTo(-20, 8, -4, -4, 14, 10);
+          ctx.bezierCurveTo(30, 22, 42, 10, 50, -8);
+          ctx.stroke();
+          // tail flick
+          ctx.beginPath();
+          ctx.moveTo(50, -8); ctx.bezierCurveTo(56, -18, 60, -10, 58, 2);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      drawSignature(sig1X, 'ralph');
+      drawSignature(sig2X, 'benjamin');
+
+      // Signature lines
+      ctx.strokeStyle = '#aaaaaa';
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(sig1X - sigLineW / 2, sigY + 4); ctx.lineTo(sig1X + sigLineW / 2, sigY + 4); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(sig2X - sigLineW / 2, sigY + 4); ctx.lineTo(sig2X + sigLineW / 2, sigY + 4); ctx.stroke();
+
+      // Signature names
+      ctx.fillStyle = '#111111';
+      ctx.font = 'bold 17px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Ralph a Manna', sig1X, sigY + 26);
+      ctx.fillText('Benjamin Vogan', sig2X, sigY + 26);
+
+      ctx.fillStyle = '#777777';
+      ctx.font = '14px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.fillText('Sr. Director, Productivity Engineering', sig1X, sigY + 44);
+      ctx.fillText('Engineering Contractor', sig2X, sigY + 44);
+
+      // Footer band
+      ctx.fillStyle = '#f2f2f2';
+      ctx.fillRect(48, H - 82, W - 96, 54);
+      ctx.strokeStyle = '#e0e0e0';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(48, H - 82, W - 96, 54);
+
+      ctx.fillStyle = '#555555';
+      ctx.font = '15px -apple-system, Helvetica, Arial, sans-serif';
+      ctx.fillText('Rakuten Rewards · AI-Accelerated Engineering · Forge Framework v0.9.0', W / 2, H - 47);
+
+      // Download
+      const link = document.createElement('a');
+      link.download = `LunchLearn_Certificate_${name.replace(/\s+/g, '_')}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      showToast('Certificate downloaded!');
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // KEYBOARD
+    // ═══════════════════════════════════════════════════════════════
+    document.addEventListener('keydown', e => {
+      if (e.target.tagName === 'INPUT') return;
+      if (e.key === 'ArrowRight') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    // ═══════════════════════════════════════════════════════════════
+    // TYPING ANIMATION
+    // ═══════════════════════════════════════════════════════════════
+    function startTypingAnimations() {
+      const slide = document.getElementById('slide-' + current);
+      if (!slide) return;
+      const els = [...slide.querySelectorAll('.typing-text[data-type-text]')].filter(el => !el.dataset.typed);
+      let delay = 300;
+      els.forEach(el => {
+        el.dataset.typed = '1';
+        const text = el.dataset.typeText;
+        el.textContent = '';
+        const startAt = delay;
+        delay += text.length * 38 + 300;
+        setTimeout(() => {
+          let i = 0;
+          function type() {
+            if (i <= text.length) {
+              el.textContent = text.slice(0, i++);
+              setTimeout(type, 38);
+            }
+          }
+          type();
+        }, startAt);
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // SIDEBAR RESIZE
+    // ═══════════════════════════════════════════════════════════════
+    (function () {
+      const resizer = document.getElementById('sidebar-resizer');
+      const sidebar = document.getElementById('sidebar');
+      let startX, startW;
+
+      resizer.addEventListener('mousedown', e => {
+        startX = e.clientX;
+        startW = sidebar.offsetWidth;
+        resizer.classList.add('dragging');
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+
+        function onMove(e) {
+          const w = Math.min(520, Math.max(180, startW + (e.clientX - startX)));
+          sidebar.style.width = w + 'px';
+        }
+        function onUp() {
+          resizer.classList.remove('dragging');
+          document.body.style.cursor = '';
+          document.body.style.userSelect = '';
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onUp);
+        }
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+      });
+    })();
+
+    build();
+  </script>
+
+  <!-- ── Support / Slack widget ── -->
+  <style>
+    #support-widget {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    #support-bubble {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 14px;
+      padding: 10px 15px;
+      font-size: 0.8rem;
+      color: #ccc;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, .55);
+      opacity: 0;
+      transform: translateY(8px) scale(0.95);
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      white-space: nowrap;
+    }
+
+    #support-bubble.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    #support-bubble .bubble-close {
+      cursor: pointer;
+      color: #555;
+      font-size: 0.9rem;
+      line-height: 1;
+      padding: 0 2px;
+      transition: color 0.15s;
+    }
+
+    #support-bubble .bubble-close:hover {
+      color: #aaa;
+    }
+
+    #support-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #1a1a1a;
+      border: 1.5px solid #444;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, .5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+
+    #support-btn:hover {
+      transform: scale(1.08);
+      background: #2a2a2a;
+      box-shadow: 0 6px 22px rgba(0, 0, 0, .65);
+    }
+
+    #support-btn svg {
+      width: 26px;
+      height: 26px;
+      fill: #aaa;
+    }
+
+    #support-btn:hover svg {
+      fill: #fff;
+    }
+
+    #support-btn .notif-dot {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      width: 9px;
+      height: 9px;
+      background: #777;
+      border-radius: 50%;
+      border: 2px solid #0a0f1e;
+    }
+  </style>
+
+  <div id="support-widget" style="display:none">
+    <div id="support-btn" title="Get help on Slack"
+      onclick="window.open('https://rakuten-international.enterprise.slack.com/archives/C0ASGG80SHL','_blank')">
+      <!-- Slack logo icon -->
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+        <path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/>
+      </svg>
+      <span class="notif-dot"></span>
+    </div>
+  </div>
+
+</body>
+
+</html>
